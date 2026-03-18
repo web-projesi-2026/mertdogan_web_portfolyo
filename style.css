@@ -1,0 +1,440 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+/* Header Tasarımı */
+header {
+    background-color: #1f1f1f;
+    padding: 20px 50px;
+    display: flex;
+    align-items: center; /* Sadece dikeyde ortalıyoruz, yatay hizalamayı nav'a bırakacağız */
+    border-bottom: 2px solid #00d2ff;
+}
+
+/* Menüyü Ortalama */
+nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    /* Sol taraftaki logonun genişliğini dengelemek için sağdan biraz boşluk bırakıyoruz ki menü "görsel" olarak tam ortada dursun */
+    padding-right: 120px; 
+}
+
+.header-sol {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.menu-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 28px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.menu-btn:hover {
+    color: #00d2ff;
+}
+
+.logo h1 {
+    color: #fff;
+    font-size: 24px;
+}
+
+.logo span {
+    color: #00d2ff;
+}
+
+/* --- ÜST MENÜ VE AÇILIR MENÜ (DROPDOWN) TASARIMI --- */
+.ust-menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.ust-menu li {
+    position: relative; 
+}
+
+.ust-menu li a {
+    display: block;
+    padding: 10px 15px;
+    color: #b3b3b3;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 4px;
+    white-space: nowrap; /* Yazıların alt satıra inmesini engeller */
+}
+
+.ust-menu li a:hover {
+    color: #00d2ff;
+    background-color: #2a2a2a;
+}
+
+/* 1. Seviye Açılır Menü (Kategoriler'in altı) */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #1f1f1f;
+    min-width: 180px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    z-index: 2000;
+    flex-direction: column;
+    padding: 5px 0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    list-style: none;
+}
+
+/* Üstüne gelince 1. seviyeyi göster */
+.dropdown:hover > .dropdown-menu {
+    display: flex;
+}
+
+/* 2. Seviye Açılır Menü (PC > Haberler vb.) */
+.dropdown-submenu {
+    position: relative;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%; 
+    background-color: #1f1f1f;
+    min-width: 160px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    z-index: 2001;
+    flex-direction: column;
+    padding: 5px 0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    list-style: none;
+}
+
+/* Üstüne gelince 2. seviyeyi göster */
+.dropdown-submenu:hover > .submenu {
+    display: flex;
+}
+
+/* Yan Menü (Sidebar) Tasarımı */
+.yan-menu {
+    position: fixed;
+    top: 0;
+    left: -300px; 
+    width: 250px;
+    height: 100vh;
+    background-color: #1f1f1f;
+    border-right: 2px solid #00d2ff;
+    padding: 20px;
+    transition: left 0.3s ease; 
+    z-index: 1000;
+    box-shadow: 2px 0 15px rgba(0,0,0,0.8);
+}
+
+.yan-menu.acik {
+    left: 0; 
+}
+
+.menu-kapat {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 32px;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    cursor: pointer;
+}
+
+.menu-kapat:hover {
+    color: #ff4c4c;
+}
+
+.yan-menu h2 {
+    color: #00d2ff;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.yan-menu ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.yan-menu ul li a {
+    color: #b3b3b3;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.yan-menu ul li a:hover {
+    color: #00d2ff;
+}
+
+.yan-menu hr {
+    border: none;
+    border-top: 1px solid #333;
+    margin: 10px 0;
+}
+
+/* Ana İçerik ve Kartlar */
+main {
+    padding: 40px 50px;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+
+/* --- YENİ HABER AKIŞI TASARIMI --- */
+.haber-listesi {
+    display: flex;
+    flex-direction: column; /* Alt alta liste görünümü */
+    gap: 20px;
+}
+
+.haber-karti {
+    background-color: #1e1e24;
+    border-radius: 8px;
+    border: 1px solid #333;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    text-decoration: none; /* Link altı çizgisini kaldır */
+    overflow: hidden; 
+}
+
+.haber-karti:hover {
+    transform: translateY(-3px);
+    border-color: #00d2ff;
+}
+
+/* 1. Manşet Kartı (En Büyük Haber) */
+.manset-karti {
+    position: relative;
+    height: 450px;
+    display: block;
+}
+
+.manset-karti .kart-resim {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
+
+.manset-karti .kart-icerik {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 40px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.9)); /* Alttan üste kararma efekti */
+}
+
+.manset-karti h3 {
+    color: #fff;
+    font-size: 28px;
+    margin-top: 15px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+/* 2. Standart Kartlar (Resim Solda, Yazı Sağda) */
+.standart-karti {
+    display: flex; /* İçerikleri yan yana dizmek için */
+    flex-direction: row;
+    height: 180px;
+}
+
+.standart-karti .kart-resim {
+    width: 300px; /* Soldaki resmin genişliği */
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0; /* Resmin küçülmesini engeller */
+}
+
+.standart-karti .kart-icerik {
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1; /* Kalan alanı kapla */
+}
+
+.standart-karti h3 {
+    color: #fff;
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+.standart-karti p {
+    color: #a0a0a0;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.kart-alt {
+    margin-top: auto;
+}
+
+.etiket {
+    background-color: #00d2ff;
+    color: #000;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    align-self: flex-start; /* Etiketin kendi boyutunda kalmasını sağlar */
+}
+
+.tarih {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Haber Detay Sayfası Tasarımı (Yeni Sayfa İçin) */
+.detay-alani {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: #1e1e24;
+    padding: 40px;
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+.detay-resim {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+.detay-baslik {
+    font-size: 36px;
+    color: #fff;
+    margin-bottom: 20px;
+}
+.detay-icerik p {
+    color: #d0d0d0;
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+.etiket {
+    background-color: #00d2ff;
+    color: #000;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.haber-karti h3 {
+    margin: 15px 0 10px 0;
+    color: #fff;
+}
+
+.haber-karti p {
+    font-size: 14px;
+    color: #a0a0a0;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.kart-alt {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #333;
+    padding-top: 15px;
+}
+
+.tarih {
+    font-size: 12px;
+    color: #888;
+}
+
+.yorum-btn {
+    background-color: transparent;
+    color: #00d2ff;
+    border: 1px solid #00d2ff;
+    padding: 5px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.yorum-btn:hover {
+    background-color: #00d2ff;
+    color: #000;
+}
+
+/* Mobil Uyumluluk */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    nav {
+        padding-right: 0;
+    }
+    .haber-karti {
+        width: 100%;
+    }
+}
+
+/* --- SAYFALAMA (PAGINATION) TASARIMI --- */
+.sayfalama-alani {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+}
+
+.sayfa-btn {
+    background-color: #1f1f1f;
+    color: #b3b3b3;
+    border: 1px solid #333;
+    padding: 8px 15px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.sayfa-btn:hover {
+    background-color: #2a2a2a;
+    color: #00d2ff;
+    border-color: #00d2ff;
+}
+
+.sayfa-btn.aktif {
+    background-color: #00d2ff;
+    color: #000;
+    border-color: #00d2ff;
+}
