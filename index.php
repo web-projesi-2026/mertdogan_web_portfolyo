@@ -21,7 +21,7 @@
                 <li><a href="#" class="filtre-butonu" data-kategori="hepsi">Ana Sayfa</a></li>
                 
                 <li class="dropdown">
-                    <a href="#">Kategoriler ▼</a>
+                    <a href="#">Kategoriler </a>
                     <ul class="dropdown-menu">
                         
                         <li class="dropdown-submenu">

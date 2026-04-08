@@ -1,10 +1,34 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // --- MENÜ ELEMANLARI ---
     const menuBtn = document.getElementById('menu-btn');
     const yanMenu = document.getElementById('yan-menu');
     const menuKapat = document.getElementById('menu-kapat');
-    if(menuBtn) menuBtn.addEventListener('click', () => yanMenu.classList.add('acik'));
-    if(menuKapat) menuKapat.addEventListener('click', () => yanMenu.classList.remove('acik'));
 
+    // Menüyü Aç
+    if(menuBtn) {
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            yanMenu.classList.add('acik');
+        });
+    }
+
+    // Menüyü Kapat
+    if(menuKapat) {
+        menuKapat.addEventListener('click', () => {
+            yanMenu.classList.remove('acik');
+        });
+    }
+
+    // Dışarı tıklandığında menüyü kapat
+    document.addEventListener('click', (e) => {
+        if (yanMenu && yanMenu.classList.contains('acik')) {
+            if (!yanMenu.contains(e.target) && e.target !== menuBtn) {
+                yanMenu.classList.remove('acik');
+            }
+        }
+    });
+
+    // --- FİLTRELEME VE SAYFALAMA MANTIĞI ---
     const sayfaBasinaHaber = 21;
     let mevcutSayfa = 1;
     let aktifKategori = 'hepsi';
@@ -15,35 +39,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const sayfalamaAlani = document.getElementById('sayfalama-alani');
 
     function ekranGuncelle() {
-        let firsatGosterildi = false; // Ana sayfada sadece 1 fırsat göstermek için
+        let firsatGosterildi = false;
 
-        // 1. Filtreleme
         const filtrelenenler = haberKartlari.filter(kart => {
             const kartKategori = kart.getAttribute('data-kategori');
             const kartPlatform = kart.getAttribute('data-platform');
-            const kartTuru = kart.querySelector('.etiket').textContent;
+            const etiketElement = kart.querySelector('.etiket');
+            const kartTuru = etiketElement ? etiketElement.textContent : "";
 
-            // Kategori veya Platform eşleşmesi (PC tıklandıysa hem PC hem platformu PC olan fırsatlar)
             const kategoriUyar = (!aktifKategori || aktifKategori === 'hepsi' || aktifKategori === kartKategori || aktifKategori === kartPlatform);
             const turUyar = (!aktifTur || aktifTur === kartTuru);
 
             let uygun = kategoriUyar && turUyar;
 
-            // ÖZEL KURAL: Ana sayfadayken (hepsi) fırsat haberlerinden sadece ilkini göster
             if (uygun && aktifKategori === 'hepsi' && kartKategori === 'firsat') {
                 if (firsatGosterildi) return false;
                 firsatGosterildi = true;
             }
-
             return uygun;
         });
 
-        // 2. Sayfalama Hesaplama
         const toplamSayfa = Math.ceil(filtrelenenler.length / sayfaBasinaHaber);
         const baslangic = (mevcutSayfa - 1) * sayfaBasinaHaber;
         const bitis = baslangic + sayfaBasinaHaber;
 
-        // 3. Görünüm ve Manşet Ayarı
         haberKartlari.forEach(k => {
             k.style.display = 'none';
             k.classList.remove('manset-karti', 'standart-karti');
@@ -51,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         filtrelenenler.slice(baslangic, bitis).forEach((kart, index) => {
             kart.style.display = '';
-            // Her sayfanın ilk haberi Manşet (büyük), diğerleri standart olsun
             if (index === 0) {
                 kart.classList.add('manset-karti');
             } else {
@@ -94,3 +112,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
     ekranGuncelle();
 });
+/* test */
