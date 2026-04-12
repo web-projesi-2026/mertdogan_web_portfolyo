@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMEPORTAL</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <script>if(localStorage.getItem('oturum')==='acik') document.documentElement.classList.add('oturum-bekleniyor');</script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-wrapper">
+        <img src="img/logolar/logo.png" alt="GAMEPORTAL Logo" class="header-logo">
+        </a>
+        <nav>
+            <ul>
+                <li><a href="index.html" style="color: #b76bff;">ANA SAYFA</a></li>
+                <li class="dropdown mega-menu">
+                    <a href="#" class="dropbtn">PLATFORMLAR<span class="nav-arrow"></span></a>
+                    <div class="mega-panel tab-style">
+                        <div class="mega-layout">
+                            <div class="mega-sidebar">
+    <a href="pages/hmkategoriler.html" class="side-item main-active" data-target="tab-pc">
+    <img src="img/logolar/platform.png" class="menu-logo logo-kategori-side"> KATEGORİLER
+</a>
+
+    <a href="pages/platform.html?p=Xbox" class="side-item" data-target="tab-xbox">
+        <img src="img/logolar/xbox.png" class="menu-logo logo-xbox-side"> XBOX
+    </a>
+
+    <a href="pages/platform.html?p=PS" class="side-item" data-target="tab-ps">
+        <img src="img/logolar/ps.png" class="menu-logo logo-ps-side"> PLAYSTATION
+    </a>
+
+    <a href="pages/platform.html?p=Nintendo" class="side-item" data-target="tab-nintendo">
+        <img src="img/logolar/nintendo.png" class="menu-logo logo-nintendo-side"> NINTENDO
+    </a>
+</div>
+                            <div class="mega-details">
+                                <div id="pc-panel" class="tab-panel active-panel">
+                                    <div class="sub-links-grid">
+                                        <div class="sub-column">
+    <h4 class="sub-column-title">PLATFORM</h4>
+    <a href="pages/platform.html?p=Steam" class="item-sub"><img src="img/logolar/steam.png" class="menu-logo logo-steam"> STEAM</a>
+    <a href="pages/platform.html?p=Epic Games" class="item-sub"><img src="img/logolar/epic.png" class="menu-logo logo-epic"> EPİC GAMES STORE</a>
+    <a href="pages/platform.html?p=EA Games" class="item-sub"><img src="img/logolar/ea.png" class="menu-logo logo-ea"> EA GAMES</a>
+    <a href="pages/platform.html?p=Ubisoft" class="item-sub"><img src="img/logolar/ubisoft.png" class="menu-logo logo-ubisoft"> UBİSOFT CONNECT</a>
+</div>
+<div class="sub-column">
+    <h4 class="sub-column-title">ÜRETİCİLER</h4>
+    <a href="pages/platform.html?p=Nvidia" class="item-sub"><img src="img/logolar/nvidia.png" class="menu-logo logo-nvidia"> NVİDİA & DONANIM</a>
+    <a href="pages/platform.html?p=AMD" class="item-sub"><img src="img/logolar/amd.png" class="menu-logo logo-amd"> AMD & DONANIM</a>
+    <a href="pages/platform.html?p=Intel" class="item-sub"><img src="img/logolar/intel.png" class="menu-logo logo-intel"> İNTEL İŞLEMCİLER</a>
+</div>
+                                    </div>
+                                </div>
+                                </div>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="pages/espor.html">E-SPOR</a></li>
+            </ul>
+        </nav>
+        <div class="header-right">
+    <div class="header-auth-group">
+        <button class="auth-btn btn-login" onclick="openAuthModal('login')">GİRİŞ YAP</button>
+        <span class="auth-sep">/</span>
+        <button class="auth-btn btn-register" onclick="openAuthModal('register')">KAYIT OL</button>
+    </div>
+
+    <a href="pages/canli-skor.html" class="live-score-btn"><span class="red-dot">•</span> CANLI SKOR</a>
+    
+    <div class="hamburger-menu">
+        <div class="hamburger-icon"><span></span><span></span><span></span></div>
+        <div class="hamburger-content">
+            <a href="index.html">ANA SAYFA</a>
+            <a href="pages/hmkategoriler.html">KATEGORİLER</a>
+            <a href="pages/espor.html">E-SPOR</a>
+        </div>
+    </div>
+</div>
+    </header>
+
+    <main>
+        <section class="hero-slider-container">
+            <button class="slider-btn prev-btn">&#10094;</button>
+            <div class="slider-track" id="hero-slider-track"></div>
+            <button class="slider-btn next-btn">&#10095;</button>
+        </section>
+
+        <div class="section-title-wrapper">
+            <h2 class="section-title">Tüm Haberler</h2>
+            <div class="title-line"></div>
+        </div>
+        
+        <section class="news-carousel-wrapper">
+            <button class="nav-btn prev-news" id="news-prev">&#10094;</button>
+        <div class="news-viewport">
+        <div id="haberler" class="news-container"></div>
+        </div>
+            <button class="nav-btn next-news" id="news-next">&#10095;</button>
+        </section>
+    </main>
+    <div id="authModal" class="auth-modal-overlay">
+    <div class="auth-modal-content">
+        <span class="auth-close-btn" onclick="closeAuthModal()">&times;</span>
+        <div class="auth-tabs">
+            <button id="tab-login" class="auth-tab active" onclick="switchAuthTab('login')">GİRİŞ YAP</button>
+            <button id="tab-register" class="auth-tab" onclick="switchAuthTab('register')">KAYIT OL</button>
+        </div>
+        <div id="auth-message-box" style="margin: 15px; padding: 10px; border-radius: 6px; display: none; font-size: 13px;"></div>
+        
+        <div id="form-login" class="auth-form-section active">
+            <h3>Hoş Geldiniz</h3>
+            <form id="ajaxLoginForm">
+                <input type="text" name="kullanici_adi" class="auth-input" placeholder="Kullanıcı Adı" required>
+                <input type="password" name="sifre" class="auth-input" placeholder="Şifre" required>
+                <button type="submit" class="auth-submit-btn">GİRİŞ YAP</button>
+            </form>
+        </div>
+
+        <div id="form-register" class="auth-form-section">
+            <h3>Yeni Hesap Oluştur</h3>
+            <form id="ajaxRegisterForm">
+                <input type="text" name="kullanici_adi" class="auth-input" placeholder="Kullanıcı Adı Seç" required>
+                <input type="password" name="sifre" class="auth-input" placeholder="Şifre Oluştur" required>
+                <button type="submit" class="auth-submit-btn">KAYIT OL</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="assets/script.js"></script>
+</body>
+</html>

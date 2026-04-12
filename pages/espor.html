@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMEPORTAL - E-Spor Dünyası</title>
+    <link rel="stylesheet" href="../assets/style.css">
+    <script>if(localStorage.getItem('oturum')==='acik') document.documentElement.classList.add('oturum-bekleniyor');</script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href="../index.html" class="logo-wrapper">
+        <img src="../img/logolar/logo.png" alt="GAMEPORTAL Logo" class="header-logo">
+        
+        </a>
+        <nav>
+            <ul>
+                <li><a href="../index.html">ANA SAYFA</a></li>
+                <li class="dropdown mega-menu">
+                    <a href="#" class="dropbtn">PLATFORMLAR<span class="nav-arrow"></span></a>
+                    <div class="mega-panel tab-style">
+                        <div class="mega-layout">
+    
+    <div class="mega-sidebar">
+        <a href="hmkategoriler.html" class="side-item main-active" data-target="tab-pc">
+    <img src="../img/logolar/platform.png" class="menu-logo logo-kategori-side"> KATEGORİLER
+</a>
+        <a href="platform.html?p=Xbox" class="side-item" data-target="tab-xbox">
+            <img src="../img/logolar/xbox.png" class="menu-logo logo-xbox-side"> XBOX
+        </a>
+        <a href="platform.html?p=PS" class="side-item" data-target="tab-ps">
+            <img src="../img/logolar/ps.png" class="menu-logo logo-ps-side"> PLAYSTATION
+        </a>
+        <a href="platform.html?p=Nintendo" class="side-item" data-target="tab-nintendo">
+            <img src="../img/logolar/nintendo.png" class="menu-logo logo-nintendo-side"> NINTENDO
+        </a>
+    </div>
+    
+    <div class="mega-details">
+        <div id="pc-panel" class="tab-panel active-panel">
+            <div class="sub-links-grid">
+                
+                <div class="sub-column">
+                    <h4 class="sub-column-title">PLATFORM</h4>
+                    <a href="platform.html?p=Steam" class="item-sub">
+                        <img src="../img/logolar/steam.png" class="menu-logo logo-steam"> STEAM
+                    </a>
+                    <a href="platform.html?p=Epic Games" class="item-sub">
+                        <img src="../img/logolar/epic.png" class="menu-logo logo-epic"> EPİC GAMES STORE
+                    </a>
+                    <a href="platform.html?p=EA Games" class="item-sub">
+                        <img src="../img/logolar/ea.png" class="menu-logo logo-ea"> EA GAMES
+                    </a>
+                    <a href="platform.html?p=Ubisoft" class="item-sub">
+                        <img src="../img/logolar/ubisoft.png" class="menu-logo logo-ubisoft"> UBİSOFT CONNECT
+                    </a>
+                </div>
+                
+                <div class="sub-column">
+                    <h4 class="sub-column-title">ÜRETİCİLER</h4>
+                    <a href="platform.html?p=Nvidia" class="item-sub">
+                        <img src="../img/logolar/nvidia.png" class="menu-logo logo-nvidia"> NVİDİA & DONANIM
+                    </a>
+                    <a href="platform.html?p=AMD" class="item-sub">
+                        <img src="../img/logolar/amd.png" class="menu-logo logo-amd"> AMD & DONANIM
+                    </a>
+                    <a href="platform.html?p=Intel" class="item-sub">
+                        <img src="../img/logolar/intel.png" class="menu-logo logo-intel"> İNTEL İŞLEMCİLER
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+                </li>
+                <li><a href="espor.html" style="color: #b76bff;">E-SPOR</a></li>
+            </ul>
+        </nav>
+        <div class="header-right">
+    <div class="header-auth-group">
+        <button class="auth-btn btn-login" onclick="openAuthModal('login')">GİRİŞ YAP</button>
+        <span class="auth-sep">/</span>
+        <button class="auth-btn btn-register" onclick="openAuthModal('register')">KAYIT OL</button>
+    </div>
+
+    <a href="canli-skor.html" class="live-score-btn"><span class="red-dot">•</span> CANLI SKOR</a>
+    
+    <div class="hamburger-menu">
+        <div class="hamburger-icon"><span></span><span></span><span></span></div>
+        <div class="hamburger-content">
+            <a href="../index.html">ANA SAYFA</a>
+            <a href="hmkategoriler.html">KATEGORİLER</a>
+            <a href="espor.html">E-SPOR</a>
+        </div>
+    </div>
+</div>
+    </header>
+
+    <main>
+        <section class="hero-gradient" style="--brand-darker: #0d001a; --brand-dark: #2a005c; --brand-light: #b76bff;">
+            <h1 style="text-shadow: 0 0 20px rgba(183,107,255,0.8);">E-SPOR ARENASI</h1>
+            <p>Turnuvalar, transferler ve profesyonel arenadan son gelişmeler.</p>
+        </section>
+
+        <div class="esports-layout">
+            
+            <div class="esports-news-section">
+                <div class="section-title-wrapper" style="margin-top: 0;">
+                    <h2 class="section-title">Son Gelişmeler</h2>
+                    <div class="title-line"></div>
+                </div>
+                
+                <div class="esports-grid">
+                    <div class="news-row" style="--row-glow: transparent; width: 100%; height: 320px; border-bottom: none;">
+                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80" class="row-img">
+                        <div class="row-info">
+                            <h3>Valorant Champions Tour 2026 Elemeleri Başlıyor</h3>
+                            <p>Dünyanın en iyi takımları büyük ödül için sahneye çıkıyor.</p>
+                            <div style="margin-top: auto; display: flex; align-items: center;">
+                                <img src="../img/canliskorlogolar/valorantlogo.png" style="height: 24px; width: auto; object-fit: contain;" alt="VALORANT" onerror="this.style.display='none'">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="news-row" style="--row-glow: transparent; width: 100%; height: 320px; border-bottom: none;">
+                        <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80" class="row-img">
+                        <div class="row-info">
+                            <h3>League of Legends MSI Şampiyonu Belli Oldu</h3>
+                            <p>Beş maçlık nefes kesen serinin ardından kupa Asya'ya gitti.</p>
+                            <div style="margin-top: auto; display: flex; align-items: center;">
+                                <img src="../img/canliskorlogolar/lollogo.png" style="height: 24px; width: auto; object-fit: contain;" alt="LOL" onerror="this.style.display='none'">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="news-row" style="--row-glow: transparent; width: 100%; height: 320px; border-bottom: none;">
+                        <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=800&q=80" class="row-img">
+                        <div class="row-info">
+                            <h3>CS2 Major Turnuvasında Sürpriz Sonuçlar</h3>
+                            <p>Favori takımların erken vedası izleyicileri şok etti.</p>
+                            <div style="margin-top: auto; display: flex; align-items: center;">
+                                <img src="../img/canliskorlogolar/cs2logo.png" style="height: 24px; width: auto; object-fit: contain;" alt="CS2" onerror="this.style.display='none'">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <div class="esports-sidebar">
+                <div class="match-board">
+                    <div class="board-header">
+                        <h3>GÜNÜN MAÇLARI</h3>
+                        <span class="live-badge"><span class="red-dot" style="font-size: 14px;">•</span> CANLI</span>
+                    </div>
+                    
+                    <div class="match-list" id="espor-match-list">
+                        </div>
+                    
+                    <a href="canli-skor.html" class="all-matches-btn">TÜM FİKSTÜRÜ GÖR</a>
+                </div>
+            </div> </div> </main>
+
+    
+<div id="authModal" class="auth-modal-overlay">
+    <div class="auth-modal-content">
+        <span class="auth-close-btn" onclick="closeAuthModal()">&times;</span>
+        <div class="auth-tabs">
+            <button id="tab-login" class="auth-tab active" onclick="switchAuthTab('login')">GİRİŞ YAP</button>
+            <button id="tab-register" class="auth-tab" onclick="switchAuthTab('register')">KAYIT OL</button>
+        </div>
+        <div id="auth-message-box" style="margin: 15px; padding: 10px; border-radius: 6px; display: none; font-size: 13px;"></div>
+        
+        <div id="form-login" class="auth-form-section active">
+            <h3>Hoş Geldiniz</h3>
+            <form id="ajaxLoginForm">
+                <input type="text" name="kullanici_adi" class="auth-input" placeholder="Kullanıcı Adı" required>
+                <input type="password" name="sifre" class="auth-input" placeholder="Şifre" required>
+                <button type="submit" class="auth-submit-btn">GİRİŞ YAP</button>
+            </form>
+        </div>
+
+        <div id="form-register" class="auth-form-section">
+            <h3>Yeni Hesap Oluştur</h3>
+            <form id="ajaxRegisterForm">
+                <input type="text" name="kullanici_adi" class="auth-input" placeholder="Kullanıcı Adı Seç" required>
+                <input type="password" name="sifre" class="auth-input" placeholder="Şifre Oluştur" required>
+                <button type="submit" class="auth-submit-btn">KAYIT OL</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="../assets/script.js"></script>
+</body>
+</html>
