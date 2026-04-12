@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAMEPORTAL - Canlı Skor</title>
+    <link rel="stylesheet" href="../assets/style.css">
+    <script>if(localStorage.getItem('oturum')==='acik') document.documentElement.classList.add('oturum-bekleniyor');</script>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href="../index.html" class="logo-wrapper">
+        <img src="../img/logolar/logo.png" alt="GAMEPORTAL Logo" class="header-logo">
+
+        </a>
+        <nav>
+            <ul>
+                <li><a href="../index.html">ANA SAYFA</a></li>
+                <li class="dropdown mega-menu">
+                    <a href="#" class="dropbtn">PLATFORMLAR<span class="nav-arrow"></span></a>
+                    <div class="mega-panel tab-style">
+                        <div class="mega-layout">
+    
+    <div class="mega-sidebar">
+        <a href="hmkategoriler.html" class="side-item main-active" data-target="tab-pc">
+    <img src="../img/logolar/platform.png" class="menu-logo logo-kategori-side"> KATEGORİLER
+</a>
+        <a href="platform.html?p=Xbox" class="side-item" data-target="tab-xbox">
+            <img src="../img/logolar/xbox.png" class="menu-logo logo-xbox-side"> XBOX
+        </a>
+        <a href="platform.html?p=PS" class="side-item" data-target="tab-ps">
+            <img src="../img/logolar/ps.png" class="menu-logo logo-ps-side"> PLAYSTATION
+        </a>
+        <a href="platform.html?p=Nintendo" class="side-item" data-target="tab-nintendo">
+            <img src="../img/logolar/nintendo.png" class="menu-logo logo-nintendo-side"> NINTENDO
+        </a>
+    </div>
+    
+    <div class="mega-details">
+        <div id="pc-panel" class="tab-panel active-panel">
+            <div class="sub-links-grid">
+                
+                <div class="sub-column">
+                    <h4 class="sub-column-title">PLATFORM</h4>
+                    <a href="platform.html?p=Steam" class="item-sub">
+                        <img src="../img/logolar/steam.png" class="menu-logo logo-steam"> STEAM
+                    </a>
+                    <a href="platform.html?p=Epic Games" class="item-sub">
+                        <img src="../img/logolar/epic.png" class="menu-logo logo-epic"> EPİC GAMES STORE
+                    </a>
+                    <a href="platform.html?p=EA Games" class="item-sub">
+                        <img src="../img/logolar/ea.png" class="menu-logo logo-ea"> EA GAMES
+                    </a>
+                    <a href="platform.html?p=Ubisoft" class="item-sub">
+                        <img src="../img/logolar/ubisoft.png" class="menu-logo logo-ubisoft"> UBİSOFT CONNECT
+                    </a>
+                </div>
+                
+                <div class="sub-column">
+                    <h4 class="sub-column-title">ÜRETİCİLER</h4>
+                    <a href="platform.html?p=Nvidia" class="item-sub">
+                        <img src="../img/logolar/nvidia.png" class="menu-logo logo-nvidia"> NVİDİA & DONANIM
+                    </a>
+                    <a href="platform.html?p=AMD" class="item-sub">
+                        <img src="../img/logolar/amd.png" class="menu-logo logo-amd"> AMD & DONANIM
+                    </a>
+                    <a href="platform.html?p=Intel" class="item-sub">
+                        <img src="../img/logolar/intel.png" class="menu-logo logo-intel"> İNTEL İŞLEMCİLER
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+                </li>
+                <li><a href="espor.html">E-SPOR</a></li>
+            </ul>
+        </nav>
+        <div class="header-right">
+    <div class="header-auth-group">
+        <button class="auth-btn btn-login" onclick="openAuthModal('login')">GİRİŞ YAP</button>
+        <span class="auth-sep">/</span>
+        <button class="auth-btn btn-register" onclick="openAuthModal('register')">KAYIT OL</button>
+    </div>
+
+    <a href="canli-skor.html" class="live-score-btn"><span class="red-dot">•</span> CANLI SKOR</a>
+    
+    <div class="hamburger-menu">
+        <div class="hamburger-icon"><span></span><span></span><span></span></div>
+        <div class="hamburger-content">
+            <a href="../index.html">ANA SAYFA</a>
+            <a href="hmkategoriler.html">KATEGORİLER</a>
+            <a href="espor.html">E-SPOR</a>
+        </div>
+    </div>
+</div>
+    </header>
+
+    <main style="min-height: 80vh; padding: 40px 20px; max-width: 1200px; margin: 0 auto;">
+        
+        <div class="title-card-wrapper" style="margin-bottom: 20px;">
+            <h2 class="title-card-text">CANLI SKOR & FİKSTÜR</h2>
+        </div>
+
+        <div class="marquee-container">
+            <div class="marquee-track">
+                
+                <a href="canli-skor.html" class="game-filter-card" data-game="all">
+                    <img src="../img/canliskorkartlar/logo.png" alt="Tüm Maçlar" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5260/5260498.png'">
+                </a>
+                <a href="canli-skor.html?game=valorant" class="game-filter-card" data-game="valorant">
+                    <img src="../img/canliskorkartlar/valorant.png" alt="Valorant" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5260/5260498.png'">
+                </a>
+                <a href="canli-skor.html?game=cs2" class="game-filter-card" data-game="cs2">
+                    <img src="../img/canliskorkartlar/cs2.png" alt="CS2" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5260/5260498.png'">
+                </a>
+                <a href="canli-skor.html?game=lol" class="game-filter-card" data-game="lol">
+                    <img src="../img/canliskorkartlar/lol.png" alt="LoL" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5260/5260498.png'">
+                </a>
+                <a href="canli-skor.html?game=dota" class="game-filter-card" data-game="dota">
+                    <img src="../img/canliskorkartlar/dota.png" alt="Dota 2" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5260/5260498.png'">
+                </a>
+
+                <a href="canli-skor.html" class="game-filter-card" data-game="all">
+                    <img src="../img/canliskorkartlar/logo.png" alt="Tüm Maçlar" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5260/5260498.png'">
+                </a>
+                <a href="canli-skor.html?game=valorant" class="game-filter-card" data-game="valorant">
+                    <img src="../img/canliskorkartlar/valorant.png" alt="Valorant" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5260/5260498.png'">
+                </a>
+                <a href="canli-skor.html?game=cs2" class="game-filter-card" data-game="cs2">
+                    <img src="../img/canliskorkartlar/cs2.png" alt="CS2" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5260/5260498.png'">
+                </a>
+                <a href="canli-skor.html?game=lol" class="game-filter-card" data-game="lol">
+                    <img src="../img/canliskorkartlar//lol.png" alt="LoL" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5260/5260498.png'">
+                </a>
+                <a href="canli-skor.html?game=dota" class="game-filter-card" data-game="dota">
+                    <img src="../img/canliskorkartlar/dota.png" alt="Dota 2" onerror="this.src='https://cdn-icons-png.flaticon.com/512/5260/5260498.png'">
+                </a>
+
+            </div>
+        </div>
+
+        <div id="live-score-board" style="margin-top: 40px;">
+            <h3 style="text-align: center; color: #888;">Maçlar Yükleniyor...</h3>
+        </div>
+
+    </main>
+
+    
+<div id="authModal" class="auth-modal-overlay">
+    <div class="auth-modal-content">
+        <span class="auth-close-btn" onclick="closeAuthModal()">&times;</span>
+        <div class="auth-tabs">
+            <button id="tab-login" class="auth-tab active" onclick="switchAuthTab('login')">GİRİŞ YAP</button>
+            <button id="tab-register" class="auth-tab" onclick="switchAuthTab('register')">KAYIT OL</button>
+        </div>
+        <div id="auth-message-box" style="margin: 15px; padding: 10px; border-radius: 6px; display: none; font-size: 13px;"></div>
+        
+        <div id="form-login" class="auth-form-section active">
+            <h3>Hoş Geldiniz</h3>
+            <form id="ajaxLoginForm">
+                <input type="text" name="kullanici_adi" class="auth-input" placeholder="Kullanıcı Adı" required>
+                <input type="password" name="sifre" class="auth-input" placeholder="Şifre" required>
+                <button type="submit" class="auth-submit-btn">GİRİŞ YAP</button>
+            </form>
+        </div>
+
+        <div id="form-register" class="auth-form-section">
+            <h3>Yeni Hesap Oluştur</h3>
+            <form id="ajaxRegisterForm">
+                <input type="text" name="kullanici_adi" class="auth-input" placeholder="Kullanıcı Adı Seç" required>
+                <input type="password" name="sifre" class="auth-input" placeholder="Şifre Oluştur" required>
+                <button type="submit" class="auth-submit-btn">KAYIT OL</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="../assets/script.js"></script>
+</body>
+</html>
