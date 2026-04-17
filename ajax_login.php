@@ -12,9 +12,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $sorgu->fetch();
 
     if ($user && password_verify($sifre, $user['sifre'])) {
+        session_regenerate_id(true);
         $_SESSION['oturum_acildi'] = true;
         $_SESSION['kullanici_id'] = $user['id'];
         $_SESSION['kullanici_adi'] = $user['kullanici_adi'];
+        $_SESSION['eposta'] = $user['eposta'];
         $_SESSION['rol'] = $user['rol'];
         
         echo json_encode(["status" => "success", "role" => $user['rol']]);

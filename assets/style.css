@@ -1,7 +1,4 @@
 /* --- 1. DİNAMİK RENK DEĞİŞKENLERİ --- */
-:root {
-    --evrensel-gradient: linear-gradient(-45deg, #171a21, #76b900, #ed1c24, #0071c5, #b76bff, #171a21);
-}
 
 /* --- 2. GENEL VE HEADER --- */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
@@ -12,6 +9,7 @@ body {
     scrollbar-width: none; 
     -ms-overflow-style: none;
 }
+img { max-width: 100%; }
 body::-webkit-scrollbar { display: none; }
 
 header { display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 80px; background-color: #121212; border-bottom: 1px solid #2a2a2a; position: sticky; top: 0; z-index: 2000; }
@@ -21,25 +19,19 @@ header { display: flex; justify-content: space-between; align-items: center; pad
     text-decoration: none;
     flex: 1;
     gap: 0;
-    /* Hover'da tüm wrapper'ın büyümesini engellemek için */
     transform: none !important;
     transition: none !important;
 }
 .header-logo {
-    height: 95px !important; 
+    height: 160px !important;
     width: auto;
     object-fit: contain;
     position: relative;
-    
-    /* LOGOYU AŞAĞI KAYDIRMA: 
-       Üstten kesilmemesi için dikey konumu biraz aşağı alıyoruz */
-    top: 5px; 
-    
-    z-index: 2;
-    transform-origin: center;
-    animation: logoNefesAnimasyonu 3s ease-in-out infinite !important; 
-    transition: none !important;
-    
+    top: 8px;
+    z-index: 2001;
+    cursor: pointer;
+    transition: opacity 0.1s ease;
+    background: transparent;
 }
 @keyframes evrenselDegradeAkis {
     0% { background-position: 0% 50%; }
@@ -47,38 +39,12 @@ header { display: flex; justify-content: space-between; align-items: center; pad
     100% { background-position: 0% 50%; }
 }
 
-.logo-text {
-    font-family: 'Oswald', sans-serif;
-    font-size: 32px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    
-    
-    /* BOŞLUĞU KAPATMA: 
-       Logoya tamamen yapışması için margin değerini sıfırlıyoruz */
-    margin-left: -70px; 
-    
-    position: relative;
-    z-index: 1;
-    display: inline-block;
-    transition: none !important;
-    transform: none !important;
-
-    background: linear-gradient(-45deg, #171a21, #76b900, #ed1c24, #0071c5, #b76bff, #171a21);
-    background-size: 400% 400%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: evrenselDegradeAkis 25s ease infinite;
-}
-.logo-wrapper:hover, 
-.logo-wrapper:hover .header-logo, 
-.logo-wrapper:hover .logo-text {
+.logo-wrapper:hover .header-logo {
     transform: none !important;
     scale: 1 !important;
 }
 
-nav { flex: 2; display: flex; justify-content: center; }
+nav { flex: 1; display: flex; justify-content: center; }
 nav ul { list-style: none; display: flex; align-items: center; height: 80px; }
 nav ul li { height: 100%; display: flex; align-items: center; position: relative; }
 /* --- NAVİGASYON LİNKLERİ (YUMUŞAK MOR GEÇİŞ) --- */
@@ -115,7 +81,7 @@ nav ul li a:hover {
     
     width: 900px; 
     background-color: #ffffff !important; 
-    border-radius: 0 0 20px 20px; 
+    border-radius: 20px; 
     box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
     z-index: 3000;
     border-top: 1px solid #2a2a2a; 
@@ -149,8 +115,8 @@ nav ul li a:hover {
     display: flex; 
     min-height: 320px; 
     background-color: #ffffff;
-    /* Panelin en üstüne padding ekleyerek başlıkların header'a yapışmasını önlüyoruz */
-    padding-top: 5px; 
+    padding-top: 30px !important; 
+    border-radius: 20px;
 }
 
 /* SOLDAKİ GRİ SİDEBAR (ALT KÖŞE TAMİRİ) */
@@ -161,36 +127,26 @@ nav ul li a:hover {
     border-right: 1px solid #eee; 
     display: flex; 
     flex-direction: column;
-    /* Sidebar'ın sol alt köşesini panelin yuvarlaklığına uyduruyoruz */
-    border-radius: 0 0 0 20px; 
+    /* Sidebar'ın sol köşelerini panelin yuvarlaklığına uyduruyoruz */
+    border-radius: 20px 0 0 20px; 
+    
 }
 
 /* SAĞDAKİ DETAY ALANI */
 .mega-details { 
     flex: 1; 
     padding: 40px; 
-    background-color: #fff; 
+    background-color: #fff;
+    border-radius: 0 20px 20px 0;
 }
 .side-item { padding: 15px 25px; color: #111 !important; font-weight: bold !important; font-size: 14px !important; text-decoration: none; }
 .side-item:hover, .main-active { background-color: #fff; color: #b76bff !important; }
-.sub-links-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-.sub-column { display: flex; flex-direction: column; gap: 10px; }
-.sub-column-title { 
-    color: #888; 
-    font-size: 11px; 
-    font-weight: bold; 
-    text-transform: uppercase; 
-    margin-bottom: 10px; 
-    border-bottom: 1px solid #eee; 
-    padding-bottom: 6px; 
-    letter-spacing: 0.5px; 
-}
 .item-sub { color: #666 !important; font-size: 13px !important; text-decoration: none; }
 .item-sub:hover { color: #b76bff !important; text-decoration: underline !important; }
 
 /* --- 4. SAĞ ALAN VE HAMBURGER --- */
 .header-right { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 25px; }
-.live-score-btn { color: #fff !important; text-decoration: none !important; font-size: 13px; display: flex; align-items: center; font-weight: 600; letter-spacing: 0.5px; transition: 0.3s; }
+.live-score-btn { color: #fff !important; text-decoration: none !important; font-size: 13px; display: flex; align-items: center; font-weight: 600; letter-spacing: 0.5px; transition: 0.3s; white-space: nowrap; }
 .live-score-btn:hover { color: #b76bff !important; }
 .red-dot { color: #ff0000; margin-right: 8px; font-size: 18px; animation: blinker 1.5s linear infinite; }
 @keyframes blinker { 50% { opacity: 0; } }
@@ -198,14 +154,38 @@ nav ul li a:hover {
 .hamburger-menu { position: relative; padding: 15px 5px; cursor: pointer; z-index: 5000; }
 .hamburger-icon { display: flex; flex-direction: column; gap: 5px; }
 .hamburger-icon span { display: block; width: 25px; height: 2px; background-color: #fff; transition: 0.3s; }
-.hamburger-content { position: absolute; top: 45px; right: 0; background-color: #1a1a1a; min-width: 180px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 4000; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease-out, opacity 0.3s ease; display: block !important; }
+.hamburger-content {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    min-width: 180px;
+    background-color: #1a1a1a;
+    border-radius: 12px;
+    border: 1px solid #333;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    z-index: 4000;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out, opacity 0.3s ease;
+}
+.hamburger-content.active {
+    max-height: 500px;
+    opacity: 1;
+}
+.hamburger-content a {
+    color: #fff;
+    padding: 13px 20px;
+    text-decoration: none;
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+    border-bottom: 1px solid #222;
+    white-space: nowrap;
+}
+.hamburger-content a:hover { background-color: #222; color: #b76bff; }
 .hamburger-content::before { content: ''; position: absolute; top: -20px; left: 0; width: 100%; height: 20px; background: transparent; }
-.hamburger-menu:hover .hamburger-content { max-height: 300px; opacity: 1; }
-.hamburger-content a { color: #fff; padding: 15px 20px; text-decoration: none; display: block; font-size: 13px; transition: 0.2s; border-bottom: 1px solid #222; white-space: nowrap; }
-.hamburger-content a:hover { background-color: #222; color: #b76bff; padding-left: 25px; }
-
-/* --- 5. 3D PERSPEKTİF SLIDER (TAMİR EDİLDİ) --- */
-@keyframes markalariKaydir { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
 
 /* --- SADECE LOGO İÇİN NEFES ALMA (PULSE) ANIMASYONU --- */
 @keyframes logoNefesAnimasyonu {
@@ -237,7 +217,7 @@ nav ul li a:hover {
     background: linear-gradient(-45deg, #171a21, #76b900, #ed1c24, #0071c5, #b76bff, #171a21);
     background-size: 400% 400%;
     
-    /* ÖNEMLİ: Etraftaki ışığı (filter) kaldırdık, sadece arka plan akar */
+    
     filter: none !important; 
     
     /* Senkron Süre: 25s */
@@ -262,8 +242,53 @@ nav ul li a:hover {
 }
 .slider-item::before { content:''; position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 60%); }
 
-.slider-content { position: absolute; bottom: 30px; left: 40px; right: 40px; color: white; text-align: left; }
-.slider-content h2 { font-size: 26px; margin-bottom: 10px; line-height: 1.3; }
+/* --- 3D Slider İçerik Kutusu --- */
+.slider-content { 
+    position: absolute; 
+    bottom: 30px; 
+    left: 40px; 
+    right: 40px; 
+    color: white; 
+    text-align: left; 
+    transform: translateY(15px);
+    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: 2;
+}
+
+.slider-content h2 { 
+    font-size: 26px; 
+    margin-bottom: 0; /* Hover olunca özet onu yukarı itecek */
+    line-height: 1.3; 
+}
+
+/* --- Gizli Özet Metni --- */
+.slider-ozet {
+    font-size: 14px;
+    color: #ddd;
+    line-height: 1.5;
+    margin-top: 0;
+    max-height: 0; /* Başlangıçta boyutu 0, yer kaplamaz */
+    opacity: 0;    /* Başlangıçta tamamen görünmez */
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    
+    /* Metni 2 satırla sınırla, taşanı "..." yap */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+/* --- MOUSE İLE ÜZERİNE GELİNCE OLACAKLAR --- */
+.slider-item:hover .slider-content {
+    /* Tüm kutu asıl yerine yukarı doğru kayar */
+    transform: translateY(0); 
+}
+
+.slider-item:hover .slider-ozet {
+    max-height: 50px; /* Özet alanı boya doğru açılır (2 satır) */
+    opacity: 1;       /* Yazı görünür olur */
+    margin-top: 12px; /* Başlık ile arasına nefes boşluğu girer */
+}
 .slider-tag { display:inline-block; background:#b76bff; color:#fff; padding:6px 15px; border-radius:20px; font-size:11px; font-weight:bold; margin-bottom:15px; text-transform: uppercase; }
 
 /* 3D Sinematik Geçiş Sınıfları */
@@ -300,9 +325,6 @@ nav ul li a:hover {
 .slider-item::before {
     z-index: 1 !important;
 }
-.slider-content {
-    z-index: 2 !important;
-}
 
 /* --- 6. TÜM HABERLER VE NEON LİSTE --- */
 
@@ -332,12 +354,12 @@ nav ul li a:hover {
 .news-row { 
     display: flex; 
     flex-direction: column;
-    background: #1a1a1a; 
+    background: #1a1a1a;
     padding: 0; 
     border-radius: 16px; 
     border: 1px solid rgba(255, 255, 255, 0.1); 
     border-bottom: 4px solid var(--row-glow, #b76bff); 
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1); 
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease, border-color 0.3s ease, opacity 0.3s ease; 
     cursor: pointer; 
     position: relative; 
     /* overflow: hidden; Kalsın, resim köşelerini korur */
@@ -365,9 +387,6 @@ nav ul li a:hover {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 
                 0 0 25px var(--row-glow), 
                 0 0 45px var(--row-glow);
-    
-    /* Kartın genel rengini de biraz "canlı" hale getirir */
-    filter: brightness(1.1);
 }
 .news-row:hover::before {
     background: rgba(10, 10, 10, 0.85); 
@@ -379,7 +398,7 @@ nav ul li a:hover {
     top: 0; left: 0; width: 100%; height: 100%; 
     background: linear-gradient(90deg, var(--row-glow, #b76bff) 0%, transparent 40%); 
     
-    /* DEĞİŞEN KISIM: Başlangıçta görünür ama şeffaf (Işık her zaman var) */
+    
     opacity: 0.1; 
     
     transition: opacity 0.3s ease; 
@@ -403,7 +422,7 @@ nav ul li a:hover {
     flex: 1; 
     display: flex; 
     flex-direction: column; 
-    justify-content: space-between; 
+    justify-content: flex-start; /* Elemanları sıkıca yukarıdan aşağı dizer */
 }
 
 .row-info h3 { 
@@ -418,42 +437,47 @@ nav ul li a:hover {
 .row-info p { 
     font-size: 12px; 
     color: #bbb; 
-    /* Özet kısmını sadece 1 satıra düşürerek yerden tasarruf ediyoruz */
+    line-height: 1.4;
+    margin-bottom: 10px; 
+    
+    /* Metni belirli bir satırda kesip sonuna ... koyar */
     display: -webkit-box;
-    -webkit-line-clamp: 1; 
+    -webkit-line-clamp: 3; /* Logonun üstüne ne kadar yaklaşmasını istiyorsan bu sayıyı 3 veya 4 yapabilirsin */
     -webkit-box-orient: vertical;
     overflow: hidden;
-    margin-bottom: 10px;
+    
+    /* Anlamsız uzun kelimelerin dışarı taşmasını engeller */
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
-/*.row-tag { background: rgba(255, 255, 255, 0.05); color: var(--row-glow, #b76bff); border: 1px solid var(--row-glow, #b76bff); font-size: 10px; padding: 4px 12px; border-radius: 6px; font-weight: bold; text-transform: uppercase; z-index: 1; } */
 .row-logo-container {
-    margin: 5px auto 10px auto; 
-    width: 70px; 
-    height: 35px;
-    background: transparent; /* Arka planı tamamen şeffaf yaptık */
-    border: 1px solid var(--row-glow);
-    border-radius: 6px;
-    padding: 4px;
+    /* İlk yazan 'auto' komutu, logoyu kartın en dibine itip orada kilitler */
+    margin: auto auto 10px auto; 
+    width: 45px;  
+    height: 25px; 
+    background: transparent; 
+    border: none; 
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 10px var(--row-glow);
-    /* Taşan siyah kısımları burada kesiyoruz */
-    overflow: hidden; 
+    box-shadow: none; 
 }
 
 .platform-logo {
     max-width: 100%;
     max-height: 100%;
-    /* Resmin orijinal oranını koruyup kutuya tam sığmasını sağlar */
     object-fit: contain; 
     background-color: transparent;
+    transition: filter 0.3s ease;
 }
 .news-row:hover .row-logo-container {
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 20px var(--row-glow);
+    background: transparent;
+    box-shadow: none;
 }
 
+.news-row:hover .platform-logo {
+    filter: drop-shadow(0 0 5px var(--row-glow));
+}
 /* --- 7. SAYFALAMA VE DİĞER --- */
 
 .page-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-size: 14px; transition: 0.3s; }
@@ -461,8 +485,8 @@ nav ul li a:hover {
 .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 .page-info { color: #888; font-size: 14px; }
 
-.hero-gradient { margin: 0 auto 40px auto; width: 100%; padding: 80px 20px; text-align: center; background: linear-gradient(135deg, var(--brand-darker) 0%, var(--brand-dark) 40%, var(--brand-light) 100%); transition: background 0.5s ease; border-bottom: 1px solid var(--brand-border); }
-.hero-gradient h1 { font-size: 36px; text-transform: uppercase; letter-spacing: 3px; color: #ffffff; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+.hero-gradient { margin: 0 auto 40px auto; width: 100%; padding: 80px 20px; text-align: center; background: linear-gradient(135deg, var(--brand-darker) 0%, var(--brand-dark) 40%, var(--brand-light) 100%); position: relative; z-index: 2; }
+.hero-gradient h1 { font-size: 36px; text-transform: uppercase; letter-spacing: 3px; color: #ffffff; text-shadow: 0 5px 15px rgba(0,0,0,0.5); position: relative; z-index: 1; }
 
 .section-title-wrapper { width: 90%; margin: 60px auto 20px auto; display: flex; align-items: center; gap: 20px; }
 .section-title { font-size: 22px; text-transform: uppercase; letter-spacing: 2px; color: #fff; }
@@ -538,73 +562,8 @@ nav ul li a:hover {
     100% { transform: rotate(360deg); }
 }
 
-/* --- HABER DETAY SAYFASI TASARIMI --- */
-.detay-main {
-    min-height: 80vh;
-    display: flex;
-    justify-content: center;
-    padding: 40px 20px;
-}
-
-.detay-kapsayici {
-    width: 100%;
-    max-width: 900px;
-    background: #1a1a1a;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 40px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-}
-
-.detay-baslik-alani {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.detay-platform-etiketi {
-    display: inline-block;
-    background: var(--brand-dark, #b76bff);
-    color: #fff;
-    padding: 6px 15px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-bottom: 15px;
-}
-
-.detay-baslik-alani h1 {
-    font-size: 32px;
-    line-height: 1.3;
-    color: #fff;
-}
-
-.detay-ana-resim {
-    width: 100%;
-    height: auto;
-    max-height: 500px;
-    object-fit: cover;
-    border-radius: 12px;
-    margin-bottom: 30px;
-}
-
-.detay-metin-alani {
-    color: #ddd;
-    line-height: 1.8;
-    font-size: 16px;
-}
-
-.detay-ozet {
-    font-size: 18px;
-    font-weight: bold;
-    color: #fff;
-    margin-bottom: 20px;
-    border-left: 4px solid #b76bff;
-    padding-left: 15px;
-}
-
 /* ============================================================
-   MOBILE RESPONSIVE TASARIM (Atlas'tan Mert'e Özel)
+   MOBILE RESPONSIVE TASARIM
    ============================================================ */
 
 @media screen and (max-width: 768px) {
@@ -620,12 +579,9 @@ nav ul li a:hover {
         display: none; 
     }
 
-    .logo-text {
-        font-size: 24px; /* Yazıyı mobilde biraz küçülttük */
-    }
-
+    
     .header-logo {
-        height: 45px !important; /* Logoyu mobilde çok az küçülttük */
+        height: 70px !important;
     }
 
     /* --- HERO SLIDER (3D'den Basit Yapıya) --- */
@@ -672,20 +628,6 @@ nav ul li a:hover {
         height: 280px;
     }
 
-    /* --- HABER DETAY SAYFASI --- */
-    .detay-kapsayici {
-        padding: 20px;
-        border-radius: 0; /* Mobilde tam ekran hissi */
-    }
-
-    .detay-baslik-alani h1 {
-        font-size: 24px;
-    }
-
-    .detay-ana-resim {
-        max-height: 300px;
-    }
-
     /* --- PLATFORM SAYFASI (GRID DÜZENİ) --- */
     .featured-news-container {
         grid-template-columns: 1fr; /* Yan yana haberleri alt alta al */
@@ -695,96 +637,26 @@ nav ul li a:hover {
         font-size: 28px;
     }
 
-    /* Mobil Hamburger İçerik Tasarımı */
-.hamburger-content {
-    position: absolute;
-    top: 100%; /* Header'ın hemen altından başlar */
-    right: 0;
-    width: 250px;
-    background: rgba(18, 18, 18, 0.98); /* Koyu ve hafif şeffaf */
-    border-left: 1px solid #2a2a2a;
-    border-bottom: 1px solid #2a2a2a;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 0;
-    z-index: 3000;
-    
-    /* Başlangıçta kapalı durum */
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
+    /* Mobil hamburger stilleri bkz. 768px media query */
 
-/* Menü Açıkken Uygulanacak Klas (JS ile tetiklenecek) */
-.hamburger-content.active {
-    max-height: 400px !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    padding: 20x 0x;
-}
-
-.hamburger-content a {
-    color: white;
-    text-decoration: none;
-    padding: 15px 30px;
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    transition: background 0.3s;
-}
-
-.hamburger-content a:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--brand-color, #76b900);
-}
-
-/* Hamburger İkonu Animasyonu */
-.hamburger-icon {
-    cursor: pointer;
-    padding: 10px;
-}
-
-.hamburger-icon span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: white;
-    margin: 5px 0;
-    transition: 0.3s;
-}
-
-.section-title-wrapper {
-        justify-content: center; 
-        text-align: center;      
-        flex-direction: column;  
-        gap: 15px; 
-        width: 100%; 
+    .section-title-wrapper {
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
         margin: 40px auto 20px auto;
     }
-
-    /* 2. Başlık Boyutu */
-    .section-title {
-        font-size: 20px; 
-        width: 100%;
-    }
-
-    /* 3. Mor Çizgi Neon Efekti */
+    .section-title { font-size: 20px; width: 100%; }
     .title-line {
-        display: block !important; 
-        width: 80% !important;     
-        height: 2px !important;    
-        margin: 0 auto;            
+        display: block !important;
+        width: 80% !important;
+        height: 2px !important;
+        margin: 0 auto;
         background: linear-gradient(to right, transparent, #b76bff, #66c0f4, #b76bff, transparent) !important;
     }
 } /* <--- BU PARANTEZ @media screen and (max-width: 768px) BLOĞUNU KAPATIR */
 
-/* 4. En Küçük Telefonlar İçin Son Ayar */
-@media screen and (max-width: 480px) {
-    .logo-text {
-        display: none; 
-    }
-}
 
 /* MEGA MENÜ LOGO AYARLARI */
 .item-sub {
@@ -797,22 +669,16 @@ nav ul li a:hover {
 
 /* MEGA MENÜ LOGO STANDARTLAŞTIRMA */
 .menu-logo {
-    width: 22px; /* Temel genişlik */
-    height: 22px; 
+    width: 32px !important; /* 22'den 32'ye büyüttük */
+    height: 32px !important; 
     object-fit: contain;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, filter 0.3s ease;
     display: inline-block;
     vertical-align: middle;
 }
 
-/* Her markayı Steam'in dolgunluğuna eşitlemek için özel ayarlar */
-.item-sub .logo-steam   { transform: scale(1); } /* Referansımız */
-.item-sub .logo-epic    { transform: scale(1.0); }
-.item-sub .logo-ea      { transform: scale(1.0); }
-.item-sub .logo-ubisoft { transform: scale(1.7); }
-.item-sub .logo-nvidia  { transform: scale(1.3); }
-.item-sub .logo-amd     { transform: scale(1.8); } /* AMD çok küçük kaldığı için daha fazla büyüttük */
-.item-sub .logo-intel   { transform: scale(1.5); } /* Intel yatay ve ince olduğu için en çok bunu büyütüyoruz */
+
+
 
 /* Hover durumunda her markanın KENDİ orantısına göre büyümesi */
 .item-sub:hover .logo-steam   { transform: scale(1.2); }
@@ -825,13 +691,14 @@ nav ul li a:hover {
 
 /* Mouse ile üzerine gelince sadece logolar parlasın (Büyüme olayı yukarıda halledildi) */
 .item-sub:hover .menu-logo {
+    transform: scale(1.2) !important; /* Mouse gelince hepsi eşit %20 büyür */
     filter: drop-shadow(0 0 5px var(--brand-light, #b76bff));
 }
 
 .item-sub:hover {
     background-color: rgba(183, 107, 255, 0.05); /* Çok hafif mor arka plan */
     border-radius: 6px;
-    text-decoration: none !important; /* Alt çizgiyi kaldırdık, logo daha şık dursun */
+    text-decoration: none !important; 
 }
 
 /* SİDEBAR LOGO AYARLARI */
@@ -844,10 +711,10 @@ nav ul li a:hover {
 
 /* Sidebar logolarının temel boyutu */
 .side-item .menu-logo {
-    width: 24px;
-    height: 24px;
+    width: 32px !important; /* 24'ten 32'ye büyüttük */
+    height: 32px !important;
     object-fit: contain;
-    filter: grayscale(1); /* Normalde gri kalsınlar, üzerine gelince renklensinler */
+    filter: grayscale(1);
     opacity: 0.7;
     transition: all 0.3s ease;
 }
@@ -857,41 +724,12 @@ nav ul li a:hover {
 .side-item.main-active .menu-logo {
     filter: grayscale(0) drop-shadow(0 0 5px rgba(183, 107, 255, 0.5));
     opacity: 1;
-    transform: scale(1.1);
+    transform: scale(1.15) !important; /* Standart büyüme */
 }
 
-/* Sidebar Marka Özel Boyut Ayarları */
-.logo-xbox-side { 
-    transform: scale(1.6) !important; /* 1.3'ten 1.6'ya çıkardık */
-    margin-right: 5px; /* Büyüdüğü için yazıya çok yaklaşmaması için ufak bir boşluk */
-}
 
-.side-item:hover .logo-xbox-side, 
-.side-item.main-active .logo-xbox-side {
-    transform: scale(2.1) !important; /* Hover'da daha belirgin bir büyüme */
-}
 
-.logo-ps-side { 
-    transform: scale(1.4) !important; /* PS logosu Xbox'a göre daha yayvan olduğu için 1.4 ideal */
-    margin-right: 5px;
-}
-
-.side-item:hover .logo-ps-side, 
-.side-item.main-active .logo-ps-side {
-    transform: scale(1.55) !important;
-}
-
-.logo-nintendo-side { 
-    transform: scale(1.5) !important; /* Nintendo'nun dairesel ikonu da büyük durmalı */
-    margin-right: 5px;
-}
-
-.side-item:hover .logo-nintendo-side, 
-.side-item.main-active .logo-nintendo-side {
-    transform: scale(2.0) !important;
-}
-
-/* --- MOBİL PLATFORM SEÇİM SAYFASI (hmplatform.html) --- */
+/* --- MOBİL PLATFORM SEÇİM SAYFASI (hmplatform.php) --- */
 .mobile-platforms-grid {
     display: grid;
     /* Kutuları 4 yerine tam 5 sütun olacak şekilde zorlar */
@@ -927,61 +765,18 @@ nav ul li a:hover {
     color: #b76bff;
 }
 
+.mobile-plat-card:hover .mobile-plat-logo {
+    transform: scale(1.15) !important; /* Standart %15 büyüme efekti */
+}
+
 .mobile-plat-logo {
-    width: 32px;
-    height: 32px;
+    width: 45px !important; 
+    height: 45px !important;
     object-fit: contain;
     filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
     transition: transform 0.3s ease;
 }
 
-.mobile-plat-icon {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mobile-plat-card:hover .mobile-plat-logo {
-    transform: scale(1.15);
-}
-
-/* Atlas bunu unutmaz: Xbox logosu her zaman daha büyük olacak! */
-/* --- MOBİL PLATFORM SAYFASI (hmplatform.html) ÖZEL LOGO BOYUTLARI --- */
-
-/* Xbox Logosunu büyüt */
-.mobile-plat-card .mobile-plat-logo[alt="Xbox"] {
-    transform: scale(1.6) !important;
-}
-/* Hover anında daha da büyüsün */
-.mobile-plat-card:hover .mobile-plat-logo[alt="Xbox"] {
-    transform: scale(1.75) !important;
-}
-
-/* Nintendo Logosunu büyüt */
-.mobile-plat-card .mobile-plat-logo[alt="Nintendo"] {
-    transform: scale(1.5) !important;
-}
-.mobile-plat-card:hover .mobile-plat-logo[alt="Nintendo"] {
-    transform: scale(1.65) !important;
-}
-
-/* Ubisoft Logosunu büyüt */
-.mobile-plat-card .mobile-plat-logo[alt="Ubisoft"] {
-    transform: scale(1.7) !important;
-}
-.mobile-plat-card:hover .mobile-plat-logo[alt="Ubisoft"] {
-    transform: scale(1.85) !important;
-}
-
-/* AMD Logosunu büyüt */
-.mobile-plat-card .mobile-plat-logo[alt="AMD"] {
-    transform: scale(1.8) !important;
-}
-.mobile-plat-card:hover .mobile-plat-logo[alt="AMD"] {
-    transform: scale(1.95) !important;
-}
 
 /* --- MOBİL PLATFORM SAYFASI BAŞLIK KUTUSU (GARANTİ) --- */
 .title-card-wrapper {
@@ -1007,7 +802,7 @@ nav ul li a:hover {
 .vertical-split-layout {
     display: flex;
     gap: 60px; /* İki taraf arasındaki boşluk */
-    max-width: 1300px; /* Ekrana yayılması için genişliği artırdık */
+    max-width: 1300px;
     margin: 0 auto;
     align-items: flex-start;
     justify-content: center;
@@ -1032,7 +827,6 @@ nav ul li a:hover {
     gap: 20px;
 }
 
-/* Küçük bir Atlas dokunuşu: Tablet veya telefondan girildiğinde sıkışmasın diye alt alta geçsin */
 @media screen and (max-width: 900px) {
     .vertical-split-layout {
         flex-direction: column;
@@ -1050,7 +844,6 @@ nav ul li a:hover {
     margin: 40px 0; /* Başlıklarla hizalanması için biraz boşluk */
 }
 
-/* Küçük bir Atlas dokunuşu: Telefondan girildiğinde (alt alta geçtiklerinde) dikey çizgi yatay bir çizgiye dönüşür */
 @media screen and (max-width: 900px) {
     .vertical-divider {
         width: 80%;
@@ -1081,6 +874,8 @@ nav ul li a:hover {
     width: 90%;
     margin: 0 auto 60px auto;
     align-items: flex-start;
+    position: relative;
+    z-index: 1;
 }
 
 .esports-news-section {
@@ -1092,20 +887,17 @@ nav ul li a:hover {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 25px;
 }
-
-.esport-tag {
-    display: inline-block;
-    background: rgba(183, 107, 255, 0.1);
-    color: #b76bff;
-    border: 1px solid #b76bff;
-    padding: 4px 10px;
-    font-size: 11px;
-    font-weight: bold;
-    border-radius: 4px;
-    letter-spacing: 1px;
-    margin-top: auto;
-    align-self: flex-start;
+.esports-grid .news-row:hover {
+    transform: none;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    border-color: var(--row-glow, #b76bff);
 }
+/* ::before ve ::after GPU paint tetiklemesin — h1 korunur */
+.esports-grid .news-row::before,
+.esports-grid .news-row::after {
+    display: none !important;
+}
+
 
 /* --- SAĞ SİDEBAR (GÜNÜN MAÇLARI) --- */
 .esports-sidebar {
@@ -1240,18 +1032,15 @@ nav ul li a:hover {
    CANLI SKOR SAYFASI ÖZEL TASARIMLARI
    ============================================================ */
 
-/* ============================================================
-   CANLI SKOR SAYFASI ÖZEL TASARIMLARI (SADE VE HATASIZ)
-   ============================================================ */
-
 /* --- SÜREKLİ AKAN OYUN LOGOLARI KONTEYNERI --- */
 .marquee-container {
     width: 100%;
-    overflow-x: hidden; 
+    overflow: hidden;
+    contain: paint;
     margin-bottom: 40px;
     position: relative;
     cursor: grab;
-    user-select: none; 
+    user-select: none;
     -webkit-user-select: none;
 }
 
@@ -1265,15 +1054,15 @@ nav ul li a:hover {
     z-index: 5;
     pointer-events: none;
 }
-.marquee-container::before { left: 0; background: linear-gradient(to right, #121212, transparent); }
-.marquee-container::after { right: 0; background: linear-gradient(to left, #121212, transparent); }
+.marquee-container::before { left: 0; background: linear-gradient(to right, #121212 0%, transparent 100%); }
+.marquee-container::after { display: none; }
 
 .marquee-track {
     display: flex;
     gap: 20px;
     width: max-content;
-    align-items: center; 
-    padding: 25px 0; 
+    align-items: center;
+    padding: 25px 20px 25px 80px; 
 }
 
 /* --- KART TASARIMI (SADECE YAKINLAŞMA EFEKTİ) --- */
@@ -1283,7 +1072,6 @@ nav ul li a:hover {
     height: 120px;
     background: #1a1a1a;
     border-radius: 16px;
-    /* Neon ışıklar ve renk geçişleri tamamen silindi */
     transition: transform 0.3s ease; 
     box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
     flex-shrink: 0;
@@ -1306,32 +1094,15 @@ nav ul li a:hover {
 }
 
 .game-filter-card.active {
-    /* Kartı hafifçe büyütüp yukarıda tutar */
-    transform: scale(1.08) translateY(0px) !important; 
-    /* Çerçeve rengini oyunun kendi rengi yapar */
     border-color: var(--game-color) !important;
-    /* Neon bir parlama ekleyerek "seçili" olduğunu belli eder */
-    box-shadow: 0 10px 25px rgba(0,0,0,0.6), 0 0 15px var(--game-color);
+    border-width: 3px;
     z-index: 10;
     color: var(--game-color);
-    opacity: 1;
 }
 
-.game-filter-card.active .card-label {
-    color: var(--game-color);
-    opacity: 1;
-}
-/* --- HOVER DURUMU (Yalnızca Zoom) --- */
-.game-filter-card:hover, .game-filter-card.active {
-    /* Tüm neon, parlama ve duman efektleri kaldırıldı */
-    transform: scale(1.08); 
-    border-color: rgba(255, 255, 255, 0.2); /* Hafif belirginleşen çerçeve */
-    z-index: 10;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-}
-
-.game-filter-card:hover img, .game-filter-card.active img {
-    transform: scale(1.1); /* Resim de kartla birlikte büyür */
+/* --- HOVER DURUMU --- */
+.game-filter-card:hover {
+    border-color: rgba(255, 255, 255, 0.35);
 }
 
 /* --- CANLI SKOR LİG TABLOLARI (DEĞİŞMEDİ) --- */
@@ -1342,8 +1113,6 @@ nav ul li a:hover {
     margin-bottom: 30px;
     overflow: hidden;
 }
-/* ... match-row, match-score gibi diğer skor tablosu kodların burada devam edebilir ... */
-
 .league-header {
     background: #222;
     padding: 12px 20px;
@@ -1403,12 +1172,6 @@ nav ul li a:hover {
     color: #ff4747;
 }
 
-.match-half {
-    text-align: right;
-    color: #666;
-    font-size: 12px;
-    font-style: italic;
-}
 
 @media screen and (max-width: 768px) {
     .match-row {
@@ -1416,49 +1179,50 @@ nav ul li a:hover {
         padding: 12px 10px;
         gap: 5px;
     }
-    .match-half { display: none; }
     .team-home { padding-right: 10px; font-size: 13px; }
     .team-away { padding-left: 10px; font-size: 13px; }
     .match-score { padding: 4px 10px; font-size: 14px; }
 }
 
 /* --- CANLİ SKOR KAYAN KART ETRAFI RENGİ --- */
-a[data-game="cs2"] {
-    --game-color: #b76bff  !important;
-}
-
-a[data-game="valorant"] {
-    --game-color: #b76bff  !important;
-}
-
-a[data-game="lol"] {
-    --game-color: #b76bff !important;
-}
-
-a[data-game="dota"] {
-    --game-color: #b76bff  !important;
-}
-
-a[data-game="all"] {
-    --game-color: #b76bff !important;
-}
+a[data-game] { --game-color: #b76bff; }
 
 /* === MODAL VE BUTON TASARIMLARI === */
 .auth-btn { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; margin-right: 10px; }
 .btn-login:hover { background: rgba(183, 107, 255, 0.1); color: #b76bff; border-color: #b76bff; }
 .btn-register { background: #b76bff; border-color: #b76bff; }
 .btn-register:hover { background: #9b51e0; box-shadow: 0 0 10px rgba(183, 107, 255, 0.5); }
-.auth-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); z-index: 9999; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
-.auth-modal-overlay.show { display: flex; opacity: 1; }
+.auth-modal-overlay { 
+    display: flex;           /* Display her zaman flex kalsın ki animasyon durmasın */
+    visibility: hidden;      /* Başlangıçta görünmez yap */
+    pointer-events: none;    /* Kapalıyken tıklamaları engelle */
+    position: fixed; 
+    top: 0; left: 0; 
+    width: 100%; height: 100%; 
+    background: rgba(0, 0, 0, 0.8); 
+    backdrop-filter: blur(5px); 
+    z-index: 9999; 
+    justify-content: center; 
+    align-items: center; 
+    opacity: 0; 
+    transition: opacity 0.3s ease, visibility 0.3s ease; 
+}
 .auth-modal-content { background: #1a1a1a; width: 380px; border-radius: 16px; border: 1px solid #333; box-shadow: 0 20px 50px rgba(0,0,0,0.8); position: relative; transform: translateY(-20px); transition: transform 0.3s ease; overflow: hidden; }
-.auth-modal-overlay.show .auth-modal-content { transform: translateY(0); }
+.auth-modal-overlay.show { 
+    visibility: visible;     /* Açıldığında görünür yap */
+    pointer-events: auto;    /* Tıklamaları aç */
+    opacity: 1; 
+}
+.auth-modal-overlay.show .auth-modal-content { 
+    transform: translateY(0); 
+}
 .auth-close-btn { position: absolute; top: 15px; right: 20px; color: #888; font-size: 28px; cursor: pointer; z-index: 10; }
 .auth-close-btn:hover { color: #fff; }
 .auth-tabs { display: flex; border-bottom: 1px solid #333; }
 .auth-tab { flex: 1; background: transparent; border: none; padding: 20px 0; color: #888; font-weight: bold; font-size: 14px; cursor: pointer; transition: 0.3s; }
 .auth-tab.active { color: #b76bff; background: rgba(183, 107, 255, 0.05); border-bottom: 2px solid #b76bff; }
 .auth-form-section { display: none; padding: 30px; text-align: center; }
-.auth-form-section.active { display: block; animation: fadeIn 0.4s ease; }
+.auth-form-section.active { display: block; }
 .auth-form-section h3 { margin-bottom: 20px; color: #fff; font-size: 20px; }
 .auth-input { width: 100%; padding: 12px; margin-bottom: 15px; background: #0a0a0a; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; }
 .auth-input:focus { border-color: #b76bff; outline: none; }
@@ -1519,33 +1283,23 @@ html.oturum-bekleniyor .header-auth-group {
     box-shadow: 0 0 20px rgba(183, 107, 255, 0.4);
 }
 
-/* --- SAYFA GEÇİŞ EFEKTİ (EKSİK PARÇA) --- */
-.page-transition-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background-color: #121212;
-    z-index: 99999;
-    opacity: 1;
-    pointer-events: none;
-    transition: opacity 0.3s ease-in-out;
-}
-.page-transition-overlay.loaded { opacity: 0; }
-.page-transition-overlay.fade-out { opacity: 1; pointer-events: all; }
 
-/* --- HABER CAROUSEL SİSTEMİ (KESİN ÇÖZÜM) --- */
-/* --- HABER CAROUSEL SİSTEMİ (MİLİMETRİK HİZALAMA VE FULL GLOW) --- */
 .news-carousel-wrapper {
     position: relative;
     width: 100%;
-    /* TAVAN SORUNU ÇÖZÜMÜ: Işığın yukarı ve aşağı rahatça taşması için 120px boşluk */
-    padding: 120px 0; 
-    margin: 0 auto;
-    /* ÖNEMLİ: Sadece yanlardan taşan kartları gizler, üst/alt ışıklara dokunmaz */
-    overflow: hidden; 
-    cursor: grab; /* Fare imleci el şeklini alır */
-    user-select: none
+    
+    /* 1. Işığın sığması için üstte 60px alan bırakıyoruz */
+    padding: 60px 0 120px 0; 
+    
+    /* 2. Kartları yukarı, başlığa doğru çeken sihirli dokunuş */
+    /* Padding ile bıraktığımız boşluktan daha fazlasını geri çekiyoruz */
+    margin-top: -60px !important; 
+    
+    margin-bottom: 0;
+    overflow: hidden; /* Yanları gizler ama artık üstte 60px yerimiz var */
+    cursor: grab;
+    user-select: none;
 }
-
 .news-carousel-wrapper:active {
     cursor: grabbing; /* Tıklayınca kavrama şekli */
 }
@@ -1594,4 +1348,560 @@ html.oturum-bekleniyor .header-auth-group {
     box-shadow: 0 0 30px rgba(183, 107, 255, 0.8);
     border-color: #fff;
     transform: translateY(-50%) scale(1.15);
+}
+
+/* ============================================================
+   MODAL YENİDEN TASARIMI (RENK GEÇİŞİ VE DIŞ X BUTONU)
+   ============================================================ */
+
+.auth-modal-content {
+    /* 'background' yerine 'background-image' kullandık ki animasyon kilitlenmesin */
+    background-image: linear-gradient(-45deg, #171a21, #76b900, #ed1c24, #0071c5, #b76bff, #171a21) !important;
+    background-size: 400% 400% !important;
+    
+    /* 3D Slider ile birebir aynı sürede (25s) ve aynı animasyonla döner */
+    animation: evrenselDegradeAkis 25s ease infinite !important;
+    
+    /* Çarpı butonunun dışarı çıkabilmesi için */
+    overflow: visible !important; 
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Renklerin üzerinde yazıların okunabilmesi için "Cam Efekti" (Glassmorphism) karartması */
+.auth-tabs {
+    background: rgba(0, 0, 0, 0.6) !important;
+    border-radius: 16px 16px 0 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.auth-form-section {
+    background: rgba(0, 0, 0, 0.6) !important;
+    border-radius: 0 0 16px 16px !important;
+}
+
+/* --- YENİ ÇARPI (X) BUTONU (DIŞARIDA VE ANİMASYONLU) --- */
+.auth-close-btn {
+    position: absolute !important;
+    top: -50px !important; /* Modalin tamamen üstüne aldık */
+    right: 0 !important;   /* Sağ tarafa hizaladık */
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.6) !important;
+    color: #fff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 50%;
+    
+    /* İçindeki X işaretini tam ortalamak için */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0; 
+    padding-bottom: 4px; /* X işaretinin dikey dengesi */
+    
+    font-size: 26px !important;
+    cursor: pointer;
+    z-index: 100;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1) !important;
+}
+
+.auth-close-btn:hover {
+    background: #ed1c24 !important; /* Hover anında kırmızı parlama */
+    color: #fff !important;
+    border-color: #ed1c24 !important;
+    box-shadow: 0 0 15px rgba(237, 28, 36, 0.6);
+    transform: scale(1.15) rotate(90deg) !important; /* Hem büyür hem de X döner */
+}
+
+/* --- HABER KARTLARI KISA ÖZET TASARIMI --- */
+.row-ozet {
+    font-size: 12px;
+    color: #bbb;
+    margin-bottom: 10px;
+    /* Yazının taşıp kartı büyütmesini engeller, 2 satırla sınırlar */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.4;
+}
+
+/* --- CANLI SKOR KARTLARINI %10 BÜYÜTME --- */
+.league-group {
+    margin-bottom: 30px !important;
+}
+.league-header {
+    font-size: 16px !important;
+    padding: 15px 20px !important;
+}
+.match-row {
+    padding: 16px 20px !important;
+}
+.team-home, .team-away {
+    font-size: 16px !important;
+}
+.match-score {
+    font-size: 18px !important;
+    padding: 6px 18px !important;
+}
+.match-time-status {
+    font-size: 13.5px !important;
+}
+
+/* Mobil Menü Açıldığında Navigasyonu Göster */
+@media (max-width: 992px) {
+    .hamburger-menu.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger-menu.active span:nth-child(2) { opacity: 0; }
+    .hamburger-menu.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+}.sifre-unut-link { display: block; text-align: center; color: #888; font-size: 12px; margin-top: 15px; text-decoration: none; transition: color 0.3s; }
+
+.sifre-unut-link:hover { color: #b76bff; }
+
+/* ============================================================
+   TAM MOBİL UYUMLULUK — KAPSAMLI DÜZELTMELER
+   ============================================================ */
+
+/* Hamburger her zaman görünür (masaüstü + mobil) */
+.hamburger-menu { display: flex; align-items: center; }
+
+/* ==============================
+   768px VE ALTI (MOBİL)
+   ============================== */
+@media screen and (max-width: 768px) {
+
+    /* --- MEGA MENU: TAM GİZLE --- */
+    nav#ana-menu { display: none !important; }
+    .mega-panel  { display: none !important; }
+
+    /* --- HEADER --- */
+    header { padding: 0 12px; height: 70px; }
+
+    .header-auth-group { gap: 2px; }
+    .header-auth-group .auth-btn { padding: 6px 8px; font-size: 11px; }
+    .auth-sep { font-size: 13px; }
+
+    .live-score-btn { font-size: 11px; }
+    .live-score-btn .red-dot { margin-right: 4px; }
+
+    .hamburger-menu { padding: 10px 4px; }
+
+    /* Hamburger içerik: fixed — header'ın tam altında başlar */
+    .hamburger-content {
+        position: fixed !important;
+        top: 70px !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100vw !important;
+        border-radius: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-top: 1px solid #2a2a2a !important;
+        border-bottom: 1px solid #2a2a2a !important;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.8) !important;
+        min-width: unset !important;
+    }
+    .hamburger-content a {
+        padding: 14px 24px;
+        font-size: 15px;
+        border-bottom: 1px solid #1e1e1e;
+        transition: background 0.15s, color 0.15s;
+    }
+    .hamburger-menu:hover .hamburger-content { max-height: 0; opacity: 0; }
+    .hamburger-content.active {
+        max-height: 600px !important;
+        opacity: 1 !important;
+    }
+
+    /* --- GENEL --- */
+    main { width: 100%; box-sizing: border-box; overflow-x: hidden; }
+    .section-title-wrapper { width: 95%; padding: 0 12px; }
+
+    /* --- HERO SLIDER --- */
+    .hero-slider-container {
+        height: 220px;
+        width: 100%;
+        margin: 0 0 20px 0;
+        border-radius: 0;
+    }
+    .slider-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+        background: rgba(0,0,0,0.5);
+    }
+    .prev-btn { left: 8px; }
+    .next-btn { right: 8px; }
+    .slider-content { left: 16px; right: 16px; bottom: 16px; }
+    .slider-content h2 { font-size: 16px; }
+
+    /* --- ANA SAYFA CAROUSEL (div#haberler) --- */
+    .news-carousel-wrapper {
+        width: 100%;
+        border-radius: 0;
+        padding: 0 0 20px 0;
+        margin-top: 0 !important;
+        overflow-x: auto !important;
+        cursor: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .news-carousel-wrapper::-webkit-scrollbar { display: none; }
+    .news-viewport {
+        width: 100% !important;
+        margin: 0 !important;
+        overflow: visible !important;
+    }
+    div#haberler.news-container {
+        flex-wrap: nowrap;
+        gap: 12px;
+        padding: 10px 12px;
+        transform: none !important;
+        transition: none !important;
+    }
+    div#haberler.news-container .news-row {
+        width: 220px;
+        min-width: 220px;
+        height: 270px;
+        flex-shrink: 0;
+    }
+    #news-prev, #news-next { display: none !important; }
+
+    /* --- PLATFORM SAYFASI (section#haberler) --- */
+    .hero-gradient { padding: 40px 16px; }
+    .hero-gradient h1 { font-size: 22px; letter-spacing: 1px; }
+    .hero-gradient p  { font-size: 14px; opacity: 0.85; margin-top: 10px; }
+
+    section#haberler.news-container {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 0 12px 20px;
+        transform: none !important;
+        transition: none !important;
+    }
+    section#haberler.news-container .news-row {
+        width: 100% !important;
+        min-width: unset !important;
+        height: 260px;
+        flex-shrink: unset;
+    }
+
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        padding: 20px;
+    }
+
+    /* --- KATEGORİLER SAYFASI --- */
+    .vertical-split-layout { flex-direction: column; gap: 30px; padding: 0 16px; }
+    .vertical-divider {
+        width: 80%; height: 2px;
+        background: linear-gradient(to right, transparent, #b76bff, transparent);
+        margin: 0 auto;
+    }
+    .mobile-platforms-grid.grid-2-col { grid-template-columns: repeat(2, 1fr) !important; gap: 12px; }
+    .mobile-plat-card  { padding: 14px; font-size: 13px; gap: 10px; }
+    .mobile-plat-logo  { width: 26px; height: 26px; }
+    .title-card-wrapper { padding: 12px 24px !important; }
+    .title-card-text   { font-size: 17px !important; }
+
+    /* --- E-SPOR SAYFASI --- */
+    .esports-layout {
+        flex-direction: column;
+        width: 95%;
+        gap: 24px;
+        padding: 0 12px;
+    }
+    .esports-grid { grid-template-columns: 1fr; }
+    .esports-sidebar { width: 100%; position: static; }
+    .match-board { padding: 16px; }
+    .esports-grid .news-row {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 260px;
+    }
+    .esports-grid .row-img { height: 160px; }
+    /* Espor'da hover transform h1'i gizlememesi için kaldır */
+    .esports-grid .news-row:hover { transform: none; }
+
+    /* --- CANLI SKOR SAYFASI --- */
+    .game-filter-card  { width: 150px; height: 85px; }
+    .marquee-container { margin-bottom: 20px; padding: 0 4px; }
+    .marquee-container::before, .marquee-container::after { width: 30px; }
+    .marquee-track { gap: 10px; }
+    .league-header     { font-size: 13px !important; padding: 10px 14px !important; }
+    .match-score       { font-size: 14px !important; padding: 4px 10px !important; }
+    .match-row         { padding: 12px 10px !important; gap: 5px; }
+    .team-home, .team-away { font-size: 13px !important; padding-right: 8px !important; padding-left: 8px !important; }
+    .match-half        { display: none; }
+
+    /* --- HABER DETAY SAYFASI --- */
+    article { padding: 0 !important; margin: 16px auto !important; }
+    #detay-baslik { font-size: 22px !important; }
+    #detay-resim  { border-radius: 0 !important; margin-bottom: 16px !important; }
+    .yorum-seksiyonu { margin: 16px auto !important; border-radius: 8px !important; }
+    .yorum-seksiyonu textarea { font-size: 14px !important; }
+
+    /* --- AUTH MODAL --- */
+    .auth-modal-content { width: 95vw !important; max-width: 420px; }
+    .auth-form-section { padding: 20px !important; }
+    .auth-close-btn { top: -40px !important; right: 0 !important; }
+}
+
+/* ==============================
+   400px VE ALTI (KÜÇÜK TELEFONLAR)
+   ============================== */
+@media screen and (max-width: 400px) {
+    /* Platform sayfası tek sütun */
+    section#haberler.news-container { grid-template-columns: 1fr; }
+    section#haberler.news-container .news-row { height: 290px; }
+
+    /* Kategoriler tek sütun */
+    .mobile-platforms-grid.grid-2-col { grid-template-columns: 1fr !important; }
+
+    /* Carousel daha dar kartlar */
+    div#haberler.news-container .news-row,
+    .news-row { width: 190px !important; min-width: 190px !important; }
+
+    /* Auth butonlarını gizle — hamburger menüde erişilebilir */
+    .header-auth-group { display: none !important; }
+
+    /* Logo küçült */
+    .header-logo { height: 56px !important; top: 0; }
+}
+
+/* ==============================
+   PLATFORM SAYFASI GLOBAL TANIMLAR
+   ============================== */
+.featured-news-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 25px;
+    width: 90%;
+    margin: 0 auto 40px auto;
+}
+
+@media screen and (max-width: 768px) {
+    .featured-news-container { grid-template-columns: 1fr; width: 95%; }
+}
+
+/* === HAMBURGER MENÜ: KULLANICI BLOĞU VE SINIF DÜZELTMELERİ === */
+.hamburger-divider {
+    height: 1px;
+    background: #2a2a2a;
+    margin: 6px 0;
+}
+.hamburger-kullanici {
+    display: block;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #b76bff;
+    letter-spacing: 0.5px;
+}
+#hamburger-oturum-blok a,
+#hamburger-auth-blok a {
+    display: block;
+    color: #fff;
+    padding: 13px 20px;
+    text-decoration: none;
+    font-size: 13px;
+    border-bottom: 1px solid #1e1e1e;
+    transition: background 0.2s, color 0.2s;
+}
+#hamburger-oturum-blok a:hover,
+#hamburger-auth-blok a:hover { background: rgba(255,255,255,0.05); color: #b76bff; }
+#hm-cikis { color: #ff4747 !important; }
+#hm-cikis:hover { background: rgba(255,71,71,0.08) !important; }
+
+/* Masaüstünde kullanıcı badge desktop class */
+@media screen and (max-width: 768px) {
+    .user-badge-desktop { display: none !important; }
+    /* Header auth butonları mobilde gizle — hamburger menüde var */
+    .header-auth-group { display: none !important; }
+}
+@media screen and (min-width: 769px) {
+    /* Masaüstünde hamburger auth bölümü gereksiz, görsel bozukluk yaratmasın */
+    #hamburger-auth-blok { display: none; }
+    #hamburger-oturum-blok { display: none; }
+}
+
+/* EA Games, PS ve Ubisoft logolarını doğrudan dosya isminden yakalayıp siyah yapar (Kesin Çözüm) */
+.mega-panel img[src*="ea.png"],
+.mega-panel img[src*="ps.png"],
+.mega-panel img[src*="amd.png"],
+.mega-panel img[src*="ubisoft.png"] {
+    filter: brightness(0) !important;
+    transition: all 0.3s ease;
+}
+
+/* Mega menüde üzerine gelince siyah kalsın ama etrafına neon mor ışık saçsın */
+/* ==========================================================================
+   MARKALARA ÖZEL NEON PARLAMA EFEKTLERİ (KUSURSUZ VERSİYON)
+   ========================================================================== */
+
+/* 1. KATEGORİLER SAYFASI (Siyah Arka Plan - Logolar Kendi Halinde Parlar) */
+.mobile-plat-card:hover img[src*="steam.png"] { filter: drop-shadow(0 0 8px #66c0f4) !important; }
+.mobile-plat-card:hover img[src*="epic.png"] { filter: drop-shadow(0 0 8px #ffffff) !important; }
+.mobile-plat-card:hover img[src*="nvidia.png"] { filter: drop-shadow(0 0 8px #76b900) !important; }
+.mobile-plat-card:hover img[src*="intel.png"] { filter: drop-shadow(0 0 8px #0071c5) !important; }
+.mobile-plat-card:hover img[src*="xbox.png"] { filter: drop-shadow(0 0 8px #107c10) !important; }
+.mobile-plat-card:hover img[src*="nintendo.png"] { filter: drop-shadow(0 0 8px #e60012) !important; }
+.mobile-plat-card:hover img[src*="ea.png"] { filter: drop-shadow(0 0 8px #ff4747) !important; }
+.mobile-plat-card:hover img[src*="ps.png"] { filter: drop-shadow(0 0 8px #0055ff) !important; }
+.mobile-plat-card:hover img[src*="ubisoft.png"] { filter: drop-shadow(0 0 8px #00d0ff) !important; }
+
+/* 2. SOL SİDEBAR (Beyaz Arka Plan - Logolar Siyah Kalıp Kendi Renginde Parlar) */
+.side-item:hover img[src*="xbox.png"] { filter: brightness(0) drop-shadow(0 0 8px #107c10) !important; }
+.side-item:hover img[src*="ps.png"] { filter: brightness(0) drop-shadow(0 0 8px #0055ff) !important; }
+.side-item:hover img[src*="nintendo.png"] { filter: brightness(0) drop-shadow(0 0 8px #e60012) !important; }
+
+/* 3. SAĞ MEGA MENÜ LİSTESİ (Beyaz Arka Plan - Sadece Mor Parlama) */
+.item-sub:hover img[src*="ea.png"],
+.item-sub:hover img[src*="ps.png"],
+.item-sub:hover img[src*="ubisoft.png"] {
+    filter: brightness(0) drop-shadow(0 0 5px #b76bff) !important;
+}
+
+/* ==========================================================================
+   AMD LOGOSU İÇİN KUSURSUZ KIRMIZI FİLTRE (Haber Resimlerini Bozmaz)
+   ========================================================================== */
+
+/* SADECE küçük ikon sınıflarını kırmızı yapar, ana haber resimlerine dokunmaz */
+.menu-logo[src*="amd.png"],
+.mobile-plat-logo[src*="amd.png"],
+.platform-logo[src*="amd.png"],
+.slider-tag img[src*="amd.png"],
+.detay-platform-logo[src*="amd.png"] {
+    filter: brightness(0) invert(18%) sepia(97%) saturate(5341%) hue-rotate(347deg) brightness(97%) contrast(95%) !important;
+    transition: all 0.3s ease;
+}
+
+/* Mouse ile üzerine gelindiğinde kırmızı neon ışık saçması için (Hover) */
+.mobile-plat-card:hover .mobile-plat-logo[src*="amd.png"],
+.item-sub:hover .menu-logo[src*="amd.png"],
+.side-item:hover .menu-logo[src*="amd.png"],
+.news-row:hover .platform-logo[src*="amd.png"] {
+    filter: brightness(0) invert(18%) sepia(97%) saturate(5341%) hue-rotate(347deg) brightness(97%) contrast(95%) drop-shadow(0 0 8px rgba(237, 28, 36, 0.8)) !important;
+}
+
+/* --- CANLI SKOR DURUM FİLTRESİ --- */
+.matches-title-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Başlığı tam ortalar */
+    margin-bottom: 30px;
+    height: 40px;
+    width: 100%;
+}
+.matches-main-title {
+    color: #ffffff;
+    margin: 0;
+    text-align: center;
+}
+.status-filter-wrapper {
+    position: absolute;
+    right: 0; /* Butonu en sağa yapıştırır */
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse; /* FİLTRE sağda, seçenekler sola doğru açılır */
+    cursor: pointer;
+}
+.status-main-btn {
+    background: rgba(183, 107, 255, 0.1);
+    color: #b76bff;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    border: 1px solid #b76bff;
+    z-index: 2;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+}
+.status-filter-wrapper:hover .status-main-btn {
+    background: #b76bff;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(183, 107, 255, 0.4);
+}
+.status-options {
+    display: flex;
+    gap: 8px;
+    opacity: 0; /* Başlangıçta gizli */
+    transform: translateX(20px); /* Sağdan sola gelme efekti için */
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    margin-right: 15px; /* Butonla seçenekler arasındaki boşluk */
+}
+/* Mouse geldiğinde seçenekleri göster */
+.status-filter-wrapper:hover .status-options {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+.s-opt {
+    background: #1a1a1a;
+    color: #888;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    border: 1px solid #333;
+    transition: 0.3s;
+}
+.s-opt:hover, .s-opt.active {
+    background: rgba(183, 107, 255, 0.15);
+    color: #b76bff;
+    border-color: #b76bff;
+}
+
+/* Mobilde üst üste binmemesi için */
+@media screen and (max-width: 768px) {
+    .matches-title-bar {
+        flex-direction: column;
+        height: auto;
+        gap: 15px;
+    }
+    .status-filter-wrapper {
+        position: relative;
+        width: 100%;
+        justify-content: center;
+        flex-direction: row; 
+    }
+    .status-options { margin-right: 0; margin-left: 10px; }
+}
+
+#scrollTopBtn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 9999;
+    background: #b76bff;
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+}
+#scrollTopBtn.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+#scrollTopBtn:hover {
+    background: #9b51e0;
+    box-shadow: 0 6px 20px rgba(183,107,255,0.8);
+    transform: translateY(-5px);
 }
