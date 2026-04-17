@@ -2,8 +2,11 @@
 // Veritabanı bağlantısı
 require_once 'baglan.php';
 
-// PANDASCORE API ANAHTARIN (Buraya kendi anahtarını yapıştır)
-$api_token = "mHsOK5kpJAokNTrC9LmJmpwiy-tWF7TygGFzIiopadFpymZz7Og";
+// Gizli ayarlar dosyamızı projeye dahil ediyoruz
+require_once 'gizli_ayarlar.php';
+
+// PANDASCORE API ANAHTARI (Artık gizli dosyadan geliyor)
+$api_token = PANDASCORE_API_KEY;
 
 // Son güncellenen, canlı oynanan veya henüz başlamayan en yeni 50 maçı çeker
 $api_url = "https://api.pandascore.co/matches?filter[status]=running,not_started,finished&sort=-modified_at&per_page=50&token=" . $api_token;
