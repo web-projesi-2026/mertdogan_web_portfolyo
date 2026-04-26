@@ -139,15 +139,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['toplu_sil_btn'])) {
             if (move_uploaded_file($_FILES['resim_dosya']['tmp_name'], $path)) { $resim = $path; }
         }
         $kaynak_url = !empty($_POST['kaynak_url']) ? trim($_POST['kaynak_url']) : null;
+        
+        // Yeni eklenen kategori verisini al (Varsayılan 'Haber' olsun)
+        $kategori = !empty($_POST['kategori']) ? $_POST['kategori'] : 'Haber';
 
         if ($tip == "haber") {
-            $db->prepare("INSERT INTO haberler (baslik, ozet, icerik, platform, resim, kaynak_url) VALUES (?,?,?,?,?,?)")
-               ->execute([$_POST['baslik'], $_POST['ozet'], $_POST['icerik'], $_POST['platform'], $resim, $kaynak_url]);
-            islemKaydet($db, $_SESSION['kullanici_id'], 'Haber Ekleme', "Yeni Haber: {$_POST['baslik']}");
+            // INSERT sorgusuna kategori eklendi
+            $db->prepare("INSERT INTO haberler (baslik, ozet, icerik, platform, resim, kaynak_url, kategori) VALUES (?,?,?,?,?,?,?)")
+               ->execute([$_POST['baslik'], $_POST['ozet'], $_POST['icerik'], $_POST['platform'], $resim, $kaynak_url, $kategori]);
+            islemKaydet($db, $_SESSION['kullanici_id'], 'İçerik Ekleme', "Yeni $kategori: {$_POST['baslik']}");
         } else {
-            $db->prepare("UPDATE haberler SET baslik=?, ozet=?, icerik=?, platform=?, resim=?, kaynak_url=? WHERE id=?")
-               ->execute([$_POST['baslik'], $_POST['ozet'], $_POST['icerik'], $_POST['platform'], $resim, $kaynak_url, $_POST['haber_id']]);
-            islemKaydet($db, $_SESSION['kullanici_id'], 'Haber Düzenleme', "Haber ID: {$_POST['haber_id']} güncellendi.");
+            // UPDATE sorgusuna kategori eklendi
+            $db->prepare("UPDATE haberler SET baslik=?, ozet=?, icerik=?, platform=?, resim=?, kaynak_url=?, kategori=? WHERE id=?")
+               ->execute([$_POST['baslik'], $_POST['ozet'], $_POST['icerik'], $_POST['platform'], $resim, $kaynak_url, $kategori, $_POST['haber_id']]);
+            islemKaydet($db, $_SESSION['kullanici_id'], 'İçerik Düzenleme', "İçerik ID: {$_POST['haber_id']} güncellendi.");
         }
         $aktif_sekme = "haber";
     }
@@ -305,23 +310,33 @@ $log_tipler = $db->query("SELECT DISTINCT islem_tipi FROM islem_loglari")->fetch
 
     <div id="haber-sekme" class="form-section <?= $aktif_sekme=='haber'?'active':'' ?>">
         <div class="admin-card">
-            <h3><?= $edit_haber ? 'Haberi Düzenle' : 'Yeni Haber Ekle' ?></h3>
+            <h3><?= $edit_haber ? 'İçeriği Düzenle' : 'Yeni İçerik Ekle' ?></h3>
             <form method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="form_tipi" value="<?= $edit_haber?'haber_guncelle':'haber' ?>">
                 <input type="hidden" name="haber_id" value="<?= $edit_haber['id']??'' ?>">
                 <input type="hidden" name="eski_resim" value="<?= $edit_haber['resim']??'' ?>">
-                <input type="text" name="baslik" placeholder="Haber Başlığı" value="<?= $edit_haber['baslik']??'' ?>" required>
+                <input type="text" name="baslik" placeholder="Başlık" value="<?= $edit_haber['baslik']??'' ?>" required>
+                
                 <div class="form-row">
+                    <select name="kategori" required>
+                        <option value="Haber" <?= ($edit_haber && $edit_haber['kategori']=='Haber')?'selected':'' ?>>Haber</option>
+                        <option value="İncelemeler" <?= ($edit_haber && $edit_haber['kategori']=='İncelemeler')?'selected':'' ?>>İnceleme</option>
+                        <option value="Donanım" <?= ($edit_haber && $edit_haber['kategori']=='Donanım')?'selected':'' ?>>Donanım & Teknoloji</option>
+                        <option value="Rehberler" <?= ($edit_haber && $edit_haber['kategori']=='Rehberler')?'selected':'' ?>>Oyun Rehberi</option>
+                    </select>
+                    
                     <select name="platform">
-                        <?php $plats = ['Steam','Epic Games','Xbox','PS','Nintendo','EA Games','Ubisoft','Nvidia','AMD','Intel']; 
+                        <?php $plats = ['Steam','Epic Games','Xbox','PS','Nintendo','EA Games','Ubisoft','Nvidia','AMD','Intel','PC']; 
                         foreach($plats as $p) echo "<option value='$p' ".($edit_haber && $edit_haber['platform']==$p?'selected':'').">$p</option>"; ?>
                     </select>
+                    
                     <input type="file" name="resim_dosya">
                 </div>
+                
                 <div class="form-row"><input type="url" name="resim_url" placeholder="URL (http://...)"></div>
                 <input type="text" name="ozet" placeholder="Kısa Özet" value="<?= $edit_haber['ozet']??'' ?>" required>
-                <textarea name="icerik" placeholder="Haber Detayı" style="height:120px;" required><?= $edit_haber['icerik']??'' ?></textarea>
-                <button class="btn-submit"><?= $edit_haber?'HABERİ GÜNCELLE':'HABERİ YAYINLA' ?></button>
+                <textarea name="icerik" placeholder="Detaylar" style="height:120px;" required><?= $edit_haber['icerik']??'' ?></textarea>
+                <button class="btn-submit"><?= $edit_haber?'İÇERİĞİ GÜNCELLE':'İÇERİĞİ YAYINLA' ?></button>
                 <?php if($edit_haber): ?><a href="?sekme=haber" style="display:block; text-align:center; margin-top:10px; color:#ff4747; text-decoration:none;">İptal Et</a><?php endif; ?>
             </form>
         </div>

@@ -1,6 +1,6 @@
-/* --- 1. DİNAMİK RENK DEĞİŞKENLERİ --- */
-
-/* --- 2. GENEL VE HEADER --- */
+/* ==========================================================================
+   1. GENEL AYARLAR VE DEĞİŞKENLER
+   ========================================================================== */
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 body { 
     background-color: #121212; 
@@ -12,474 +12,269 @@ body {
 img { max-width: 100%; }
 body::-webkit-scrollbar { display: none; }
 
-header { display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 80px; background-color: #121212; border-bottom: 1px solid #2a2a2a; position: sticky; top: 0; z-index: 2000; }
-.logo-wrapper {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    flex: 1;
-    gap: 0;
-    transform: none !important;
-    transition: none !important;
-}
-.header-logo {
-    height: 160px !important;
-    width: auto;
-    object-fit: contain;
-    position: relative;
-    top: 8px;
-    z-index: 2001;
-    cursor: pointer;
-    transition: opacity 0.1s ease;
-    background: transparent;
-}
+/* --- Evrensel Animasyonlar --- */
 @keyframes evrenselDegradeAkis {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
-
-.logo-wrapper:hover .header-logo {
-    transform: none !important;
-    scale: 1 !important;
+@keyframes blinker { 50% { opacity: 0; } }
+@keyframes logoNefesAnimasyonu {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
 }
+@keyframes spinBorder {
+    100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   2. HEADER VE NAVİGASYON
+   ========================================================================== */
+header { display: flex; justify-content: space-between; align-items: center; padding: 0 40px; height: 80px; background-color: #121212; border-bottom: 1px solid #2a2a2a; position: sticky; top: 0; z-index: 2000; }
+
+.logo-wrapper { display: flex; align-items: center; text-decoration: none; flex: 1; gap: 0; transform: none !important; transition: none !important; }
+.header-logo { height: 160px !important; width: auto; object-fit: contain; position: relative; top: 8px; z-index: 2001; cursor: pointer; transition: opacity 0.1s ease; background: transparent; }
+.logo-wrapper:hover .header-logo { transform: none !important; scale: 1 !important; }
 
 nav { flex: 1; display: flex; justify-content: center; }
 nav ul { list-style: none; display: flex; align-items: center; height: 80px; }
 nav ul li { height: 100%; display: flex; align-items: center; position: relative; }
-/* --- NAVİGASYON LİNKLERİ (YUMUŞAK MOR GEÇİŞ) --- */
-nav ul li a { 
-    color: #fff; 
-    text-decoration: none; 
-    font-size: 14px; 
-    text-transform: uppercase; 
-    padding: 0 20px; 
-    height: 100%; 
-    display: flex; 
-    align-items: center; 
-    /* Yumuşak geçiş efekti burada başlıyor */
-    transition: color 0.3s ease; 
-}
+nav ul li a { color: #fff; text-decoration: none; font-size: 14px; text-transform: uppercase; padding: 0 20px; height: 100%; display: flex; align-items: center; transition: color 0.3s ease; }
+nav ul li a:hover { color: #b76bff; }
 
-/* Mouse üzerine geldiğinde Canlı Skor ile aynı mor renk olur */
-nav ul li a:hover { 
-    color: #b76bff; 
-}
+.nav-arrow { display: inline-block; width: 7px; height: 7px; margin-left: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-135deg); transition: transform 0.3s ease, top 0.3s ease; position: relative; top: 2px; }
+.mega-menu:hover .nav-arrow { transform: rotate(45deg); top: -2px; }
 
-/* --- 3. MEGA MENU VE SEKME MANTIĞI --- */
-.mega-menu { position: static; }
-.mega-panel { 
-    /* display: none; yerine bunları kullanıyoruz ki animasyon çalışsın */
-    visibility: hidden;
-    opacity: 0;
-    
-    position: absolute; 
-    top: 80px; 
-    left: 50% !important; 
-    /* Paneli 10px aşağıdan başlatıyoruz, hoverda yerine oturacak */
-    transform: translateX(-50%) translateY(10px) !important; 
-    
-    width: 900px; 
-    background-color: #ffffff !important; 
-    border-radius: 20px; 
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5); 
-    z-index: 3000;
-    border-top: 1px solid #2a2a2a; 
-    overflow: hidden;
-
-    /* GEÇİŞ EFEKTİ: 0.3 saniyede hem görünürlük hem de konum değişir */
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    pointer-events: none; /* Kapalıyken tıklamaları engelle */
-}
-
-.mega-menu:hover .mega-panel { 
-    visibility: visible;
-    opacity: 1;
-    /* Paneli asıl konumuna (0) çekiyoruz */
-    transform: translateX(-50%) translateY(0) !important; 
-    pointer-events: auto; /* Açıkken tıklanabilir yap */
-}
-
-/* Menüye geçerken kapanmayı önleyen köprü */
-.mega-panel::before { 
-    content: ''; 
-    position: absolute; 
-    top: -20px; 
-    left: 0; 
-    width: 100%; 
-    height: 20px; 
-    background: transparent; 
-}
-
-.mega-layout { 
-    display: flex; 
-    min-height: 320px; 
-    background-color: #ffffff;
-    padding-top: 30px !important; 
-    border-radius: 20px;
-}
-
-/* SOLDAKİ GRİ SİDEBAR (ALT KÖŞE TAMİRİ) */
-.mega-sidebar { 
-    width: 220px; 
-    background-color: #f8f9fa; 
-    padding: 20px 0; 
-    border-right: 1px solid #eee; 
-    display: flex; 
-    flex-direction: column;
-    /* Sidebar'ın sol köşelerini panelin yuvarlaklığına uyduruyoruz */
-    border-radius: 20px 0 0 20px; 
-    
-}
-
-/* SAĞDAKİ DETAY ALANI */
-.mega-details { 
-    flex: 1; 
-    padding: 40px; 
-    background-color: #fff;
-    border-radius: 0 20px 20px 0;
-}
-.side-item { padding: 15px 25px; color: #111 !important; font-weight: bold !important; font-size: 14px !important; text-decoration: none; }
-.side-item:hover, .main-active { background-color: #fff; color: #b76bff !important; }
-.item-sub { color: #666 !important; font-size: 13px !important; text-decoration: none; }
-.item-sub:hover { color: #b76bff !important; text-decoration: underline !important; }
-
-/* --- 4. SAĞ ALAN VE HAMBURGER --- */
 .header-right { flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 25px; }
 .live-score-btn { color: #fff !important; text-decoration: none !important; font-size: 13px; display: flex; align-items: center; font-weight: 600; letter-spacing: 0.5px; transition: 0.3s; white-space: nowrap; }
 .live-score-btn:hover { color: #b76bff !important; }
 .red-dot { color: #ff0000; margin-right: 8px; font-size: 18px; animation: blinker 1.5s linear infinite; }
-@keyframes blinker { 50% { opacity: 0; } }
 
-.hamburger-menu { position: relative; padding: 15px 5px; cursor: pointer; z-index: 5000; }
+/* --- Hamburger Menü --- */
+.hamburger-menu { position: relative; padding: 15px 5px; cursor: pointer; z-index: 5000; display: flex; align-items: center; }
 .hamburger-icon { display: flex; flex-direction: column; gap: 5px; }
 .hamburger-icon span { display: block; width: 25px; height: 2px; background-color: #fff; transition: 0.3s; }
-.hamburger-content {
-    position: absolute;
-    top: 45px;
-    right: 0;
-    min-width: 180px;
-    background-color: #1a1a1a;
-    border-radius: 12px;
-    border: 1px solid #333;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-    z-index: 4000;
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease-out, opacity 0.3s ease;
-}
-.hamburger-content.active {
-    max-height: 500px;
-    opacity: 1;
-}
-.hamburger-content a {
-    color: #fff;
-    padding: 13px 20px;
-    text-decoration: none;
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    transition: background 0.2s, color 0.2s;
-    border-bottom: 1px solid #222;
-    white-space: nowrap;
-}
+.hamburger-content { position: absolute; top: 45px; right: 0; min-width: 180px; background-color: #1a1a1a; border-radius: 12px; border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 4000; max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease-out, opacity 0.3s ease; }
+.hamburger-content.active { max-height: 500px; opacity: 1; }
+.hamburger-content a { color: #fff; padding: 13px 20px; text-decoration: none; display: block; font-size: 13px; font-weight: 600; transition: background 0.2s, color 0.2s; border-bottom: 1px solid #222; white-space: nowrap; }
 .hamburger-content a:hover { background-color: #222; color: #b76bff; }
 .hamburger-content::before { content: ''; position: absolute; top: -20px; left: 0; width: 100%; height: 20px; background: transparent; }
 
-/* --- SADECE LOGO İÇİN NEFES ALMA (PULSE) ANIMASYONU --- */
-@keyframes logoNefesAnimasyonu {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.15); /* %15 büyüme, daha belirgin olması için artırdım */
-    }
-    100% {
-        transform: scale(1);
-    }
-}
+.hamburger-divider { height: 1px; background: #2a2a2a; margin: 6px 0; }
+.hamburger-kullanici { display: block; padding: 12px 20px; font-size: 13px; font-weight: bold; color: #b76bff; letter-spacing: 0.5px; }
+#hamburger-oturum-blok a, #hamburger-auth-blok a { display: block; color: #fff; padding: 13px 20px; text-decoration: none; font-size: 13px; border-bottom: 1px solid #1e1e1e; transition: background 0.2s, color 0.2s; }
+#hamburger-oturum-blok a:hover, #hamburger-auth-blok a:hover { background: rgba(255,255,255,0.05); color: #b76bff; }
+#hm-cikis { color: #ff4747 !important; }
+#hm-cikis:hover { background: rgba(255,71,71,0.08) !important; }
 
-.hero-slider-container {
-    width: 90%;
-    margin: 50px auto;
-    height: 450px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20px;
-    overflow: hidden;
-    perspective: 1200px;
-    z-index: 1;
+/* ==========================================================================
+   3. MEGA MENÜ (AÇILIR PENCERE) VE LOGOLAR
+   ========================================================================== */
+.mega-menu { position: static; }
+.mega-panel { visibility: hidden; opacity: 0; position: absolute; top: 80px; left: 50% !important; transform: translateX(-50%) translateY(10px) !important; width: 900px; background-color: #1a1a1a !important; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); z-index: 3000; border-top: 2px solid #b76bff; overflow: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; }
+.mega-menu:hover .mega-panel { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0) !important; pointer-events: auto; }
+.mega-panel::before { content: ''; position: absolute; top: -20px; left: 0; width: 100%; height: 20px; background: transparent; }
+.mega-layout { display: flex; min-height: 320px; background-color: #1a1a1a; padding-top: 30px !important; border-radius: 20px; }
+.mega-sidebar { width: 220px; background-color: #121212; padding: 0 0 20px 0; border-right: 1px solid #333; display: flex; flex-direction: column; border-radius: 20px 0 0 20px; }
+.mega-details { flex: 1; padding: 40px; background-color: #1a1a1a; border-radius: 0 20px 20px 0; }
 
-    /* ARKA PLAN DEGRADESİ */
-    background: linear-gradient(-45deg, #171a21, #76b900, #ed1c24, #0071c5, #b76bff, #171a21);
-    background-size: 400% 400%;
-    
-    
-    filter: none !important; 
-    
-    /* Senkron Süre: 25s */
-    animation: evrenselDegradeAkis 25s ease infinite;
-}
-.hero-slider-container::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: -1;
-}
+.side-item { display: flex !important; align-items: center; gap: 20px; /* Logo ile XBOX/PS yazıları arasındaki boşluk açıldı */padding: 13px 25px; /* Satırlar arası ferahlatıldı */color: #fff !important; font-weight: bold !important; font-size: 14px !important; text-decoration: none; transition: all 0.3s ease !important; }
+.side-item:hover, .main-active { background-color: #222; color: #b76bff !important; }
+.item-sub { display: flex !important; align-items: center; gap: 18px !important; /* Logo ile yazı arasındaki boşluk (12'den 18'e çıktı) */padding: 12px 10px !important; /* Kutunun üst/alt iç boşluğu artırıldı */margin-bottom: 6px; /* Seçeneklerin birbirinden uzaklaşması için alt dış boşluk eklendi */ transition: all 0.2s ease !important; color: #ddd !important; font-size: 13px !important; text-decoration: none; }
+.item-sub:hover { color: #b76bff !important; background-color: rgba(183, 107, 255, 0.05); border-radius: 6px; text-decoration: none !important; }
 
+.mega-title { border-bottom: 1px solid #333 !important; color: #aaa !important; }
+
+.menu-logo { width: 32px !important; height: 32px !important; object-fit: contain; transition: transform 0.3s ease, filter 0.3s ease; display: inline-block; vertical-align: middle; }
+.logo-nvidia, .logo-amd, .logo-intel { width: 48px !important; } /* bu logoları mega menüde büyüttük */
+.side-item .menu-logo { opacity: 0.7; }
+.side-item:hover .menu-logo, .side-item.main-active .menu-logo { filter: grayscale(0) drop-shadow(0 0 5px rgba(183, 107, 255, 0.5)); opacity: 1; transform: scale(1.15) !important; }
+
+/* Markalara Özel Büyümeler ve Görünümler */
+.item-sub:hover .logo-steam { transform: scale(1.2); }
+.item-sub:hover .logo-epic { transform: scale(1.2); }
+.item-sub:hover .logo-ea { transform: scale(1.2); }
+.item-sub:hover .logo-ubisoft { transform: scale(1.9); }
+.item-sub:hover .logo-nvidia { transform: scale(1.5); }
+.item-sub:hover .logo-amd { transform: scale(2.0); }
+.item-sub:hover .logo-intel { transform: scale(1.7); }
+.item-sub:hover .menu-logo { transform: scale(1.2) !important; filter: drop-shadow(0 0 5px var(--brand-light, #b76bff)); }
+
+.side-item img[src*="xbox"], .side-item img[src*="nintendo"] { width: 42px !important; height: 42px !important; }
+.logo-kategori-side { transform: scale(1.4) !important; margin-right: 5px; }
+.side-item:hover .logo-kategori-side, .side-item.main-active .logo-kategori-side { transform: scale(1.65) !important; }
+
+/* ==========================================================================
+   4. HERO SLIDER (3D)
+   ========================================================================== */
+.hero-slider-container { width: 90%; margin: 50px auto; height: 450px; position: relative; display: flex; align-items: center; justify-content: center; border-radius: 20px; overflow: hidden; perspective: 1200px; z-index: 1; background: linear-gradient(-45deg, #171a21, #76b900, #ed1c24, #0071c5, #b76bff, #171a21); background-size: 400% 400%; filter: none !important; animation: evrenselDegradeAkis 25s ease infinite; }
+.hero-slider-container::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: -1; }
 .slider-track { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; transform-style: preserve-3d; }
+.slider-item { position: absolute; width: 55%; height: 75%; border-radius: 16px; background-size: cover; background-position: center; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s ease; box-shadow: 0 15px 35px rgba(0,0,0,0.7); opacity: 0; z-index: 0; pointer-events: none; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+.slider-item::before { content:''; position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 60%); z-index: 1 !important; }
+.slider-bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; border-radius: 16px; }
 
-.slider-item {
-    position: absolute; width: 55%; height: 75%; border-radius: 16px;
-    background-size: cover; background-position: center;
-    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s ease;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.7); opacity: 0; z-index: 0;
-    pointer-events: none; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);
-}
-.slider-item::before { content:''; position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, transparent 60%); }
+.slider-content { position: absolute; bottom: 30px; left: 40px; right: 40px; color: white; text-align: left; transform: translateY(15px); transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); z-index: 2; }
+.slider-content h2 { font-size: 26px; margin-bottom: 0; line-height: 1.3; }
+.slider-ozet { font-size: 14px; color: #ddd; line-height: 1.5; margin-top: 0; max-height: 0; opacity: 0; overflow: hidden; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 
-/* --- 3D Slider İçerik Kutusu --- */
-.slider-content { 
-    position: absolute; 
-    bottom: 30px; 
-    left: 40px; 
-    right: 40px; 
-    color: white; 
-    text-align: left; 
-    transform: translateY(15px);
-    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    z-index: 2;
-}
-
-.slider-content h2 { 
-    font-size: 26px; 
-    margin-bottom: 0; /* Hover olunca özet onu yukarı itecek */
-    line-height: 1.3; 
-}
-
-/* --- Gizli Özet Metni --- */
-.slider-ozet {
-    font-size: 14px;
-    color: #ddd;
-    line-height: 1.5;
-    margin-top: 0;
-    max-height: 0; /* Başlangıçta boyutu 0, yer kaplamaz */
-    opacity: 0;    /* Başlangıçta tamamen görünmez */
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    
-    /* Metni 2 satırla sınırla, taşanı "..." yap */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-}
-
-/* --- MOUSE İLE ÜZERİNE GELİNCE OLACAKLAR --- */
-.slider-item:hover .slider-content {
-    /* Tüm kutu asıl yerine yukarı doğru kayar */
-    transform: translateY(0); 
-}
-
-.slider-item:hover .slider-ozet {
-    max-height: 50px; /* Özet alanı boya doğru açılır (2 satır) */
-    opacity: 1;       /* Yazı görünür olur */
-    margin-top: 12px; /* Başlık ile arasına nefes boşluğu girer */
-}
+.slider-item:hover .slider-content { transform: translateY(0); }
+.slider-item:hover .slider-ozet { max-height: 50px; opacity: 1; margin-top: 12px; }
 .slider-tag { display:inline-block; background:#b76bff; color:#fff; padding:6px 15px; border-radius:20px; font-size:11px; font-weight:bold; margin-bottom:15px; text-transform: uppercase; }
 
-/* 3D Sinematik Geçiş Sınıfları */
-.slider-item.active { 
-    transform: translateX(0) translateZ(0) scale(1); 
-    opacity: 1; 
-    z-index: 5 !important; /* En önde dursun */
-    pointer-events: auto; 
-}
+.slider-item.active { transform: translateX(0) translateZ(0) scale(1); opacity: 1; z-index: 5 !important; pointer-events: auto; }
 .slider-item.prev { transform: translateX(-45%) translateZ(-150px) rotateY(25deg) scale(0.85); opacity: 0.6; z-index: 2; pointer-events: auto; cursor: pointer; }
 .slider-item.next { transform: translateX(45%) translateZ(-150px) rotateY(-25deg) scale(0.85); opacity: 0.6; z-index: 2; pointer-events: auto; cursor: pointer; }
 
-.slider-btn {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    background: rgba(0,0,0,0.6); color: white; border: 1px solid rgba(255,255,255,0.2);
-    font-size: 24px; width: 50px; height: 50px; border-radius: 50%;
-    cursor: pointer; z-index: 10; transition: 0.3s; display: flex; align-items: center; justify-content: center;
-}
+.slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.6); color: white; border: 1px solid rgba(255,255,255,0.2); font-size: 24px; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; z-index: 10; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
 .slider-btn:hover { background: #b76bff; border-color: #b76bff; box-shadow: 0 0 15px #b76bff; }
 .prev-btn { left: 30px; } .next-btn { right: 30px; }
 
-.slider-bg-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0; /* İçeriğin arkasında kalması için */
-    border-radius: 16px; /* Kartın köşelerine uyması için */
-}
+.spin-glow-border { position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 16px; z-index: 10; pointer-events: none; padding: 3px; -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.3s ease; overflow: hidden; }
+.spin-glow-border::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg, transparent 60%, var(--hover-color, #b76bff) 100%); animation: spinBorder 2s linear infinite; }
+.slider-item:hover .spin-glow-border { opacity: 1; }
 
-/* Mevcut karartma efektinin resmin üzerinde kalması için z-index ayarı */
-.slider-item::before {
-    z-index: 1 !important;
-}
+/* ==========================================================================
+   5. HABER KARTLARI VE CAROUSEL (KAYDIRMALI LİSTE)
+   ========================================================================== */
+.nav-btn { background: rgba(255, 255, 255, 0.05); color: white; border: 1px solid rgba(255, 255, 255, 0.1); width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 20px; transition: 0.3s; z-index: 10; display: flex; align-items: center; justify-content: center; }
+.nav-btn:hover { background: #b76bff; box-shadow: 0 0 15px #b76bff; border-color: #b76bff; }
 
-/* --- 6. TÜM HABERLER VE NEON LİSTE --- */
+.news-row { display: flex; flex-direction: column; background: #1a1a1a; padding: 0; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.1); border-bottom: 4px solid var(--row-glow, #b76bff); transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease, border-color 0.3s ease, opacity 0.3s ease; cursor: pointer; position: relative; overflow: hidden; height: 310px; width: 270px; flex-shrink: 0; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4), 0 0 10px var(--row-glow); }
+.news-row::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 10, 0); transition: background 0.3s ease; z-index: -1; }
+.news-row:hover { transform: translateY(-15px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px var(--row-glow), 0 0 45px var(--row-glow); }
+.news-row:hover::before { background: rgba(10, 10, 10, 0.85); }
+.news-row::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, var(--row-glow, #b76bff) 0%, transparent 40%); opacity: 0.1; transition: opacity 0.3s ease; z-index: -2; }
+.news-row:hover::after { opacity: 0.3; }
 
-
-.nav-btn {
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 20px;
-    transition: 0.3s;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.nav-btn:hover {
-    background: #b76bff;
-    box-shadow: 0 0 15px #b76bff;
-    border-color: #b76bff;
-}
-
-.news-row { 
-    display: flex; 
-    flex-direction: column;
-    background: #1a1a1a;
-    padding: 0; 
-    border-radius: 16px; 
-    border: 1px solid rgba(255, 255, 255, 0.1); 
-    border-bottom: 4px solid var(--row-glow, #b76bff); 
-    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.3s ease, border-color 0.3s ease, opacity 0.3s ease; 
-    cursor: pointer; 
-    position: relative; 
-    /* overflow: hidden; Kalsın, resim köşelerini korur */
-    overflow: hidden; 
-    height: 310px; 
-    width: 270px;
-    flex-shrink: 0;
-    /* Standart hafif parlama */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4), 0 0 10px var(--row-glow);
-}
-
-.news-row::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(10, 10, 10, 0); /* Normalde şeffaf */
-    transition: background 0.3s ease;
-    z-index: -1; /* Yazıların arkasında kalır */
-}
-
-.news-row:hover { 
-    transform: translateY(-15px); /* Biraz daha yukarı çıksın, daha havalı durur */
-    
-    /* 3 katmanlı gölge ile parlaklığı zirveye taşıyoruz */
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 
-                0 0 25px var(--row-glow), 
-                0 0 45px var(--row-glow);
-}
-.news-row:hover::before {
-    background: rgba(10, 10, 10, 0.85); 
-}
-
-.news-row::after { 
-    content: ''; 
-    position: absolute; 
-    top: 0; left: 0; width: 100%; height: 100%; 
-    background: linear-gradient(90deg, var(--row-glow, #b76bff) 0%, transparent 40%); 
-    
-    
-    opacity: 0.1; 
-    
-    transition: opacity 0.3s ease; 
-    z-index: -2; 
-}
-.news-row:hover::after { 
-    /* DEĞİŞEN KISIM: Hoverda arka plan ışığı belirginleşiyor */
-    opacity: 0.3; 
-}
-.row-img { 
-    width: 100%; 
-    height: 140px; /* Resim alanını biraz daha daralttık */
-    object-fit: cover; 
-    pointer-events: none; /* Resmin sürüklenip masaüstüne kaydedilmesini engeller */
-    -webkit-user-drag: none;
-    user-select: none;
-}
-
-.row-info { 
-    padding: 12px 15px; 
-    flex: 1; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: flex-start; /* Elemanları sıkıca yukarıdan aşağı dizer */
-}
-
-.row-info h3 { 
-    font-size: 15px; 
-    font-weight: 700;
-    line-height: 1.3; 
-    color: #fff;
-    margin-bottom: 5px;
-}
-
+.row-img { width: 100%; height: 140px; object-fit: cover; pointer-events: none; -webkit-user-drag: none; user-select: none; }
+.row-info { padding: 12px 15px; flex: 1; display: flex; flex-direction: column; justify-content: flex-start; }
+.row-info h3 { font-size: 15px; font-weight: 700; line-height: 1.3; color: #fff; margin-bottom: 5px; }
 .news-row:hover h3 { color: var(--row-glow, #b76bff); }
-.row-info p { 
-    font-size: 12px; 
-    color: #bbb; 
-    line-height: 1.4;
-    margin-bottom: 10px; 
-    
-    /* Metni belirli bir satırda kesip sonuna ... koyar */
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* Logonun üstüne ne kadar yaklaşmasını istiyorsan bu sayıyı 3 veya 4 yapabilirsin */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    
-    /* Anlamsız uzun kelimelerin dışarı taşmasını engeller */
-    overflow-wrap: break-word;
-    word-break: break-word;
-}
-.row-logo-container {
-    /* İlk yazan 'auto' komutu, logoyu kartın en dibine itip orada kilitler */
-    margin: auto auto 10px auto; 
-    width: 45px;  
-    height: 25px; 
-    background: transparent; 
-    border: none; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: none; 
-}
+.row-info p { font-size: 12px; color: #bbb; line-height: 1.4; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: break-word; word-break: break-word; }
+.row-ozet { font-size: 12px; color: #bbb; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.4; }
 
-.platform-logo {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; 
-    background-color: transparent;
-    transition: filter 0.3s ease;
-}
-.news-row:hover .row-logo-container {
-    background: transparent;
-    box-shadow: none;
-}
+.row-logo-container { margin: auto auto 10px auto; width: 45px; height: 25px; background: transparent; border: none; display: flex; align-items: center; justify-content: center; box-shadow: none; }
+.platform-logo { max-width: 100%; max-height: 100%; object-fit: contain; background-color: transparent; transition: filter 0.3s ease; }
+.news-row:hover .row-logo-container { background: transparent; box-shadow: none; }
+.news-row:hover .platform-logo { filter: drop-shadow(0 0 5px var(--row-glow)); }
 
-.news-row:hover .platform-logo {
-    filter: drop-shadow(0 0 5px var(--row-glow));
-}
-/* --- 7. SAYFALAMA VE DİĞER --- */
+/* Ana Sayfa Kaydırılabilir Haber Alanı (Carousel) */
+.news-carousel-wrapper { position: relative; width: 100%; padding: 60px 0 120px 0; margin-top: -60px !important; margin-bottom: 0; overflow: hidden; cursor: grab; user-select: none; }
+.news-carousel-wrapper:active { cursor: grabbing; }
+.news-viewport { width: 90%; margin: 0 auto; overflow: visible !important; }
+.news-container { display: flex; gap: 25px; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+#news-prev, #news-next { position: absolute; top: 50%; transform: translateY(-50%); z-index: 3000; background: rgba(18, 18, 18, 0.95); border: 1px solid rgba(183, 107, 255, 0.4); color: #fff; width: 55px; height: 55px; border-radius: 50%; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+#news-prev { left: 30px; } #news-next { right: 30px; }
+#news-prev:hover, #news-next:hover { background: #b76bff; box-shadow: 0 0 30px rgba(183, 107, 255, 0.8); border-color: #fff; transform: translateY(-50%) scale(1.15); }
 
+/* ==========================================================================
+   6. PLATFORMLAR, KATEGORİLER VE NEON IŞIKLAR
+   ========================================================================== */
+.featured-news-container { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; width: 90%; margin: 0 auto 40px auto; }
+.mobile-platforms-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; max-width: 1100px; margin: 30px auto; }
+.mobile-plat-card { display: flex; align-items: center; gap: 15px; background: #1a1a1a; padding: 20px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); color: #fff; text-decoration: none; font-weight: 600; font-size: 14px; letter-spacing: 0.5px; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.mobile-plat-card:hover { background: rgba(183, 107, 255, 0.08); border-color: #b76bff; transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(183, 107, 255, 0.2); color: #b76bff; }
+.mobile-plat-logo { width: 45px !important; height: 45px !important; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); transition: transform 0.3s ease; }
+.mobile-plat-card:hover .mobile-plat-logo { transform: scale(1.15) !important; }
+
+.title-card-wrapper { background: #1a1a1a !important; padding: 15px 40px !important; border-radius: 12px !important; border: 1px solid rgba(255, 255, 255, 0.05) !important; margin: 0 auto 40px auto !important; width: fit-content !important; box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important; }
+.title-card-text { color: #fff !important; font-size: 20px !important; font-weight: 700 !important; letter-spacing: 2px !important; margin: 0 !important; text-align: center !important; }
+
+.vertical-split-layout { display: flex; gap: 60px; max-width: 1300px; margin: 0 auto; align-items: flex-start; justify-content: center; }
+.split-side { flex: 1; display: flex; flex-direction: column; align-items: center; width: 100%; }
+.split-side .mobile-platforms-grid { margin: 0; width: 100%; }
+.mobile-platforms-grid.grid-2-col { grid-template-columns: repeat(2, 1fr) !important; gap: 20px; }
+.vertical-divider { width: 2px; background: linear-gradient(to bottom, transparent, #b76bff, transparent); border-radius: 2px; opacity: 0.7; align-self: stretch; margin: 40px 0; }
+
+/* Markalara Özel Neon Parlamalar */
+.mobile-plat-card:hover img[src*="steam.png"] { filter: drop-shadow(0 0 8px #66c0f4) !important; }
+.mobile-plat-card:hover img[src*="epic.png"] { filter: drop-shadow(0 0 8px #ffffff) !important; }
+.mobile-plat-card:hover img[src*="nvidia.png"] { filter: drop-shadow(0 0 8px #76b900) !important; }
+.mobile-plat-card:hover img[src*="intel.png"] { filter: drop-shadow(0 0 8px #0071c5) !important; }
+.mobile-plat-card:hover img[src*="xbox.png"] { filter: drop-shadow(0 0 8px #107c10) !important; }
+.mobile-plat-card:hover img[src*="nintendo.png"] { filter: drop-shadow(0 0 8px #e60012) !important; }
+.mobile-plat-card:hover img[src*="ea.png"] { filter: drop-shadow(0 0 8px #ff4747) !important; }
+.mobile-plat-card:hover img[src*="ps.png"] { filter: drop-shadow(0 0 8px #0055ff) !important; }
+.mobile-plat-card:hover img[src*="ubisoft.png"] { filter: drop-shadow(0 0 8px #00d0ff) !important; }
+.mobile-plat-card:hover img[src*="amd.png"] { filter: drop-shadow(0 0 8px #ed1c24) !important; }
+
+/* ==========================================================================
+   7. E-SPOR SAYFASI
+   ========================================================================== */
+.esports-layout { display: flex; gap: 40px; width: 90%; margin: 0 auto 60px auto; align-items: flex-start; position: relative; z-index: 1; }
+.esports-news-section { flex: 2; }
+.esports-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+.esports-grid .news-row:hover { transform: none; box-shadow: 0 6px 20px rgba(0,0,0,0.5); border-color: var(--row-glow, #b76bff); }
+.esports-grid .news-row::before, .esports-grid .news-row::after { display: none !important; }
+
+.esports-sidebar { flex: 1; position: sticky; top: 100px; }
+.match-board { background: #1a1a1a; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.05); padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+.board-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 15px; margin-bottom: 20px; }
+.board-header h3 { color: #fff; font-size: 18px; letter-spacing: 1px; }
+.live-badge { background: rgba(255, 0, 0, 0.1); color: #ff4747; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 5px; }
+
+.match-list { display: flex; flex-direction: column; gap: 15px; }
+.match-item { background: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 15px; border-left: 3px solid #333; transition: 0.3s; }
+.match-item:hover { background: rgba(255, 255, 255, 0.05); border-left-color: #b76bff; }
+.match-game-name { font-size: 11px; color: #888; margin-bottom: 8px; text-transform: uppercase; font-weight: bold; }
+.match-teams { display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+.team { color: #fff; font-size: 14px; flex: 1; text-align: center; }
+.score { background: #222; padding: 4px 12px; border-radius: 4px; color: #aaa; font-size: 12px; min-width: 60px; text-align: center; }
+.live-score { color: #ff4747; border: 1px solid #ff4747; background: rgba(255, 0, 0, 0.05); }
+
+.all-matches-btn { display: block; text-align: center; margin-top: 25px; padding: 12px; background: rgba(183, 107, 255, 0.1); color: #b76bff; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 13px; transition: 0.3s; }
+.all-matches-btn:hover { background: #b76bff; color: #fff; box-shadow: 0 0 15px rgba(183, 107, 255, 0.4); }
+
+/* ==========================================================================
+   8. CANLI SKOR SAYFASI
+   ========================================================================== */
+.marquee-container { width: 100%; overflow: hidden; contain: paint; margin-bottom: 40px; position: relative; cursor: grab; user-select: none; -webkit-user-select: none; }
+.marquee-container:active { cursor: grabbing; }
+.marquee-container::before, .marquee-container::after { content: ''; position: absolute; top: 0; width: 80px; height: 100%; z-index: 5; pointer-events: none; }
+.marquee-container::before { left: 0; background: linear-gradient(to right, #121212 0%, transparent 100%); }
+.marquee-container::after { display: none; }
+.marquee-track { display: flex; gap: 20px; width: max-content; align-items: center; padding: 25px 20px 25px 80px; }
+
+.game-filter-card { display: block; width: 220px; height: 120px; background: #1a1a1a; border-radius: 16px; transition: transform 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.3); flex-shrink: 0; text-decoration: none; position: relative; overflow: hidden; border: 2px solid rgba(255, 255, 255, 0.05); }
+.game-filter-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease; pointer-events: none !important; -webkit-user-drag: none !important; user-select: none !important; }
+.game-filter-card.active { border-color: var(--game-color) !important; border-width: 3px; z-index: 10; color: var(--game-color); }
+.game-filter-card:hover { border-color: rgba(255, 255, 255, 0.35); }
+a[data-game] { --game-color: #b76bff; }
+
+.league-group { margin-bottom: 30px !important; overflow: hidden; background: #1a1a1a; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05); }
+.league-header { background: #222; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); font-weight: bold; color: #fff; text-transform: uppercase; font-size: 16px !important; padding: 15px 20px !important; }
+
+.match-row { display: grid; grid-template-columns: 80px 1fr auto 1fr 100px; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.03); transition: background 0.2s; padding: 16px 20px !important; }
+.match-row:last-child { border-bottom: none; }
+.match-row:hover { background: rgba(255, 255, 255, 0.02); }
+
+.match-time-status { display: flex; flex-direction: column; gap: 4px; font-size: 13.5px !important; }
+.match-time { color: #888; font-size: 13px; font-weight: 600; }
+.match-status { font-size: 12px; font-weight: bold; color: #aaa; }
+.match-status.live { color: #ff4747; animation: blinker 1.5s linear infinite; }
+
+.team-home { text-align: right; padding-right: 20px; font-weight: 600; color: #fff; font-size: 16px !important; }
+.team-away { text-align: left; padding-left: 20px; font-weight: 600; color: #fff; font-size: 16px !important; }
+
+.match-score { background: #000; border-radius: 6px; font-weight: bold; color: #b76bff; text-align: center; letter-spacing: 2px; border: 1px solid rgba(183, 107, 255, 0.2); font-size: 18px !important; padding: 6px 18px !important; }
+.match-score.live-score-bg { border-color: #ff4747; color: #ff4747; }
+
+/* Durum Filtresi */
+.matches-title-bar { position: relative; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; height: 40px; width: 100%; }
+.matches-main-title { color: #ffffff; margin: 0; text-align: center; }
+.status-filter-wrapper { position: absolute; right: 0; display: flex; align-items: center; flex-direction: row-reverse; cursor: pointer; }
+.status-main-btn { background: rgba(183, 107, 255, 0.1); color: #b76bff; padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: bold; border: 1px solid #b76bff; z-index: 2; transition: 0.3s; display: flex; align-items: center; }
+.status-filter-wrapper:hover .status-main-btn { background: #b76bff; color: #fff; box-shadow: 0 0 15px rgba(183, 107, 255, 0.4); }
+.status-options { display: flex; gap: 8px; opacity: 0; transform: translateX(20px); pointer-events: none; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); margin-right: 15px; }
+.status-filter-wrapper:hover .status-options { opacity: 1; transform: translateX(0); pointer-events: auto; }
+.s-opt { background: #1a1a1a; color: #888; padding: 8px 14px; border-radius: 6px; font-size: 12px; font-weight: bold; border: 1px solid #333; transition: 0.3s; }
+.s-opt:hover, .s-opt.active { background: rgba(183, 107, 255, 0.15); color: #b76bff; border-color: #b76bff; }
+
+/* ==========================================================================
+   9. ORTAK BİLEŞENLER (MODAL, BUTONLAR, BAŞLIKLAR)
+   ========================================================================== */
 .page-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-size: 14px; transition: 0.3s; }
 .page-btn:hover:not(:disabled) { background: #b76bff; box-shadow: 0 0 15px rgba(183, 107, 255, 0.4); }
 .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
@@ -491,737 +286,34 @@ nav ul li a:hover {
 .section-title-wrapper { width: 90%; margin: 60px auto 20px auto; display: flex; align-items: center; gap: 20px; }
 .section-title { font-size: 22px; text-transform: uppercase; letter-spacing: 2px; color: #fff; }
 .title-line { flex: 1; height: 1px; background: linear-gradient(to right, #b76bff, transparent); }
+.kaynak-btn { display: inline-block; background: rgba(183, 107, 255, 0.1); color: #b76bff; padding: 12px 25px; border: 1px solid #b76bff; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.3s; margin-top: 20px; }
+.kaynak-btn:hover { background: #b76bff; color: #fff; box-shadow: 0 0 20px rgba(183, 107, 255, 0.4); }
 
-/* --- NAVİGASYON OKU (YUKARI -> AŞAĞI ANİMASYONU) --- */
-.nav-arrow {
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    margin-left: 8px;
-    
-    /* Sağ ve alt kenarlıkları kullanarak ok formunu veriyoruz */
-    border-right: 2px solid currentColor;
-    border-bottom: 2px solid currentColor;
-    
-    /* ÖNEMLİ DEĞİŞİKLİK: Başlangıçta YUKARI bakması için -135 derece döndürüyoruz */
-    transform: rotate(-135deg); 
-    
-    /* Dönüş animasyonu */
-    transition: transform 0.3s ease, top 0.3s ease;
-    
-    position: relative;
-    /* Yukarı bakarken yazıyla aynı hizada durması için ufak dikey ayar */
-    top: 2px; 
-}
+#scrollTopBtn { position: fixed; bottom: 30px; right: 30px; z-index: 9999; background: #b76bff; color: white; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 20px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transform: translateY(20px); }
+#scrollTopBtn.show { opacity: 1; visibility: visible; transform: translateY(0); }
+#scrollTopBtn:hover { background: #9b51e0; box-shadow: 0 6px 20px rgba(183,107,255,0.8); transform: translateY(-5px); }
 
-/* Menü (mega-menu) üzerine gelindiğinde oku AŞAĞI döndür */
-.mega-menu:hover .nav-arrow {
-    /* Ok yarım tur atarak aşağı doğru bakar */
-    transform: rotate(45deg); 
-    
-    /* Döndükten sonra hizayı koruması için ufak ayar */
-    top: -2px; 
-}
-
-/* --- 3D SLIDER DÖNEN IŞIK (NEON BORDER) ANİMASYONU --- */
-.spin-glow-border {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    border-radius: 16px;
-    z-index: 10; /* Resmin ve karartmanın üzerinde dursun */
-    pointer-events: none; /* Tıklamayı engellemesin */
-    padding: 3px; /* Etrafında dönen ışığın kalınlığı (İstersen artırabilirsin) */
-    
-    /* CSS Maskesi: İçi boşaltılmış bir çerçeve yaratır, sadece kenarlar parlar */
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    
-    opacity: 0; /* Başlangıçta gizli */
-    transition: opacity 0.3s ease; /* Yumuşak bir şekilde belirsin */
-    overflow: hidden;
-}
-
-/* Etrafında dönen gradyan ışık huzmesi */
-.spin-glow-border::before {
-    content: '';
-    position: absolute;
-    top: -50%; left: -50%; width: 200%; height: 200%;
-    /* --hover-color değişkenini JS'den alıp platforma göre renklendiriyoruz */
-    background: conic-gradient(from 0deg, transparent 60%, var(--hover-color, #b76bff) 100%);
-    animation: spinBorder 2s linear infinite; /* Dönüş hızı */
-}
-
-/* Mouse ile kartın üzerine gelince ışığı yak */
-.slider-item:hover .spin-glow-border {
-    opacity: 1;
-}
-
-/* 360 Derece Dönme Animasyonu */
-@keyframes spinBorder {
-    100% { transform: rotate(360deg); }
-}
-
-/* ============================================================
-   MOBILE RESPONSIVE TASARIM
-   ============================================================ */
-
-@media screen and (max-width: 768px) {
-    
-    /* --- HEADER VE NAVIGASYON --- */
-    header {
-        padding: 0 15px;
-        height: 70px;
-    }
-
-    /* Mobilde ana menüyü gizle (Hamburger menüye geçeceğiz) */
-    nav ul {
-        display: none; 
-    }
-
-    
-    .header-logo {
-        height: 70px !important;
-    }
-
-    /* --- HERO SLIDER (3D'den Basit Yapıya) --- */
-    .hero-slider-container {
-        height: 250px;
-        width: 95%;
-        margin: 20px auto;
-        perspective: none; /* 3D efekti mobilde karmaşık durur, düzeltiyoruz */
-    }
-
-    .slider-item {
-        width: 100%;
-        height: 100%;
-        transform: none !important; /* 3D dönmeleri kapat */
-        opacity: 0;
-        display: none;
-    }
-
-    .slider-item.active {
-        display: block;
-        opacity: 1;
-        z-index: 5;
-    }
-
-    .slider-content h2 {
-        font-size: 18px;
-        bottom: 15px;
-        left: 20px;
-    }
-
-
-    /* Mobilde butonları gizleyebiliriz (parmakla kaydırmak daha kolay) */
-    .nav-btn {
-        display: none;
-    }
-
-    .news-container {
-        gap: 15px;
-        padding: 0 10px;
-    }
-
-    .news-row {
-        width: 240px; /* Kartları mobilde biraz daralttık */
-        height: 280px;
-    }
-
-    /* --- PLATFORM SAYFASI (GRID DÜZENİ) --- */
-    .featured-news-container {
-        grid-template-columns: 1fr; /* Yan yana haberleri alt alta al */
-    }
-
-    .hero-gradient h1 {
-        font-size: 28px;
-    }
-
-    /* Mobil hamburger stilleri bkz. 768px media query */
-
-    .section-title-wrapper {
-        justify-content: center;
-        text-align: center;
-        flex-direction: column;
-        gap: 15px;
-        width: 100%;
-        margin: 40px auto 20px auto;
-    }
-    .section-title { font-size: 20px; width: 100%; }
-    .title-line {
-        display: block !important;
-        width: 80% !important;
-        height: 2px !important;
-        margin: 0 auto;
-        background: linear-gradient(to right, transparent, #b76bff, #66c0f4, #b76bff, transparent) !important;
-    }
-} /* <--- BU PARANTEZ @media screen and (max-width: 768px) BLOĞUNU KAPATIR */
-
-
-/* MEGA MENÜ LOGO AYARLARI */
-.item-sub {
-    display: flex !important; /* Logo ve yazıyı yan yana getirir */
-    align-items: center;      /* Dikeyde hizalar */
-    gap: 12px;                /* Logo ile yazı arasındaki boşluk */
-    padding: 8px 10px !important;
-    transition: all 0.2s ease !important;
-}
-
-/* MEGA MENÜ LOGO STANDARTLAŞTIRMA */
-.menu-logo {
-    width: 32px !important; /* 22'den 32'ye büyüttük */
-    height: 32px !important; 
-    object-fit: contain;
-    transition: transform 0.3s ease, filter 0.3s ease;
-    display: inline-block;
-    vertical-align: middle;
-}
-
-
-
-
-/* Hover durumunda her markanın KENDİ orantısına göre büyümesi */
-.item-sub:hover .logo-steam   { transform: scale(1.2); }
-.item-sub:hover .logo-epic    { transform: scale(1.2); }
-.item-sub:hover .logo-ea      { transform: scale(1.2); }
-.item-sub:hover .logo-ubisoft { transform: scale(1.9); }
-.item-sub:hover .logo-nvidia  { transform: scale(1.5); }
-.item-sub:hover .logo-amd     { transform: scale(2.0); }
-.item-sub:hover .logo-intel   { transform: scale(1.7); }
-
-/* Mouse ile üzerine gelince sadece logolar parlasın (Büyüme olayı yukarıda halledildi) */
-.item-sub:hover .menu-logo {
-    transform: scale(1.2) !important; /* Mouse gelince hepsi eşit %20 büyür */
-    filter: drop-shadow(0 0 5px var(--brand-light, #b76bff));
-}
-
-.item-sub:hover {
-    background-color: rgba(183, 107, 255, 0.05); /* Çok hafif mor arka plan */
-    border-radius: 6px;
-    text-decoration: none !important; 
-}
-
-/* SİDEBAR LOGO AYARLARI */
-.side-item {
-    display: flex !important;
-    align-items: center;
-    gap: 15px; /* Logo ile yazı arasındaki mesafe */
-    transition: all 0.3s ease !important;
-}
-
-/* Sidebar logolarının temel boyutu */
-.side-item .menu-logo {
-    width: 32px !important; /* 24'ten 32'ye büyüttük */
-    height: 32px !important;
-    object-fit: contain;
-    filter: grayscale(1);
-    opacity: 0.7;
-    transition: all 0.3s ease;
-}
-
-/* Aktif veya üzerine gelinen menüde logoyu renklendir ve parlat */
-.side-item:hover .menu-logo, 
-.side-item.main-active .menu-logo {
-    filter: grayscale(0) drop-shadow(0 0 5px rgba(183, 107, 255, 0.5));
-    opacity: 1;
-    transform: scale(1.15) !important; /* Standart büyüme */
-}
-
-
-
-/* --- MOBİL PLATFORM SEÇİM SAYFASI (hmplatform.php) --- */
-.mobile-platforms-grid {
-    display: grid;
-    /* Kutuları 4 yerine tam 5 sütun olacak şekilde zorlar */
-    grid-template-columns: repeat(5, 1fr); 
-    gap: 15px;
-    /* 5 kutunun rahat sığması için genişliği 800px'den 1100px'e çıkardık */
-    max-width: 1100px; 
-    margin: 30px auto;
-}
-
-.mobile-plat-card {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    background: #1a1a1a;
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-.mobile-plat-card:hover {
-    background: rgba(183, 107, 255, 0.08);
-    border-color: #b76bff;
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(183, 107, 255, 0.2);
-    color: #b76bff;
-}
-
-.mobile-plat-card:hover .mobile-plat-logo {
-    transform: scale(1.15) !important; /* Standart %15 büyüme efekti */
-}
-
-.mobile-plat-logo {
-    width: 45px !important; 
-    height: 45px !important;
-    object-fit: contain;
-    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
-    transition: transform 0.3s ease;
-}
-
-
-/* --- MOBİL PLATFORM SAYFASI BAŞLIK KUTUSU (GARANTİ) --- */
-.title-card-wrapper {
-    background: #1a1a1a !important;
-    padding: 15px 40px !important;
-    border-radius: 12px !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    margin: 0 auto 40px auto !important; 
-    width: fit-content !important; 
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3) !important;
-}
-
-.title-card-text {
-    color: #fff !important;
-    font-size: 20px !important;
-    font-weight: 700 !important;
-    letter-spacing: 2px !important;
-    margin: 0 !important;
-    text-align: center !important;
-}
-
-/* --- DİKEY (YAN YANA) BÖLÜNMÜŞ DÜZEN VE 2'Lİ SIRALAMA --- */
-.vertical-split-layout {
-    display: flex;
-    gap: 60px; /* İki taraf arasındaki boşluk */
-    max-width: 1300px;
-    margin: 0 auto;
-    align-items: flex-start;
-    justify-content: center;
-}
-
-.split-side {
-    flex: 1; /* İki taraf da eşit alan kaplar */
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Başlıkların kendi alanında ortalanması için */
-    width: 100%;
-}
-
-.split-side .mobile-platforms-grid {
-    margin: 0; 
-    width: 100%;
-}
-
-/* Kutu sıralamasını sadece 2 sütun (yan yana 2'şer) olacak şekilde eziyoruz */
-.mobile-platforms-grid.grid-2-col {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 20px;
-}
-
-@media screen and (max-width: 900px) {
-    .vertical-split-layout {
-        flex-direction: column;
-        gap: 60px;
-    }
-}
-
-/* --- ORTADAKİ DİKEY NEON ÇİZGİ --- */
-.vertical-divider {
-    width: 2px;
-    background: linear-gradient(to bottom, transparent, #b76bff, transparent);
-    border-radius: 2px;
-    opacity: 0.7;
-    align-self: stretch; /* Konteynerin boyuna göre uzamasını sağlar */
-    margin: 40px 0; /* Başlıklarla hizalanması için biraz boşluk */
-}
-
-@media screen and (max-width: 900px) {
-    .vertical-divider {
-        width: 80%;
-        height: 2px;
-        background: linear-gradient(to right, transparent, #b76bff, transparent);
-        margin: 20px auto;
-    }
-}
-
-/* --- SİDEBAR KATEGORİ LOGOSU AYARLARI --- */
-.logo-kategori-side { 
-    transform: scale(1.4) !important; /* Logonun varsayılan boyutunu dengeler */
-    margin-right: 5px; 
-}
-
-.side-item:hover .logo-kategori-side, 
-.side-item.main-active .logo-kategori-side {
-    transform: scale(1.65) !important; /* Hover'da diğerleri gibi belirgin şekilde büyür */
-}
-
-/* ============================================================
-   E-SPOR SAYFASI ÖZEL TASARIMLARI
-   ============================================================ */
-
-.esports-layout {
-    display: flex;
-    gap: 40px;
-    width: 90%;
-    margin: 0 auto 60px auto;
-    align-items: flex-start;
-    position: relative;
-    z-index: 1;
-}
-
-.esports-news-section {
-    flex: 2; /* Sol taraf geniş (Haberler) */
-}
-
-.esports-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
-}
-.esports-grid .news-row:hover {
-    transform: none;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-    border-color: var(--row-glow, #b76bff);
-}
-/* ::before ve ::after GPU paint tetiklemesin — h1 korunur */
-.esports-grid .news-row::before,
-.esports-grid .news-row::after {
-    display: none !important;
-}
-
-
-/* --- SAĞ SİDEBAR (GÜNÜN MAÇLARI) --- */
-.esports-sidebar {
-    flex: 1; /* Sağ taraf dar (Fikstür) */
-    position: sticky;
-    top: 100px; /* Ekranda aşağı kayarken fikstürün sabit kalması için */
-}
-
-.match-board {
-    background: #1a1a1a;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 25px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-}
-
-.board-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 15px;
-    margin-bottom: 20px;
-}
-
-.board-header h3 {
-    color: #fff;
-    font-size: 18px;
-    letter-spacing: 1px;
-}
-
-.live-badge {
-    background: rgba(255, 0, 0, 0.1);
-    color: #ff4747;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.match-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.match-item {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    padding: 15px;
-    border-left: 3px solid #333;
-    transition: 0.3s;
-}
-
-.match-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-left-color: #b76bff;
-}
-
-.match-game-name {
-    font-size: 11px;
-    color: #888;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    font-weight: bold;
-}
-
-.match-teams {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-}
-
-.team {
-    color: #fff;
-    font-size: 14px;
-    flex: 1;
-    text-align: center;
-}
-
-.score {
-    background: #222;
-    padding: 4px 12px;
-    border-radius: 4px;
-    color: #aaa;
-    font-size: 12px;
-    min-width: 60px;
-    text-align: center;
-}
-
-.live-score {
-    color: #ff4747;
-    border: 1px solid #ff4747;
-    background: rgba(255, 0, 0, 0.05);
-}
-
-.all-matches-btn {
-    display: block;
-    text-align: center;
-    margin-top: 25px;
-    padding: 12px;
-    background: rgba(183, 107, 255, 0.1);
-    color: #b76bff;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 13px;
-    transition: 0.3s;
-}
-
-.all-matches-btn:hover {
-    background: #b76bff;
-    color: #fff;
-    box-shadow: 0 0 15px rgba(183, 107, 255, 0.4);
-}
-
-/* Mobilde ve Tablette E-Spor Sayfası Düzeni (Sol ve Sağ Alt Alta Geçsin) */
-@media screen and (max-width: 900px) {
-    .esports-layout {
-        flex-direction: column;
-    }
-    .esports-sidebar {
-        width: 100%;
-    }
-}
-
-/* ============================================================
-   CANLI SKOR SAYFASI ÖZEL TASARIMLARI
-   ============================================================ */
-
-/* --- SÜREKLİ AKAN OYUN LOGOLARI KONTEYNERI --- */
-.marquee-container {
-    width: 100%;
-    overflow: hidden;
-    contain: paint;
-    margin-bottom: 40px;
-    position: relative;
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
-}
-
-.marquee-container:active { cursor: grabbing; }
-
-/* Sağ ve Sol Karartma Efektleri */
-.marquee-container::before, .marquee-container::after {
-    content: '';
-    position: absolute;
-    top: 0; width: 80px; height: 100%;
-    z-index: 5;
-    pointer-events: none;
-}
-.marquee-container::before { left: 0; background: linear-gradient(to right, #121212 0%, transparent 100%); }
-.marquee-container::after { display: none; }
-
-.marquee-track {
-    display: flex;
-    gap: 20px;
-    width: max-content;
-    align-items: center;
-    padding: 25px 20px 25px 80px; 
-}
-
-/* --- KART TASARIMI (SADECE YAKINLAŞMA EFEKTİ) --- */
-.game-filter-card {
-    display: block; 
-    width: 220px;
-    height: 120px;
-    background: #1a1a1a;
-    border-radius: 16px;
-    transition: transform 0.3s ease; 
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
-    flex-shrink: 0;
-    text-decoration: none;
-    position: relative;
-    overflow: hidden; 
-    border: 2px solid rgba(255, 255, 255, 0.05); /* Sabit sade çerçeve */
-}
-
-.game-filter-card img {
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    display: block;
-    transition: transform 0.3s ease;
-    /* ÖNEMLİ: Fare tıklamalarını resim değil, altındaki link (A etiketi) yakalamalı */
-    pointer-events: none !important; 
-    -webkit-user-drag: none !important;
-    user-select: none !important;
-}
-
-.game-filter-card.active {
-    border-color: var(--game-color) !important;
-    border-width: 3px;
-    z-index: 10;
-    color: var(--game-color);
-}
-
-/* --- HOVER DURUMU --- */
-.game-filter-card:hover {
-    border-color: rgba(255, 255, 255, 0.35);
-}
-
-/* --- CANLI SKOR LİG TABLOLARI (DEĞİŞMEDİ) --- */
-.league-group {
-    background: #1a1a1a;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    margin-bottom: 30px;
-    overflow: hidden;
-}
-.league-header {
-    background: #222;
-    padding: 12px 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    font-weight: bold;
-    color: #fff;
-    font-size: 15px;
-    text-transform: uppercase;
-}
-
-.match-row {
-    display: grid;
-    grid-template-columns: 80px 1fr auto 1fr 100px;
-    align-items: center;
-    padding: 15px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    transition: background 0.2s;
-}
-
-.match-row:last-child {
-    border-bottom: none;
-}
-
-.match-row:hover {
-    background: rgba(255, 255, 255, 0.02);
-}
-
-.match-time-status {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.match-time { color: #888; font-size: 13px; font-weight: 600; }
-.match-status { font-size: 12px; font-weight: bold; color: #aaa; }
-.match-status.live { color: #ff4747; animation: blinker 1.5s linear infinite; }
-
-.team-home { text-align: right; padding-right: 20px; font-weight: 600; color: #fff; }
-.team-away { text-align: left; padding-left: 20px; font-weight: 600; color: #fff; }
-
-.match-score {
-    background: #000;
-    padding: 6px 16px;
-    border-radius: 6px;
-    font-weight: bold;
-    font-size: 16px;
-    color: #b76bff;
-    text-align: center;
-    letter-spacing: 2px;
-    border: 1px solid rgba(183, 107, 255, 0.2);
-}
-.match-score.live-score-bg {
-    border-color: #ff4747;
-    color: #ff4747;
-}
-
-
-@media screen and (max-width: 768px) {
-    .match-row {
-        grid-template-columns: 60px 1fr auto 1fr; /* Mobilde en sağdaki kısmı gizle */
-        padding: 12px 10px;
-        gap: 5px;
-    }
-    .team-home { padding-right: 10px; font-size: 13px; }
-    .team-away { padding-left: 10px; font-size: 13px; }
-    .match-score { padding: 4px 10px; font-size: 14px; }
-}
-
-/* --- CANLİ SKOR KAYAN KART ETRAFI RENGİ --- */
-a[data-game] { --game-color: #b76bff; }
-
-/* === MODAL VE BUTON TASARIMLARI === */
+/* --- Auth/Login Modal --- */
 .auth-btn { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; margin-right: 10px; }
 .btn-login:hover { background: rgba(183, 107, 255, 0.1); color: #b76bff; border-color: #b76bff; }
 .btn-register { background: #b76bff; border-color: #b76bff; }
 .btn-register:hover { background: #9b51e0; box-shadow: 0 0 10px rgba(183, 107, 255, 0.5); }
-.auth-modal-overlay { 
-    display: flex;           /* Display her zaman flex kalsın ki animasyon durmasın */
-    visibility: hidden;      /* Başlangıçta görünmez yap */
-    pointer-events: none;    /* Kapalıyken tıklamaları engelle */
-    position: fixed; 
-    top: 0; left: 0; 
-    width: 100%; height: 100%; 
-    background: rgba(0, 0, 0, 0.8); 
-    backdrop-filter: blur(5px); 
-    z-index: 9999; 
-    justify-content: center; 
-    align-items: center; 
-    opacity: 0; 
-    transition: opacity 0.3s ease, visibility 0.3s ease; 
-}
-.auth-modal-content { background: #1a1a1a; width: 380px; border-radius: 16px; border: 1px solid #333; box-shadow: 0 20px 50px rgba(0,0,0,0.8); position: relative; transform: translateY(-20px); transition: transform 0.3s ease; overflow: hidden; }
-.auth-modal-overlay.show { 
-    visibility: visible;     /* Açıldığında görünür yap */
-    pointer-events: auto;    /* Tıklamaları aç */
-    opacity: 1; 
-}
-.auth-modal-overlay.show .auth-modal-content { 
-    transform: translateY(0); 
-}
-.auth-close-btn { position: absolute; top: 15px; right: 20px; color: #888; font-size: 28px; cursor: pointer; z-index: 10; }
-.auth-close-btn:hover { color: #fff; }
-.auth-tabs { display: flex; border-bottom: 1px solid #333; }
+
+.header-auth-group { display: flex; align-items: center; justify-content: center; gap: 4px; margin-right: 10px; }
+.header-auth-group .auth-btn { margin: 0 !important; padding: 8px 14px; }
+.auth-sep { color: rgba(255, 255, 255, 0.3); font-weight: 300; font-size: 16px; margin: 0 2px; user-select: none; line-height: 1; display: flex; align-items: center; }
+html.oturum-bekleniyor .header-auth-group { display: none !important; }
+
+.auth-modal-overlay { display: flex; visibility: hidden; pointer-events: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); z-index: 9999; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease, visibility 0.3s ease; }
+.auth-modal-overlay.show { visibility: visible; pointer-events: auto; opacity: 1; }
+.auth-modal-content { width: 380px; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); position: relative; transform: translateY(-20px); transition: transform 0.3s ease; background-image: linear-gradient(-45deg, #171a21, #76b900, #ed1c24, #0071c5, #b76bff, #171a21) !important; background-size: 400% 400% !important; animation: evrenselDegradeAkis 25s ease infinite !important; overflow: visible !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; background-color: #1a1a1a; }
+.auth-modal-overlay.show .auth-modal-content { transform: translateY(0); }
+
+.auth-tabs { display: flex; background: rgba(0, 0, 0, 0.6) !important; border-radius: 16px 16px 0 0 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important; }
 .auth-tab { flex: 1; background: transparent; border: none; padding: 20px 0; color: #888; font-weight: bold; font-size: 14px; cursor: pointer; transition: 0.3s; }
 .auth-tab.active { color: #b76bff; background: rgba(183, 107, 255, 0.05); border-bottom: 2px solid #b76bff; }
-.auth-form-section { display: none; padding: 30px; text-align: center; }
+
+.auth-form-section { display: none; padding: 30px; text-align: center; background: rgba(0, 0, 0, 0.6) !important; border-radius: 0 0 16px 16px !important; }
 .auth-form-section.active { display: block; }
 .auth-form-section h3 { margin-bottom: 20px; color: #fff; font-size: 20px; }
 .auth-input { width: 100%; padding: 12px; margin-bottom: 15px; background: #0a0a0a; border: 1px solid #333; color: white; border-radius: 8px; box-sizing: border-box; }
@@ -1229,679 +321,132 @@ a[data-game] { --game-color: #b76bff; }
 .auth-submit-btn { width: 100%; padding: 14px; background: #b76bff; border: none; color: white; font-weight: bold; border-radius: 8px; cursor: pointer; }
 .auth-submit-btn:hover { background: #9b51e0; }
 
-/* Butonları ve ayırıcıyı kapsayan grup */
-.header-auth-group {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px; /* Butonlar ile "/" arasındaki boşluk (4px idealdir) */
-    margin-right: 10px; /* Canlı Skor butonuna olan uzaklık */
-}
+.auth-close-btn { position: absolute !important; top: -50px !important; right: 0 !important; width: 40px; height: 40px; background: rgba(0, 0, 0, 0.6) !important; color: #fff !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; border-radius: 50%; display: flex; align-items: center; justify-content: center; line-height: 0; padding-bottom: 4px; font-size: 26px !important; cursor: pointer; z-index: 100; transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1) !important; }
+.auth-close-btn:hover { background: #ed1c24 !important; color: #fff !important; border-color: #ed1c24 !important; box-shadow: 0 0 15px rgba(237, 28, 36, 0.6); transform: scale(1.15) rotate(90deg) !important; }
+.sifre-unut-link { display: block; text-align: center; color: #888; font-size: 12px; margin-top: 15px; text-decoration: none; transition: color 0.3s; }
+.sifre-unut-link:hover { color: #b76bff; }
 
-/* Mevcut buton marginlerini tamamen sıfırlıyoruz */
-.header-auth-group .auth-btn {
-    margin: 0 !important; 
-    padding: 8px 14px; /* Mobilde taşmaması için padding'i hafif daralttık */
-}
+/* ==========================================================================
+   10. MEDIA QUERIES (TAM MOBİL UYUMLULUK VE ÖNCELİK KURALLARI)
+   ========================================================================== */
 
-/* Ayırıcı "/" işaretini tam merkeze alan stil */
-.auth-sep {
-    color: rgba(255, 255, 255, 0.3); /* Çok parlamasın, asil dursun */
-    font-weight: 300; /* Daha ince bir çizgi daha şık durur */
-    font-size: 16px;
-    margin: 0 2px; /* Çizginin kendi etrafındaki minik payı */
-    user-select: none;
-    line-height: 1; /* Yükseklik kaymasını engeller */
-    display: flex;
-    align-items: center;
-}
-
-/* Oturum Senkronizasyonu (Flicker Önleyici) */
-html.oturum-bekleniyor .header-auth-group {
-    display: none !important;
-}
-
-
-/* --- HABER DETAY: KAYNAK BUTONU (EKSİK PARÇA) --- */
-.kaynak-btn {
-    display: inline-block;
-    background: rgba(183, 107, 255, 0.1);
-    color: #b76bff;
-    padding: 12px 25px;
-    border: 1px solid #b76bff;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 14px;
-    transition: 0.3s;
-    margin-top: 20px;
-}
-
-.kaynak-btn:hover {
-    background: #b76bff;
-    color: #fff;
-    box-shadow: 0 0 20px rgba(183, 107, 255, 0.4);
-}
-
-
-.news-carousel-wrapper {
-    position: relative;
-    width: 100%;
-    
-    /* 1. Işığın sığması için üstte 60px alan bırakıyoruz */
-    padding: 60px 0 120px 0; 
-    
-    /* 2. Kartları yukarı, başlığa doğru çeken sihirli dokunuş */
-    /* Padding ile bıraktığımız boşluktan daha fazlasını geri çekiyoruz */
-    margin-top: -60px !important; 
-    
-    margin-bottom: 0;
-    overflow: hidden; /* Yanları gizler ama artık üstte 60px yerimiz var */
-    cursor: grab;
-    user-select: none;
-}
-.news-carousel-wrapper:active {
-    cursor: grabbing; /* Tıklayınca kavrama şekli */
-}
-
-.news-viewport {
-    /* Kartların başlık ile aynı hizada (orta alanda) durması için %90 genişlik */
-    width: 90%;
-    margin: 0 auto;
-    /* KRİTİK: Işıkların kesilmemesi için bu alanın taşmasına izin veriyoruz */
-    overflow: visible !important; 
-}
-
-.news-container {
-    display: flex;
-    gap: 25px;
-    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-/* OKLARI TAM KARTLARIN MERKEZİNE SABİTLEME */
-#news-prev, #news-next {
-    position: absolute;
-    /* Wrapper'ın tam ortasına (50%) alıyoruz, kartların ortasına denk gelir */
-    top: 50%; 
-    transform: translateY(-50%);
-    z-index: 3000;
-    background: rgba(18, 18, 18, 0.95);
-    border: 1px solid rgba(183, 107, 255, 0.4);
-    color: #fff;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(10px);
-}
-
-/* Okları kenarlara şık bir şekilde yerleştirelim */
-#news-prev { left: 30px; }
-#news-next { right: 30px; }
-
-#news-prev:hover, #news-next:hover {
-    background: #b76bff;
-    box-shadow: 0 0 30px rgba(183, 107, 255, 0.8);
-    border-color: #fff;
-    transform: translateY(-50%) scale(1.15);
-}
-
-/* ============================================================
-   MODAL YENİDEN TASARIMI (RENK GEÇİŞİ VE DIŞ X BUTONU)
-   ============================================================ */
-
-.auth-modal-content {
-    /* 'background' yerine 'background-image' kullandık ki animasyon kilitlenmesin */
-    background-image: linear-gradient(-45deg, #171a21, #76b900, #ed1c24, #0071c5, #b76bff, #171a21) !important;
-    background-size: 400% 400% !important;
-    
-    /* 3D Slider ile birebir aynı sürede (25s) ve aynı animasyonla döner */
-    animation: evrenselDegradeAkis 25s ease infinite !important;
-    
-    /* Çarpı butonunun dışarı çıkabilmesi için */
-    overflow: visible !important; 
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-}
-
-/* Renklerin üzerinde yazıların okunabilmesi için "Cam Efekti" (Glassmorphism) karartması */
-.auth-tabs {
-    background: rgba(0, 0, 0, 0.6) !important;
-    border-radius: 16px 16px 0 0 !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-.auth-form-section {
-    background: rgba(0, 0, 0, 0.6) !important;
-    border-radius: 0 0 16px 16px !important;
-}
-
-/* --- YENİ ÇARPI (X) BUTONU (DIŞARIDA VE ANİMASYONLU) --- */
-.auth-close-btn {
-    position: absolute !important;
-    top: -50px !important; /* Modalin tamamen üstüne aldık */
-    right: 0 !important;   /* Sağ tarafa hizaladık */
-    width: 40px;
-    height: 40px;
-    background: rgba(0, 0, 0, 0.6) !important;
-    color: #fff !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    border-radius: 50%;
-    
-    /* İçindeki X işaretini tam ortalamak için */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 0; 
-    padding-bottom: 4px; /* X işaretinin dikey dengesi */
-    
-    font-size: 26px !important;
-    cursor: pointer;
-    z-index: 100;
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1) !important;
-}
-
-.auth-close-btn:hover {
-    background: #ed1c24 !important; /* Hover anında kırmızı parlama */
-    color: #fff !important;
-    border-color: #ed1c24 !important;
-    box-shadow: 0 0 15px rgba(237, 28, 36, 0.6);
-    transform: scale(1.15) rotate(90deg) !important; /* Hem büyür hem de X döner */
-}
-
-/* --- HABER KARTLARI KISA ÖZET TASARIMI --- */
-.row-ozet {
-    font-size: 12px;
-    color: #bbb;
-    margin-bottom: 10px;
-    /* Yazının taşıp kartı büyütmesini engeller, 2 satırla sınırlar */
-    display: -webkit-box;
-    -webkit-line-clamp: 2; 
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    line-height: 1.4;
-}
-
-/* --- CANLI SKOR KARTLARINI %10 BÜYÜTME --- */
-.league-group {
-    margin-bottom: 30px !important;
-}
-.league-header {
-    font-size: 16px !important;
-    padding: 15px 20px !important;
-}
-.match-row {
-    padding: 16px 20px !important;
-}
-.team-home, .team-away {
-    font-size: 16px !important;
-}
-.match-score {
-    font-size: 18px !important;
-    padding: 6px 18px !important;
-}
-.match-time-status {
-    font-size: 13.5px !important;
-}
-
-/* Mobil Menü Açıldığında Navigasyonu Göster */
 @media (max-width: 992px) {
     .hamburger-menu.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
     .hamburger-menu.active span:nth-child(2) { opacity: 0; }
     .hamburger-menu.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
-}.sifre-unut-link { display: block; text-align: center; color: #888; font-size: 12px; margin-top: 15px; text-decoration: none; transition: color 0.3s; }
+}
 
-.sifre-unut-link:hover { color: #b76bff; }
+@media screen and (max-width: 900px) {
+    .vertical-split-layout { flex-direction: column; gap: 60px; }
+    .vertical-divider { width: 80%; height: 2px; background: linear-gradient(to right, transparent, #b76bff, transparent); margin: 20px auto; }
+    .esports-layout { flex-direction: column; }
+    .esports-sidebar { width: 100%; }
+}
 
-/* ============================================================
-   TAM MOBİL UYUMLULUK — KAPSAMLI DÜZELTMELER
-   ============================================================ */
-
-/* Hamburger her zaman görünür (masaüstü + mobil) */
-.hamburger-menu { display: flex; align-items: center; }
-
-/* ==============================
-   768px VE ALTI (MOBİL)
-   ============================== */
 @media screen and (max-width: 768px) {
-
-    /* --- MEGA MENU: TAM GİZLE --- */
+    /* Header ve Menü */
     nav#ana-menu { display: none !important; }
-    .mega-panel  { display: none !important; }
-
-    /* --- HEADER --- */
+    .mega-panel { display: none !important; }
     header { padding: 0 12px; height: 70px; }
-
-    .header-auth-group { gap: 2px; }
-    .header-auth-group .auth-btn { padding: 6px 8px; font-size: 11px; }
-    .auth-sep { font-size: 13px; }
-
-    .live-score-btn { font-size: 11px; }
-    .live-score-btn .red-dot { margin-right: 4px; }
-
+    .header-logo { height: 70px !important; }
+    .header-auth-group { display: none !important; gap: 2px; }
     .hamburger-menu { padding: 10px 4px; }
-
-    /* Hamburger içerik: fixed — header'ın tam altında başlar */
-    .hamburger-content {
-        position: fixed !important;
-        top: 70px !important;
-        left: 0 !important;
-        right: 0 !important;
-        width: 100vw !important;
-        border-radius: 0 !important;
-        border-left: none !important;
-        border-right: none !important;
-        border-top: 1px solid #2a2a2a !important;
-        border-bottom: 1px solid #2a2a2a !important;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.8) !important;
-        min-width: unset !important;
-    }
-    .hamburger-content a {
-        padding: 14px 24px;
-        font-size: 15px;
-        border-bottom: 1px solid #1e1e1e;
-        transition: background 0.15s, color 0.15s;
-    }
-    .hamburger-menu:hover .hamburger-content { max-height: 0; opacity: 0; }
-    .hamburger-content.active {
-        max-height: 600px !important;
-        opacity: 1 !important;
-    }
-
-    /* --- GENEL --- */
+    
+    .hamburger-content { position: fixed !important; top: 70px !important; left: 0 !important; right: 0 !important; width: 100vw !important; border-radius: 0 !important; border-left: none !important; border-right: none !important; border-top: 1px solid #2a2a2a !important; border-bottom: 1px solid #2a2a2a !important; box-shadow: 0 8px 24px rgba(0,0,0,0.8) !important; min-width: unset !important; }
+    .hamburger-content a { padding: 14px 24px; font-size: 15px; border-bottom: 1px solid #1e1e1e; transition: background 0.15s, color 0.15s; }
+    .hamburger-content.active { max-height: 600px !important; opacity: 1 !important; }
+    
     main { width: 100%; box-sizing: border-box; overflow-x: hidden; }
-    .section-title-wrapper { width: 95%; padding: 0 12px; }
-
-    /* --- HERO SLIDER --- */
-    .hero-slider-container {
-        height: 220px;
-        width: 100%;
-        margin: 0 0 20px 0;
-        border-radius: 0;
-    }
-    .slider-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 16px;
-        background: rgba(0,0,0,0.5);
-    }
+    
+    /* Ortak Başlıklar */
+    .section-title-wrapper { width: 95%; padding: 0 12px; justify-content: center; text-align: center; flex-direction: column; gap: 15px; margin: 40px auto 20px auto; }
+    .section-title { font-size: 20px; width: 100%; }
+    .title-line { display: block !important; width: 80% !important; height: 2px !important; margin: 0 auto; background: linear-gradient(to right, transparent, #b76bff, #66c0f4, #b76bff, transparent) !important; }
+    
+    /* Slider ve Haberler */
+    .hero-slider-container { height: 220px; width: 100%; margin: 0 0 20px 0; border-radius: 0; perspective: none; }
+    .slider-item { width: 100%; height: 100%; transform: none !important; opacity: 0; display: none; }
+    .slider-item.active { display: block; opacity: 1; z-index: 5; }
+    .slider-btn { width: 36px; height: 36px; font-size: 16px; background: rgba(0,0,0,0.5); }
     .prev-btn { left: 8px; }
     .next-btn { right: 8px; }
     .slider-content { left: 16px; right: 16px; bottom: 16px; }
     .slider-content h2 { font-size: 16px; }
-
-    /* --- ANA SAYFA CAROUSEL (div#haberler) --- */
-    .news-carousel-wrapper {
-        width: 100%;
-        border-radius: 0;
-        padding: 0 0 20px 0;
-        margin-top: 0 !important;
-        overflow-x: auto !important;
-        cursor: auto;
-        -webkit-overflow-scrolling: touch;
-    }
+    
+    .news-carousel-wrapper { width: 100%; border-radius: 0; padding: 0 0 20px 0; margin-top: 0 !important; overflow-x: auto !important; cursor: auto; -webkit-overflow-scrolling: touch; }
     .news-carousel-wrapper::-webkit-scrollbar { display: none; }
-    .news-viewport {
-        width: 100% !important;
-        margin: 0 !important;
-        overflow: visible !important;
-    }
-    div#haberler.news-container {
-        flex-wrap: nowrap;
-        gap: 12px;
-        padding: 10px 12px;
-        transform: none !important;
-        transition: none !important;
-    }
-    div#haberler.news-container .news-row {
-        width: 220px;
-        min-width: 220px;
-        height: 270px;
-        flex-shrink: 0;
-    }
+    .news-viewport { width: 100% !important; margin: 0 !important; overflow: visible !important; }
+    div#haberler.news-container { flex-wrap: nowrap; gap: 12px; padding: 10px 12px; transform: none !important; transition: none !important; }
+    div#haberler.news-container .news-row { width: 220px; min-width: 220px; height: 270px; flex-shrink: 0; }
     #news-prev, #news-next { display: none !important; }
-
-    /* --- PLATFORM SAYFASI (section#haberler) --- */
+    
+    /* İç Sayfa (Platformlar, Haber Listesi) */
     .hero-gradient { padding: 40px 16px; }
     .hero-gradient h1 { font-size: 22px; letter-spacing: 1px; }
-    .hero-gradient p  { font-size: 14px; opacity: 0.85; margin-top: 10px; }
-
-    section#haberler.news-container {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        padding: 0 12px 20px;
-        transform: none !important;
-        transition: none !important;
-    }
-    section#haberler.news-container .news-row {
-        width: 100% !important;
-        min-width: unset !important;
-        height: 260px;
-        flex-shrink: unset;
-    }
-
-    .pagination-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 12px;
-        padding: 20px;
-    }
-
-    /* --- KATEGORİLER SAYFASI --- */
+    .hero-gradient p { font-size: 14px; opacity: 0.85; margin-top: 10px; }
+    section#haberler.news-container { display: grid !important; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 12px 20px; transform: none !important; transition: none !important; }
+    section#haberler.news-container .news-row { width: 100% !important; min-width: unset !important; height: 260px; flex-shrink: unset; }
+    .featured-news-container { grid-template-columns: 1fr; width: 95%; }
+    
+    /* Kategoriler ve Grid */
     .vertical-split-layout { flex-direction: column; gap: 30px; padding: 0 16px; }
-    .vertical-divider {
-        width: 80%; height: 2px;
-        background: linear-gradient(to right, transparent, #b76bff, transparent);
-        margin: 0 auto;
-    }
+    .vertical-divider { width: 80%; height: 2px; background: linear-gradient(to right, transparent, #b76bff, transparent); margin: 0 auto; }
     .mobile-platforms-grid.grid-2-col { grid-template-columns: repeat(2, 1fr) !important; gap: 12px; }
-    .mobile-plat-card  { padding: 14px; font-size: 13px; gap: 10px; }
-    .mobile-plat-logo  { width: 26px; height: 26px; }
+    .mobile-plat-card { padding: 14px; font-size: 13px; gap: 10px; }
+    .mobile-plat-logo { width: 26px; height: 26px; }
     .title-card-wrapper { padding: 12px 24px !important; }
-    .title-card-text   { font-size: 17px !important; }
-
-    /* --- E-SPOR SAYFASI --- */
-    .esports-layout {
-        flex-direction: column;
-        width: 95%;
-        gap: 24px;
-        padding: 0 12px;
-    }
+    .title-card-text { font-size: 17px !important; }
+    
+    /* E-Spor Sayfası */
+    .esports-layout { flex-direction: column; width: 95%; gap: 24px; padding: 0 12px; }
     .esports-grid { grid-template-columns: 1fr; }
     .esports-sidebar { width: 100%; position: static; }
     .match-board { padding: 16px; }
-    .esports-grid .news-row {
-        width: 100% !important;
-        height: auto !important;
-        min-height: 260px;
-    }
+    .esports-grid .news-row { width: 100% !important; height: auto !important; min-height: 260px; }
     .esports-grid .row-img { height: 160px; }
-    /* Espor'da hover transform h1'i gizlememesi için kaldır */
     .esports-grid .news-row:hover { transform: none; }
-
-    /* --- CANLI SKOR SAYFASI --- */
-    .game-filter-card  { width: 150px; height: 85px; }
+    
+    /* Canlı Skor Sayfası */
+    .matches-title-bar { flex-direction: column; height: auto; gap: 15px; }
+    .status-filter-wrapper { position: relative; width: 100%; justify-content: center; flex-direction: row; }
+    .status-options { margin-right: 0; margin-left: 10px; }
+    .game-filter-card { width: 150px; height: 85px; }
     .marquee-container { margin-bottom: 20px; padding: 0 4px; }
     .marquee-container::before, .marquee-container::after { width: 30px; }
     .marquee-track { gap: 10px; }
-    .league-header     { font-size: 13px !important; padding: 10px 14px !important; }
-    .match-score       { font-size: 14px !important; padding: 4px 10px !important; }
-    .match-row         { padding: 12px 10px !important; gap: 5px; }
+    .league-header { font-size: 13px !important; padding: 10px 14px !important; }
+    .match-row { grid-template-columns: 60px 1fr auto 1fr; padding: 12px 10px !important; gap: 5px; }
     .team-home, .team-away { font-size: 13px !important; padding-right: 8px !important; padding-left: 8px !important; }
-    .match-half        { display: none; }
-
-    /* --- HABER DETAY SAYFASI --- */
+    .match-score { font-size: 14px !important; padding: 4px 10px !important; }
+    .match-half { display: none; }
+    
+    /* Haber Detay (Varsa) */
     article { padding: 0 !important; margin: 16px auto !important; }
     #detay-baslik { font-size: 22px !important; }
-    #detay-resim  { border-radius: 0 !important; margin-bottom: 16px !important; }
+    #detay-resim { border-radius: 0 !important; margin-bottom: 16px !important; }
     .yorum-seksiyonu { margin: 16px auto !important; border-radius: 8px !important; }
     .yorum-seksiyonu textarea { font-size: 14px !important; }
-
-    /* --- AUTH MODAL --- */
+    
+    /* Auth Modal */
     .auth-modal-content { width: 95vw !important; max-width: 420px; }
     .auth-form-section { padding: 20px !important; }
     .auth-close-btn { top: -40px !important; right: 0 !important; }
+    
+    /* Çeşitli Diğer Hiding İşlemleri */
+    .user-badge-desktop { display: none !important; }
+    .pagination-container { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 20px; }
 }
 
-/* ==============================
-   400px VE ALTI (KÜÇÜK TELEFONLAR)
-   ============================== */
 @media screen and (max-width: 400px) {
-    /* Platform sayfası tek sütun */
     section#haberler.news-container { grid-template-columns: 1fr; }
     section#haberler.news-container .news-row { height: 290px; }
-
-    /* Kategoriler tek sütun */
     .mobile-platforms-grid.grid-2-col { grid-template-columns: 1fr !important; }
-
-    /* Carousel daha dar kartlar */
-    div#haberler.news-container .news-row,
-    .news-row { width: 190px !important; min-width: 190px !important; }
-
-    /* Auth butonlarını gizle — hamburger menüde erişilebilir */
+    div#haberler.news-container .news-row, .news-row { width: 190px !important; min-width: 190px !important; }
     .header-auth-group { display: none !important; }
-
-    /* Logo küçült */
     .header-logo { height: 56px !important; top: 0; }
 }
 
-/* ==============================
-   PLATFORM SAYFASI GLOBAL TANIMLAR
-   ============================== */
-.featured-news-container {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 25px;
-    width: 90%;
-    margin: 0 auto 40px auto;
-}
-
-@media screen and (max-width: 768px) {
-    .featured-news-container { grid-template-columns: 1fr; width: 95%; }
-}
-
-/* === HAMBURGER MENÜ: KULLANICI BLOĞU VE SINIF DÜZELTMELERİ === */
-.hamburger-divider {
-    height: 1px;
-    background: #2a2a2a;
-    margin: 6px 0;
-}
-.hamburger-kullanici {
-    display: block;
-    padding: 12px 20px;
-    font-size: 13px;
-    font-weight: bold;
-    color: #b76bff;
-    letter-spacing: 0.5px;
-}
-#hamburger-oturum-blok a,
-#hamburger-auth-blok a {
-    display: block;
-    color: #fff;
-    padding: 13px 20px;
-    text-decoration: none;
-    font-size: 13px;
-    border-bottom: 1px solid #1e1e1e;
-    transition: background 0.2s, color 0.2s;
-}
-#hamburger-oturum-blok a:hover,
-#hamburger-auth-blok a:hover { background: rgba(255,255,255,0.05); color: #b76bff; }
-#hm-cikis { color: #ff4747 !important; }
-#hm-cikis:hover { background: rgba(255,71,71,0.08) !important; }
-
-/* Masaüstünde kullanıcı badge desktop class */
-@media screen and (max-width: 768px) {
-    .user-badge-desktop { display: none !important; }
-    /* Header auth butonları mobilde gizle — hamburger menüde var */
-    .header-auth-group { display: none !important; }
-}
 @media screen and (min-width: 769px) {
-    /* Masaüstünde hamburger auth bölümü gereksiz, görsel bozukluk yaratmasın */
     #hamburger-auth-blok { display: none; }
     #hamburger-oturum-blok { display: none; }
-}
-
-/* EA Games, PS ve Ubisoft logolarını doğrudan dosya isminden yakalayıp siyah yapar (Kesin Çözüm) */
-.mega-panel img[src*="ea.png"],
-.mega-panel img[src*="ps.png"],
-.mega-panel img[src*="amd.png"],
-.mega-panel img[src*="ubisoft.png"] {
-    filter: brightness(0) !important;
-    transition: all 0.3s ease;
-}
-
-/* Mega menüde üzerine gelince siyah kalsın ama etrafına neon mor ışık saçsın */
-/* ==========================================================================
-   MARKALARA ÖZEL NEON PARLAMA EFEKTLERİ (KUSURSUZ VERSİYON)
-   ========================================================================== */
-
-/* 1. KATEGORİLER SAYFASI (Siyah Arka Plan - Logolar Kendi Halinde Parlar) */
-.mobile-plat-card:hover img[src*="steam.png"] { filter: drop-shadow(0 0 8px #66c0f4) !important; }
-.mobile-plat-card:hover img[src*="epic.png"] { filter: drop-shadow(0 0 8px #ffffff) !important; }
-.mobile-plat-card:hover img[src*="nvidia.png"] { filter: drop-shadow(0 0 8px #76b900) !important; }
-.mobile-plat-card:hover img[src*="intel.png"] { filter: drop-shadow(0 0 8px #0071c5) !important; }
-.mobile-plat-card:hover img[src*="xbox.png"] { filter: drop-shadow(0 0 8px #107c10) !important; }
-.mobile-plat-card:hover img[src*="nintendo.png"] { filter: drop-shadow(0 0 8px #e60012) !important; }
-.mobile-plat-card:hover img[src*="ea.png"] { filter: drop-shadow(0 0 8px #ff4747) !important; }
-.mobile-plat-card:hover img[src*="ps.png"] { filter: drop-shadow(0 0 8px #0055ff) !important; }
-.mobile-plat-card:hover img[src*="ubisoft.png"] { filter: drop-shadow(0 0 8px #00d0ff) !important; }
-
-/* 2. SOL SİDEBAR (Beyaz Arka Plan - Logolar Siyah Kalıp Kendi Renginde Parlar) */
-.side-item:hover img[src*="xbox.png"] { filter: brightness(0) drop-shadow(0 0 8px #107c10) !important; }
-.side-item:hover img[src*="ps.png"] { filter: brightness(0) drop-shadow(0 0 8px #0055ff) !important; }
-.side-item:hover img[src*="nintendo.png"] { filter: brightness(0) drop-shadow(0 0 8px #e60012) !important; }
-
-/* 3. SAĞ MEGA MENÜ LİSTESİ (Beyaz Arka Plan - Sadece Mor Parlama) */
-.item-sub:hover img[src*="ea.png"],
-.item-sub:hover img[src*="ps.png"],
-.item-sub:hover img[src*="ubisoft.png"] {
-    filter: brightness(0) drop-shadow(0 0 5px #b76bff) !important;
-}
-
-/* ==========================================================================
-   AMD LOGOSU İÇİN KUSURSUZ KIRMIZI FİLTRE (Haber Resimlerini Bozmaz)
-   ========================================================================== */
-
-/* SADECE küçük ikon sınıflarını kırmızı yapar, ana haber resimlerine dokunmaz */
-.menu-logo[src*="amd.png"],
-.mobile-plat-logo[src*="amd.png"],
-.platform-logo[src*="amd.png"],
-.slider-tag img[src*="amd.png"],
-.detay-platform-logo[src*="amd.png"] {
-    filter: brightness(0) invert(18%) sepia(97%) saturate(5341%) hue-rotate(347deg) brightness(97%) contrast(95%) !important;
-    transition: all 0.3s ease;
-}
-
-/* Mouse ile üzerine gelindiğinde kırmızı neon ışık saçması için (Hover) */
-.mobile-plat-card:hover .mobile-plat-logo[src*="amd.png"],
-.item-sub:hover .menu-logo[src*="amd.png"],
-.side-item:hover .menu-logo[src*="amd.png"],
-.news-row:hover .platform-logo[src*="amd.png"] {
-    filter: brightness(0) invert(18%) sepia(97%) saturate(5341%) hue-rotate(347deg) brightness(97%) contrast(95%) drop-shadow(0 0 8px rgba(237, 28, 36, 0.8)) !important;
-}
-
-/* --- CANLI SKOR DURUM FİLTRESİ --- */
-.matches-title-bar {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Başlığı tam ortalar */
-    margin-bottom: 30px;
-    height: 40px;
-    width: 100%;
-}
-.matches-main-title {
-    color: #ffffff;
-    margin: 0;
-    text-align: center;
-}
-.status-filter-wrapper {
-    position: absolute;
-    right: 0; /* Butonu en sağa yapıştırır */
-    display: flex;
-    align-items: center;
-    flex-direction: row-reverse; /* FİLTRE sağda, seçenekler sola doğru açılır */
-    cursor: pointer;
-}
-.status-main-btn {
-    background: rgba(183, 107, 255, 0.1);
-    color: #b76bff;
-    padding: 8px 18px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: bold;
-    border: 1px solid #b76bff;
-    z-index: 2;
-    transition: 0.3s;
-    display: flex;
-    align-items: center;
-}
-.status-filter-wrapper:hover .status-main-btn {
-    background: #b76bff;
-    color: #fff;
-    box-shadow: 0 0 15px rgba(183, 107, 255, 0.4);
-}
-.status-options {
-    display: flex;
-    gap: 8px;
-    opacity: 0; /* Başlangıçta gizli */
-    transform: translateX(20px); /* Sağdan sola gelme efekti için */
-    pointer-events: none;
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    margin-right: 15px; /* Butonla seçenekler arasındaki boşluk */
-}
-/* Mouse geldiğinde seçenekleri göster */
-.status-filter-wrapper:hover .status-options {
-    opacity: 1;
-    transform: translateX(0);
-    pointer-events: auto;
-}
-.s-opt {
-    background: #1a1a1a;
-    color: #888;
-    padding: 8px 14px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: bold;
-    border: 1px solid #333;
-    transition: 0.3s;
-}
-.s-opt:hover, .s-opt.active {
-    background: rgba(183, 107, 255, 0.15);
-    color: #b76bff;
-    border-color: #b76bff;
-}
-
-/* Mobilde üst üste binmemesi için */
-@media screen and (max-width: 768px) {
-    .matches-title-bar {
-        flex-direction: column;
-        height: auto;
-        gap: 15px;
-    }
-    .status-filter-wrapper {
-        position: relative;
-        width: 100%;
-        justify-content: center;
-        flex-direction: row; 
-    }
-    .status-options { margin-right: 0; margin-left: 10px; }
-}
-
-#scrollTopBtn {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    z-index: 9999;
-    background: #b76bff;
-    color: white;
-    border: none;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    font-size: 20px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(20px);
-}
-#scrollTopBtn.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-#scrollTopBtn:hover {
-    background: #9b51e0;
-    box-shadow: 0 6px 20px rgba(183,107,255,0.8);
-    transform: translateY(-5px);
 }
