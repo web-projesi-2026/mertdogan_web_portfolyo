@@ -25,6 +25,10 @@ foreach($dbPlatformlar as $p) {
 $ureticiSorgu = $db->prepare("SELECT * FROM platformlar WHERE kategori = 'Üretici' ORDER BY id ASC");
 $ureticiSorgu->execute();
 $dbUreticiler = $ureticiSorgu->fetchAll(PDO::FETCH_ASSOC);
+// YENİ: Oyunları Kendi Özel Tablosundan Çek
+$oyunSorgu = $db->prepare("SELECT * FROM oyunlar ORDER BY isim ASC");
+$oyunSorgu->execute();
+$dbOyunlar = $oyunSorgu->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <style>
@@ -38,6 +42,11 @@ $dbUreticiler = $ureticiSorgu->fetchAll(PDO::FETCH_ASSOC);
         align-items: flex-start !important;
     }
     .mega-col { min-width: 200px !important; }
+    
+    /* YENİ: Mega Menü Sekme (Tab) Sisteminin Animasyonları */
+    .tab-panel { display: none; width: 100%; animation: megaFade 0.3s ease; }
+    .active-panel { display: block !important; }
+    @keyframes megaFade { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
 </style>
 
 <header>
@@ -62,31 +71,31 @@ $dbUreticiler = $ureticiSorgu->fetchAll(PDO::FETCH_ASSOC);
                     <div class="mega-layout">
                         
                        <div class="mega-sidebar">
-                            <a href="<?php echo $yol; ?>pages/hmkategoriler.php" class="side-item main-active" data-target="tab-pc">
+                            <a href="<?php echo $yol; ?>pages/hmkategoriler.php" class="side-item main-active" data-target="tab-platformlar">
                                 <img src="<?php echo $yol; ?>img/logolar/platform.png" class="menu-logo logo-kategori-side"> PLATFORMLAR
                             </a>
+
+                            <a href="#" class="side-item" data-target="tab-oyunlar" style="padding-left: 82px;">
+                                OYUNLAR
+                            </a>
                             
-                            <a href="<?php echo $yol; ?>pages/kategori.php?k=İncelemeler" class="side-item" style="padding-left: 82px;">
+                            <a href="<?php echo $yol; ?>pages/kategori.php?k=İncelemeler" class="side-item" data-target="tab-bos" style="padding-left: 82px;">
                                 İNCELEMELER
                             </a>
                             
-                            <a href="<?php echo $yol; ?>pages/kategori.php?k=Donanım" class="side-item" style="padding-left: 82px;">
+                            <a href="<?php echo $yol; ?>pages/kategori.php?k=Donanım" class="side-item" data-target="tab-bos" style="padding-left: 82px;">
                                 DONANIM & TEKNOLOJİ
                             </a>
                             
-                            <a href="<?php echo $yol; ?>pages/kategori.php?k=Rehberler" class="side-item" style="padding-left: 82px;">
-                                OYUN REHBERLERİ
-                            </a>
-
-                            <a href="<?php echo $yol; ?>pages/espor.php" class="side-item" style="padding-left: 82px;">
+                            <a href="<?php echo $yol; ?>pages/espor.php" class="side-item" data-target="tab-bos" style="padding-left: 82px;">
                                 E-SPOR DÜNYASI
                             </a>
                         </div>
                         
-                        <div class="mega-content">
-                            <div id="tab-pc" class="mega-tab-content active">
+                        <div class="mega-content" style="width: 100%;">
+                            
+                            <div id="tab-platformlar" class="tab-panel active-panel">
                                 <div class="mega-details">
-                                    
                                     <div class="mega-col">
                                         <h4 class="mega-title" style="color:#888;font-size:11px;font-weight:bold;text-transform:uppercase;margin-bottom:20px;border-bottom:1px solid #333;padding-bottom:6px;">PLATFORMLAR</h4>
                                         <?php if(isset($dbPlatformlar) && count($dbPlatformlar) > 0): ?>
@@ -96,8 +105,6 @@ $dbUreticiler = $ureticiSorgu->fetchAll(PDO::FETCH_ASSOC);
                                                     $kontrolIsim = mb_strtoupper(trim($plat['isim']), 'UTF-8');
                                                     $gosterilecekLogo = ($kontrolIsim == 'PS' || $kontrolIsim == 'PLAYSTATION') ? 'ps.png' : $plat['logo'];
                                                     $cssSinifi = "logo-" . strtolower(explode(' ', $plat['isim'])[0]); 
-                                                    
-                                                    // SADECE STORE YAZISINI SİLMEK İÇİN:
                                                     $temizIsim = str_ireplace(' STORE', '', $plat['isim']);
                                                     ?>
                                                     <a href="<?php echo $yol; ?>pages/platform.php?p=<?php echo urlencode($plat['isim']); ?>" class="item-sub">
@@ -128,9 +135,36 @@ $dbUreticiler = $ureticiSorgu->fetchAll(PDO::FETCH_ASSOC);
                                             <a href="#" class="item-sub">Veri Bulunamadı</a>
                                         <?php endif; ?>
                                     </div>
-
                                 </div>
                             </div>
+
+                            <div id="tab-oyunlar" class="tab-panel">
+                                <div class="mega-details">
+                                    <div class="mega-col" style="width: 100%;">
+                                        <h4 class="mega-title" style="color:#888;font-size:11px;font-weight:bold;text-transform:uppercase;margin-bottom:20px;border-bottom:1px solid #333;padding-bottom:6px;">OYUNLAR</h4>
+                                        <?php if(isset($dbOyunlar) && count($dbOyunlar) > 0): ?>
+                                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px 40px;">
+                                                <?php foreach($dbOyunlar as $oyun): ?>
+                                                    <?php $cssSinifi = "logo-" . strtolower(explode(' ', $oyun['isim'])[0]); ?>
+                                                    <a href="<?php echo $yol; ?>pages/platform.php?p=<?php echo urlencode($oyun['isim']); ?>" class="item-sub">
+                                                        <img src="<?php echo $yol; ?>img/logolar/<?php echo $oyun['logo']; ?>" class="menu-logo <?php echo $cssSinifi; ?>" onerror="this.src='<?php echo $yol; ?>img/logolar/default.png'"> 
+                                                        <span style="white-space: nowrap;"><?php echo mb_strtoupper($oyun['isim'], 'UTF-8'); ?></span>
+                                                    </a>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php else: ?>
+                                            <p style="color: #666; font-size: 13px;">Sistemde henüz kayıtlı oyun bulunmuyor.</p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="tab-bos" class="tab-panel">
+                                <div style="display: flex; justify-content: center; align-items: center; height: 100%; min-height: 300px; opacity: 0.03;">
+                                    <img src="<?php echo $yol; ?>img/logolar/logo.png" style="width: 150px; filter: grayscale(1);">
+                                </div>
+                            </div>
+
                         </div>
 
                     </div>
@@ -154,6 +188,7 @@ $dbUreticiler = $ureticiSorgu->fetchAll(PDO::FETCH_ASSOC);
             <div class="hamburger-content">
                 <a href="<?php echo $yol; ?>index.php">ANA SAYFA</a>
                 <a href="<?php echo $yol; ?>pages/hmkategoriler.php">KATEGORİLER</a>
+                <a href="<?php echo $yol; ?>pages/hmoyunlar.php">OYUNLAR</a>
                 <a href="<?php echo $yol; ?>pages/espor.php">E-SPOR</a>
                 <a href="<?php echo $yol; ?>pages/canli-skor.php">CANLI SKOR</a>
                 <div style="margin: 10px 16px; border-top: 2px solid rgba(183,107,255,0.5);"></div>

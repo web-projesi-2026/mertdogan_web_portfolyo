@@ -28,11 +28,26 @@
             <div class="mobile-platforms-grid grid-2-col">
                 <?php if(isset($dbPlatformlar) && count($dbPlatformlar) > 0): ?>
                     <?php foreach($dbPlatformlar as $plat): ?>
-                        <a href="platform.php?p=<?php echo urlencode($plat['isim']); ?>" class="mobile-plat-card">
-                            <img src="../img/logolar/<?php echo $plat['logo']; ?>" alt="<?php echo $plat['isim']; ?>" class="mobile-plat-logo">
-                            <span><?php echo mb_strtoupper($plat['isim'], 'UTF-8'); ?></span>
-                        </a>
-                    <?php endforeach; ?>
+                        <a href="platform.php?p=<?php echo urlencode($plat['isim']); ?>" class="mobile-plat-card" style="display: flex; align-items: center; justify-content: space-between; text-decoration: none;">
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <img src="../img/logolar/<?php echo $plat['logo']; ?>" alt="<?php echo $plat['isim']; ?>" class="mobile-plat-logo" style="width: 40px; object-fit: contain;">
+        <span style="color: #fff; font-weight: bold; font-size: 14px;"><?php echo mb_strtoupper($plat['isim'], 'UTF-8'); ?></span>
+    </div>
+
+    <button class="bookmarkBtn" data-platform="<?php echo mb_strtoupper($plat['isim'], 'UTF-8'); ?>" onclick="toggleTakip(event, '<?php echo mb_strtoupper($plat['isim'], 'UTF-8'); ?>')">
+      <span class="IconContainer">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1.5em" class="icon" viewBox="0 0 24 24">
+          <g>
+            <path d="M13 17.62a5.29 5.29 0 0 0 .38 2l.06.14H3.5a2.25 2.25 0 0 1-2.25-2.26V17A6.71 6.71 0 0 1 4 11.55a6.7 6.7 0 0 0 8.92 0 6.7 6.7 0 0 1 1.87 2.06A5.24 5.24 0 0 0 13 17.62z" fill="#000000"></path>
+            <circle cx="8.5" cy="6.5" r="5.25" fill="#000000"></circle>
+            <path d="M18.38 13.25A4.37 4.37 0 0 0 14 17.62a4.53 4.53 0 0 0 .3 1.62 4.38 4.38 0 1 0 4.08-6zm1.84 5.07h-1.15v1.15a.7.7 0 0 1-1.39 0v-1.15h-1.15a.7.7 0 0 1 0-1.39h1.15v-1.15a.7.7 0 0 1 1.39 0v1.15h1.15a.7.7 0 0 1 0 1.39z" fill="#000000"></path>
+          </g>
+        </svg>
+      </span>
+      <p class="text">Takip Et</p>
+    </button>
+</a>
+<?php endforeach; ?>
                 <?php else: ?>
                     <p style="color: #666; text-align: center; width: 100%;">Platform verisi yüklenemedi.</p>
                 <?php endif; ?>
@@ -49,10 +64,25 @@
             <div class="mobile-platforms-grid grid-2-col">
                 <?php if(isset($dbUreticiler) && count($dbUreticiler) > 0): ?>
                     <?php foreach($dbUreticiler as $uret): ?>
-                        <a href="platform.php?p=<?php echo urlencode($uret['isim']); ?>" class="mobile-plat-card">
-                            <img src="../img/logolar/<?php echo $uret['logo']; ?>" alt="<?php echo $uret['isim']; ?>" class="mobile-plat-logo">
-                            <span><?php echo mb_strtoupper($uret['isim'], 'UTF-8'); ?></span>
-                        </a>
+                        <a href="platform.php?p=<?php echo urlencode($uret['isim']); ?>" class="mobile-plat-card" style="display: flex; align-items: center; justify-content: space-between; text-decoration: none;">
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <img src="../img/logolar/<?php echo $uret['logo']; ?>" alt="<?php echo $uret['isim']; ?>" class="mobile-plat-logo" style="width: 40px; object-fit: contain;">
+        <span style="color: #fff; font-weight: bold; font-size: 14px;"><?php echo mb_strtoupper($uret['isim'], 'UTF-8'); ?></span>
+    </div>
+
+    <button class="bookmarkBtn" data-platform="<?php echo mb_strtoupper($uret['isim'], 'UTF-8'); ?>" onclick="toggleTakip(event, '<?php echo mb_strtoupper($uret['isim'], 'UTF-8'); ?>')">
+      <span class="IconContainer">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="1.5em" class="icon" viewBox="0 0 24 24">
+          <g>
+            <path d="M13 17.62a5.29 5.29 0 0 0 .38 2l.06.14H3.5a2.25 2.25 0 0 1-2.25-2.26V17A6.71 6.71 0 0 1 4 11.55a6.7 6.7 0 0 0 8.92 0 6.7 6.7 0 0 1 1.87 2.06A5.24 5.24 0 0 0 13 17.62z" fill="#000000"></path>
+            <circle cx="8.5" cy="6.5" r="5.25" fill="#000000"></circle>
+            <path d="M18.38 13.25A4.37 4.37 0 0 0 14 17.62a4.53 4.53 0 0 0 .3 1.62 4.38 4.38 0 1 0 4.08-6zm1.84 5.07h-1.15v1.15a.7.7 0 0 1-1.39 0v-1.15h-1.15a.7.7 0 0 1 0-1.39h1.15v-1.15a.7.7 0 0 1 1.39 0v1.15h1.15a.7.7 0 0 1 0 1.39z" fill="#000000"></path>
+          </g>
+        </svg>
+      </span>
+      <p class="text">Takip Et</p>
+    </button>
+</a>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <p style="color: #666; text-align: center; width: 100%;">Üretici verisi yüklenemedi.</p>

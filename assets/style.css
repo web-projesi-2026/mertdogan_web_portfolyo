@@ -148,7 +148,16 @@ nav ul li a:hover { color: #b76bff; }
 .news-row::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, var(--row-glow, #b76bff) 0%, transparent 40%); opacity: 0.1; transition: opacity 0.3s ease; z-index: -2; }
 .news-row:hover::after { opacity: 0.3; }
 
-.row-img { width: 100%; height: 140px; object-fit: cover; pointer-events: none; -webkit-user-drag: none; user-select: none; }
+.row-img { 
+    width: 100%; 
+    height: 140px; 
+    object-fit: cover; 
+    pointer-events: none; 
+    -webkit-user-drag: none; 
+    user-select: none; 
+    /* İŞTE SİHİRLİ DOKUNUŞ: Resmin kendi üst köşelerini doğrudan yuvarlatıyoruz */
+    border-radius: 15px 15px 0 0; 
+}
 .row-info { padding: 12px 15px; flex: 1; display: flex; flex-direction: column; justify-content: flex-start; }
 .row-info h3 { font-size: 15px; font-weight: 700; line-height: 1.3; color: #fff; margin-bottom: 5px; }
 .news-row:hover h3 { color: var(--row-glow, #b76bff); }
@@ -449,4 +458,131 @@ html.oturum-bekleniyor .header-auth-group { display: none !important; }
 @media screen and (min-width: 769px) {
     #hamburger-auth-blok { display: none; }
     #hamburger-oturum-blok { display: none; }
+}
+
+/* ==========================================================================
+   UIVERSE FAVORİ BUTONU (Ugly Ape 46)
+   ========================================================================== */
+.ui-like {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 20;
+  cursor: pointer;
+  display: block;
+}
+.ui-like input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+/* Butonun arka planı (Haber kartında net görünsün diye) */
+.ui-like .checkmark {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.3s;
+}
+.ui-like svg {
+  width: 18px;
+  transition: all 0.3s;
+}
+.ui-like svg path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 20px;
+}
+/* TIKLANINCA (CHECKED) OLACAKLAR */
+.ui-like input:checked ~ .checkmark {
+  background: rgba(183, 107, 255, 0.2); /* Sitenin mor teması */
+  border-color: #b76bff;
+}
+.ui-like input:checked ~ .checkmark svg path {
+  fill: #ff4747; /* Kalp dolgusu */
+  stroke: #ff4747;
+}
+.ui-like input:checked ~ .checkmark svg {
+  animation: like-anim 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes like-anim {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+/* --- TAKİP ET BUTONU --- */
+.bookmarkBtn {
+  width: 85px; /* 110px'den 85px'e düşürdük, artık yazıları ezmeyecek */
+  height: 34px; /* Yüksekliği de kartla uyumlu olması için hafif kısalttık */
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.349);
+  background-color: rgb(12, 12, 12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  overflow: hidden;
+  position: relative;
+  margin-left: auto; 
+}
+
+.bookmarkBtn .IconContainer {
+  width: 26px; /* İkon kutusu küçüldü */
+  height: 26px;
+  background: linear-gradient(to bottom, rgb(255, 136, 255), rgb(172, 70, 255));
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 2;
+  transition-duration: 0.3s;
+}
+
+.bookmarkBtn .text {
+  height: 100%;
+  width: 50px; /* Yazı alanı daraltıldı */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  z-index: 1;
+  transition-duration: 0.3s;
+  font-size: 11px; /* Yazı boyutu alana tam sığsın diye küçültüldü */
+  font-weight: bold;
+  margin: 0;
+}
+
+.bookmarkBtn:hover .IconContainer {
+  width: 80px; /* Hover animasyonu yeni genişliğe uyarlandı */
+  transition-duration: 0.3s;
+}
+
+.bookmarkBtn:hover .text {
+  transform: translate(10px);
+  width: 0;
+  font-size: 0;
+  transition-duration: 0.3s;
+}
+
+.bookmarkBtn:active {
+  transform: scale(0.95);
+  transition-duration: 0.3s;
+}
+
+/* TAKİP EDİLDİĞİNDE (AKTİF) GÖRÜNÜM */
+.bookmarkBtn.active {
+    border-color: #76b900;
+}
+.bookmarkBtn.active .IconContainer {
+    background: linear-gradient(to bottom, #9dff00, #76b900);
 }

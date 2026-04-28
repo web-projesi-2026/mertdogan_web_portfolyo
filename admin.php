@@ -13,7 +13,7 @@ $mesaj = "";
 $aktif_sekme = isset($_GET['sekme']) ? $_GET['sekme'] : "haber";
 
 // Hataları önlemek için değişkenleri sıfırlıyoruz
-$edit_haber = null; $edit_skor = null; $edit_user = null; $edit_yorum = null; $edit_platform = null; $edit_takim = null;
+$edit_haber = null; $edit_skor = null; $edit_user = null; $edit_yorum = null; $edit_platform = null; $edit_oyun = null; $edit_takim = null;
 
 // === LOG KAYIT FONKSİYONU ===
 function islemKaydet($db, $admin_id, $tip, $detay) {
@@ -31,7 +31,7 @@ if (isset($_POST['toplu_sil_btn']) && isset($_POST['silme_idleri'])) {
     $tablo = $_POST['tablo_adi'];
     
     // İzin verilen tablolara 'takimlar' eklendi
-    $izin_verilen_tablolar = ['haberler', 'canli_skor', 'kullanicilar', 'yorumlar', 'platformlar', 'takimlar'];
+    $izin_verilen_tablolar = ['haberler', 'canli_skor', 'kullanicilar', 'yorumlar', 'platformlar', 'takimlar', 'oyunlar'];
     
     if (in_array($tablo, $izin_verilen_tablolar)) {
         $placeholderlar = str_repeat('?,', count($silinecek_id_listesi) - 1) . '?';
@@ -83,6 +83,12 @@ if (isset($_GET['sil_platform'])) {
     $mesaj = "<div class='basarili'>🎮 Kategori (Platform/Üretici) silindi.</div>";
     $aktif_sekme = "platform";
 }
+if (isset($_GET['sil_oyun'])) {
+    $db->prepare("DELETE FROM oyunlar WHERE id = ?")->execute([$_GET['sil_oyun']]);
+    islemKaydet($db, $_SESSION['kullanici_id'], 'Oyun Silme', "Oyun ID: {$_GET['sil_oyun']} sistemden silindi.");
+    $mesaj = "<div class='basarili'>🕹️ Oyun silindi.</div>";
+    $aktif_sekme = "oyun";
+}
 
 // ==========================================
 // 2. DÜZENLEME MODU (VERİ ÇEKME)
@@ -110,6 +116,10 @@ if (isset($_GET['edit_yorum'])) {
 if (isset($_GET['edit_platform'])) { 
     $sorgu = $db->prepare("SELECT * FROM platformlar WHERE id=?"); $sorgu->execute([$_GET['edit_platform']]);
     $edit_platform = $sorgu->fetch(); $aktif_sekme = "platform"; 
+}
+if (isset($_GET['edit_oyun'])) { 
+    $sorgu = $db->prepare("SELECT * FROM oyunlar WHERE id=?"); $sorgu->execute([$_GET['edit_oyun']]);
+    $edit_oyun = $sorgu->fetch(); $aktif_sekme = "oyun"; 
 }
 
 // ==========================================
@@ -219,6 +229,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['toplu_sil_btn'])) {
         $aktif_sekme = "platform";
     }
 
+    // --- OYUN İŞLEMLERİ ---
+    else if ($tip == "oyun" || $tip == "oyun_guncelle") {
+        $logo = $_POST['eski_logo'] ?? "default.png";
+        if (!empty($_POST['logo_metin'])) { $logo = trim($_POST['logo_metin']); }
+        if (isset($_FILES['logo_dosya']) && $_FILES['logo_dosya']['error'] == 0) {
+            $dosya_adi = $_FILES['logo_dosya']['name'];
+            $path = "img/logolar/" . $dosya_adi;
+            if (move_uploaded_file($_FILES['logo_dosya']['tmp_name'], $path)) { $logo = $dosya_adi; }
+        }
+
+        if ($tip == "oyun") {
+            $db->prepare("INSERT INTO oyunlar (isim, logo) VALUES (?,?)")->execute([trim($_POST['isim']), $logo]);
+            islemKaydet($db, $_SESSION['kullanici_id'], 'Oyun Ekleme', "Yeni Oyun eklendi: {$_POST['isim']}");
+        } else {
+            $db->prepare("UPDATE oyunlar SET isim=?, logo=? WHERE id=?")->execute([trim($_POST['isim']), $logo, $_POST['oyun_id']]);
+            islemKaydet($db, $_SESSION['kullanici_id'], 'Oyun Düzenleme', "Oyun ID: {$_POST['oyun_id']} güncellendi.");
+        }
+        $aktif_sekme = "oyun";
+    }
+
     $mesaj = "<div class='basarili'>✅ İşlem başarıyla gerçekleştirildi.</div>";
 }
 
@@ -230,6 +260,7 @@ $yorumlar = $db->query("SELECT y.*, h.baslik as haber_baslik FROM yorumlar y JOI
 $mevcut_ligler = $db->query("SELECT DISTINCT lig FROM canli_skor ORDER BY lig ASC")->fetchAll();
 $takimlar = $db->query("SELECT * FROM takimlar ORDER BY takim_adi ASC")->fetchAll();
 $platformlar = $db->query("SELECT * FROM platformlar ORDER BY id DESC")->fetchAll();
+$oyunlar_tablosu = $db->query("SELECT * FROM oyunlar ORDER BY id DESC")->fetchAll();
 
 // === LOG FİLTRELEME VE ÇEKME İŞLEMLERİ ===
 $log_admin_filter = $_GET['admin_filter'] ?? '';
@@ -305,6 +336,7 @@ $log_tipler = $db->query("SELECT DISTINCT islem_tipi FROM islem_loglari")->fetch
         <button class="m-tab <?= $aktif_sekme=='user'?'active':'' ?>" onclick="git('user')">👥 Kullanıcı</button>
         <button class="m-tab <?= $aktif_sekme=='yorum'?'active':'' ?>" onclick="git('yorum')">💬 Yorum</button>
         <button class="m-tab <?= $aktif_sekme=='platform'?'active':'' ?>" onclick="git('platform')">🎮 Kategori</button>
+        <button class="m-tab <?= $aktif_sekme=='oyun'?'active':'' ?>" onclick="git('oyun')">🕹️ Oyunlar</button>
         <button class="m-tab <?= $aktif_sekme=='log'?'active':'' ?>" onclick="git('log')">🕒 Log</button>
     </div>
 
@@ -318,18 +350,20 @@ $log_tipler = $db->query("SELECT DISTINCT islem_tipi FROM islem_loglari")->fetch
                 <input type="text" name="baslik" placeholder="Başlık" value="<?= $edit_haber['baslik']??'' ?>" required>
                 
                 <div class="form-row">
-                    <select name="kategori" required>
-                        <option value="Haber" <?= ($edit_haber && $edit_haber['kategori']=='Haber')?'selected':'' ?>>Haber</option>
-                        <option value="İncelemeler" <?= ($edit_haber && $edit_haber['kategori']=='İncelemeler')?'selected':'' ?>>İnceleme</option>
-                        <option value="Donanım" <?= ($edit_haber && $edit_haber['kategori']=='Donanım')?'selected':'' ?>>Donanım & Teknoloji</option>
-                        <option value="Rehberler" <?= ($edit_haber && $edit_haber['kategori']=='Rehberler')?'selected':'' ?>>Oyun Rehberi</option>
+                    <select name="platform" required>
+                        <option value="">Platform / Oyun Seçin</option>
+                        <optgroup label="Platformlar & Üreticiler">
+                            <?php foreach($platformlar as $p): ?>
+                                <option value="<?= $p['isim'] ?>" <?= ($edit_haber && $edit_haber['platform'] == $p['isim']) ? 'selected' : '' ?>><?= $p['isim'] ?></option>
+                            <?php endforeach; ?>
+                        </optgroup>
+                        <optgroup label="Oyunlar">
+                            <?php foreach($oyunlar_tablosu as $o): ?>
+                                <option value="<?= $o['isim'] ?>" <?= ($edit_haber && $edit_haber['platform'] == $o['isim']) ? 'selected' : '' ?>><?= $o['isim'] ?></option>
+                            <?php endforeach; ?>
+                        </optgroup>
+                        <option value="PC" <?= ($edit_haber && $edit_haber['platform']=='PC')?'selected':'' ?>>PC (Genel)</option>
                     </select>
-                    
-                    <select name="platform">
-                        <?php $plats = ['Steam','Epic Games','Xbox','PS','Nintendo','EA Games','Ubisoft','Nvidia','AMD','Intel','PC']; 
-                        foreach($plats as $p) echo "<option value='$p' ".($edit_haber && $edit_haber['platform']==$p?'selected':'').">$p</option>"; ?>
-                    </select>
-                    
                     <input type="file" name="resim_dosya">
                 </div>
                 
@@ -500,19 +534,26 @@ $log_tipler = $db->query("SELECT DISTINCT islem_tipi FROM islem_loglari")->fetch
 
     <div id="platform-sekme" class="form-section <?= $aktif_sekme=='platform'?'active':'' ?>">
         <div class="admin-card">
-            <h3><?= $edit_platform ? 'Kategoriyi Düzenle' : 'Yeni Kategori (Platform/Üretici) Ekle' ?></h3>
+            <h3><?= $edit_platform ? 'Kaydı Düzenle' : 'Platform / Üretici Ekle' ?></h3>
             <form method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="form_tipi" value="<?= $edit_platform ? 'platform_guncelle' : 'platform' ?>">
                 <input type="hidden" name="platform_id" value="<?= $edit_platform['id']??'' ?>">
                 <input type="hidden" name="eski_logo" value="<?= $edit_platform['logo']??'' ?>">
-                <div class="form-row"><input type="text" name="isim" placeholder="Kategori Adı" value="<?= $edit_platform['isim']??'' ?>" required><select name="kategori" required><option value="Platform" <?= ($edit_platform && $edit_platform['kategori']=='Platform')?'selected':'' ?>>Platform</option><option value="Üretici" <?= ($edit_platform && $edit_platform['kategori']=='Üretici')?'selected':'' ?>>Üretici</option></select></div>
+                <div class="form-row">
+                    <input type="text" name="isim" placeholder="Platform veya Oyun Adı (Örn: CS2, Steam)" value="<?= $edit_platform['isim']??'' ?>" required>
+                    <select name="kategori" required>
+                        <option value="Platform" <?= ($edit_platform && $edit_platform['kategori']=='Platform')?'selected':'' ?>>Platform</option>
+                        <option value="Üretici" <?= ($edit_platform && $edit_platform['kategori']=='Üretici')?'selected':'' ?>>Üretici</option>
+                        <option value="Oyun" <?= ($edit_platform && $edit_platform['kategori']=='Oyun')?'selected':'' ?>>Oyun</option>
+                    </select>
+                </div>
                 <div class="form-row"><input type="text" name="logo_metin" placeholder="Logo Dosya Adı" value="<?= $edit_platform['logo']??'' ?>"><input type="file" name="logo_dosya"></div>
-                <button class="btn-submit"><?= $edit_platform ? 'MARKAYI GÜNCELLE' : 'MARKAYI SİSTEME EKLE' ?></button>
+                <button class="btn-submit"><?= $edit_platform ? 'KAYDI GÜNCELLE' : 'SİSTEME EKLE' ?></button>
                 <?php if($edit_platform): ?><a href="?sekme=platform" style="display:block; text-align:center; margin-top:10px; color:#ff4747; text-decoration:none;">İptal Et</a><?php endif; ?>
             </form>
         </div>
         <div class="admin-card">
-            <div class="card-header-flex"><h3>Kayıtlı Kategoriler</h3><input type="text" id="aramaPlatform" class="arama-kutusu" placeholder="🔍 İsim Ara..." onkeyup="tabloFiltrele('aramaPlatform', 'tabloPlatform')"></div>
+            <div class="card-header-flex"><h3>Kayıtlı Platformlar ve Oyunlar</h3><input type="text" id="aramaPlatform" class="arama-kutusu" placeholder="🔍 İsim Ara..." onkeyup="tabloFiltrele('aramaPlatform', 'tabloPlatform')"></div>
             <form method="POST" action="admin.php?sekme=platform">
                 <input type="hidden" name="tablo_adi" value="platformlar">
                 <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 15px;">
@@ -529,6 +570,38 @@ $log_tipler = $db->query("SELECT DISTINCT islem_tipi FROM islem_loglari")->fetch
         </div>
     </div>
 
+    <div id="oyun-sekme" class="form-section <?= $aktif_sekme=='oyun'?'active':'' ?>">
+        <div class="admin-card">
+            <h3><?= isset($edit_oyun) && $edit_oyun ? 'Oyunu Düzenle' : 'Sisteme Yeni Oyun Ekle' ?></h3>
+            <form method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="form_tipi" value="<?= isset($edit_oyun) && $edit_oyun ? 'oyun_guncelle' : 'oyun' ?>">
+                <input type="hidden" name="oyun_id" value="<?= $edit_oyun['id']??'' ?>">
+                <input type="hidden" name="eski_logo" value="<?= $edit_oyun['logo']??'' ?>">
+                <div class="form-row">
+                    <input type="text" name="isim" placeholder="Oyun Adı (Örn: CS2, Valorant)" value="<?= $edit_oyun['isim']??'' ?>" required>
+                </div>
+                <div class="form-row"><input type="text" name="logo_metin" placeholder="Logo Dosya Adı" value="<?= $edit_oyun['logo']??'' ?>"><input type="file" name="logo_dosya"></div>
+                <button class="btn-submit"><?= isset($edit_oyun) && $edit_oyun ? 'OYUNU GÜNCELLE' : 'OYUNU SİSTEME EKLE' ?></button>
+                <?php if(isset($edit_oyun) && $edit_oyun): ?><a href="?sekme=oyun" style="display:block; text-align:center; margin-top:10px; color:#ff4747; text-decoration:none;">İptal Et</a><?php endif; ?>
+            </form>
+        </div>
+        <div class="admin-card">
+            <div class="card-header-flex"><h3>Kayıtlı Oyunlar</h3><input type="text" id="aramaOyun" class="arama-kutusu" placeholder="🔍 Oyun Ara..." onkeyup="tabloFiltrele('aramaOyun', 'tabloOyun')"></div>
+            <form method="POST" action="admin.php?sekme=oyun">
+                <input type="hidden" name="tablo_adi" value="oyunlar">
+                <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 15px;">
+                    <button type="submit" name="toplu_sil_btn" class="act-btn del" style="padding: 10px 20px; cursor: pointer;" onclick="return confirm('Seçili oyunları silmek istediğine emin misin?')">🗑️ SEÇİLENLERİ TOPLU SİL</button>
+                </div>
+                <table class="admin-table" id="tabloOyun">
+                    <tr><th><input type="checkbox" onclick="toggleChecks(this, 'oyun-checkbox')"></th><th>ID</th><th>Logo</th><th>Oyun İsmi</th><th style="text-align:right;">İşlem</th></tr>
+                    <?php if(isset($oyunlar_tablosu)): foreach($oyunlar_tablosu as $o): ?>
+                    <tr><td><input type="checkbox" name="silme_idleri[]" value="<?= $o['id'] ?>" class="oyun-checkbox"></td><td>#<?= $o['id'] ?></td><td><img src="img/logolar/<?= htmlspecialchars($o['logo']) ?>" style="height:25px; max-width: 50px; object-fit:contain;"></td><td><strong><?= htmlspecialchars($o['isim']) ?></strong></td>
+                        <td style="text-align:right;"><a href="?edit_oyun=<?= $o['id'] ?>" class="act-btn edit">Düzenle</a><a href="?sil_oyun=<?= $o['id'] ?>" class="act-btn del" onclick="return confirm('Silinsin mi?')">Sil</a></td>
+                    </tr><?php endforeach; endif; ?>
+                </table>
+            </form>
+        </div>
+    </div>
     <div id="log-sekme" class="form-section <?= $aktif_sekme=='log'?'active':'' ?>">
         <div class="admin-card">
             <h3>Filtrele</h3>

@@ -1,3 +1,4 @@
+
 /* === 1. VERİ AYARLARI === */
 let allNewsData = [];
 let currentScroll = 0;
@@ -17,6 +18,10 @@ const markaRenkleri = {
     "Xbox": { dark: "#0a4d0a", darker: "#052d05", light: "#107c10" },
     "PS": { dark: "#001a4d", darker: "#000a1a", light: "#003791" },
     "Intel": { dark: "#003a66", darker: "#001a33", light: "#0071c5" },
+    "Riot Games": { dark: "#2a0a0a", darker: "#110000", light: "#eb0029" },
+    "Valorant": { dark: "#2a0a10", darker: "#1a0505", light: "#ff4655" },
+    "League of Legends": { dark: "#1a1600", darker: "#0a0800", light: "#c89b3c" },
+    "CS2": { dark: "#2a1a00", darker: "#1a0a00", light: "#f4a900" },
     "PC": { dark: "#222222", darker: "#111111", light: "#b76bff" }
 };
 
@@ -29,6 +34,13 @@ const takimRenkleri = {
     "dark passage": "#048eff"    // Örnek DP - Kırmızı
     // Yeni takım ekledikçe adını küçük harfle yazıp buraya rengini girebilirsin!
 };
+
+// YENİ VE KUSURSUZ ANAHTAR BULUCU
+function getFavoriKey() {
+    // Artık ekrandaki yazıya değil, direkt tarayıcının sarsılmaz hafızasına bakıyoruz.
+    const kullaniciAdi = localStorage.getItem('aktif_kullanici');
+    return kullaniciAdi ? 'favoriler_' + kullaniciAdi : null;
+}
 
 document.addEventListener("DOMContentLoaded", async () => {
     // 1. Parametreler
@@ -53,14 +65,40 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     });
 
-    // 3. Veritabanı Bağlantısı
+    // 3. Veritabanı Bağlantısı ve Akıllı Filtreleme
     try {
         let apiYolu = isSubPage ? '../api.php' : 'api.php';
-        if (secilenPlatform) {
-            apiYolu += `?platform=${secilenPlatform}`;
-        }
+        
+        // Önce API'den (herhangi bir filtre olmadan) tüm haberleri çekiyoruz
         const response = await fetch(apiYolu);
-        allNewsData = await response.json();
+        const hamVeri = await response.json();
+
+        if (secilenPlatform) {
+            // HANGİ ÜRETİCİ HANGİ OYUNLARA SAHİP? (Buraya istediğin kadar ekleme yapabilirsin)
+            const ureticiOyunlari = {
+                "Riot Games": ["Riot Games", "Valorant", "League of Legends", "LoL", "TFT"],
+                "EA Games": ["EA Games", "FC 24", "FIFA", "Battlefield", "Apex Legends"],
+                "Valve": ["Valve", "Steam", "CS2", "Dota 2", "Half-Life"]
+            };
+
+            let aranacakKelimeler = [secilenPlatform];
+            
+            // Eğer URL'deki platform bir Üretici ise (Örn: Riot Games), oyunlarını da listeye kat
+            for (const [uretici, oyunlar] of Object.entries(ureticiOyunlari)) {
+                if (secilenPlatform.toLowerCase() === uretici.toLowerCase()) {
+                    aranacakKelimeler = oyunlar;
+                    break;
+                }
+            }
+
+            // Gelen tüm haberleri filtreleyip sadece ilgili olanları ekranda göster
+            allNewsData = hamVeri.filter(h => 
+                aranacakKelimeler.some(kelime => h.platform.toLowerCase() === kelime.toLowerCase())
+            );
+        } else {
+            allNewsData = hamVeri;
+        }
+
     } catch (error) {
         console.error("Veritabanından veri çekilemedi:", error);
         allNewsData = [];
@@ -115,8 +153,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
         initHeroSlider(allNewsData);
     }
+    await kontrolEtOturum();
 
-    ekranaBas(allNewsData);
 
     // 6. Carousel Navigasyon (sadece masaüstünde)
     const container = document.getElementById('haberler');
@@ -212,37 +250,99 @@ function ekranaBas(liste) {
     const container = document.getElementById('haberler');
     if (!container) return;
 
+    // Renk haritası aynı kalıyor...
     const renkMap = {
         "Steam": "#66c0f4", "Epic Games": "#e0e0e0", "Nvidia": "#76b900",
         "AMD": "#ed1c24", "Intel": "#0071c5", "PS": "#003791",
         "Xbox": "#107c10", "EA Games": "#ff4747", "Ubisoft": "#0070ff",
-        "Nintendo": "#e60012", "PC": "#b76bff"
+        "Nintendo": "#e60012", "PC": "#b76bff",
+        "Riot Games": "#eb0029", "Valorant": "#ff4655", "League of Legends": "#c89b3c", "CS2": "#f4a900"
     };
+
+    const userKey = getFavoriKey(); 
+    let favoriler = [];
+    if (localStorage.getItem('oturum') === 'acik' && userKey) {
+        favoriler = JSON.parse(localStorage.getItem(userKey)) || [];
+    }
+
+    // === ATLAS DOKUNUŞU: FAVORİLER SAYFASI GÜMRÜK KONTROLÜ ===
+    if (window.location.pathname.includes('favoriler.php')) {
+        
+        // 1. Durum: Ziyaretçi linki kopyalayıp girmişse onu uyar ve giriş yapmasını iste
+        if (!userKey || localStorage.getItem('oturum') !== 'acik') {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 100px 20px; width: 100%;">
+                    <h2 style="color: #ff4747; margin-bottom: 15px;">Lütfen Giriş Yapın</h2>
+                    <p style="color: #888;">Favori haberlerinizi görmek için oturum açmalısınız.</p>
+                    <button onclick="openAuthModal('login')" style="margin-top:20px; padding:10px 25px; background:#b76bff; font-weight:bold; color:#fff; border:none; border-radius:6px; cursor:pointer;">GİRİŞ YAP</button>
+                </div>
+            `;
+            return; // Fonksiyonu durdur
+        }
+
+        // 2. Durum: Giriş yapılmışsa, tüm haberleri süzgeçten geçir ve sadece favori ID'leri olanları bırak
+        liste = liste.filter(h => favoriler.includes(h.id.toString()));
+
+        // 3. Durum: Süzgeçten sonra elde hiç haber kalmazsa senin hazırladığın o boş ekranı göster
+        if (liste.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 100px 20px; width: 100%;">
+                    <h2 style="color: #fff; margin-bottom: 15px;">Henüz favorilere eklediğiniz bir haber bulunmuyor.</h2>
+                    <p style="color: #888;">Ana sayfadaki kalp butonlarına tıklayarak haberleri buraya ekleyebilirsiniz.</p>
+                </div>
+            `;
+            return; // Fonksiyonu durdur
+        }
+    }
+
 
     container.innerHTML = liste.map(h => {
         let col = "#b76bff";
         let logoDosya = "default.png";
         let logoStili = "";
 
-        if (h.platform.includes("Steam")) { col = renkMap["Steam"]; logoDosya = "steam.png"; }
-        else if (h.platform.includes("Epic Games")) { col = renkMap["Epic Games"]; logoDosya = "epic.png"; }
-        else if (h.platform.includes("EA Games")) { col = renkMap["EA Games"]; logoDosya = "ea.png"; }
-        else if (h.platform.includes("Ubisoft")) { col = renkMap["Ubisoft"]; logoDosya = "ubisoft.png"; }
-        else if (h.platform.includes("Nvidia")) { col = renkMap["Nvidia"]; logoDosya = "nvidia.png"; }
-        else if (h.platform.includes("AMD")) { col = renkMap["AMD"]; logoDosya = "amd.png"; }
-        else if (h.platform.includes("Intel")) { col = renkMap["Intel"]; logoDosya = "intel.png"; }
-        else if (h.platform.includes("PS")) { col = renkMap["PS"]; logoDosya = "ps.png"; }
-        else if (h.platform.includes("Xbox")) { col = renkMap["Xbox"]; logoDosya = "xbox.png"; logoStili = "transform: scale(1.6);"; }
-        else if (h.platform.includes("Nintendo")) { col = renkMap["Nintendo"]; logoDosya = "nintendo.png"; }
+        // TÜRKÇE KARAKTER SORUNUNU KÖKTEN ÇÖZEN BÜYÜK HARF TAKTİĞİ
+        const p = h.platform.toUpperCase();
 
+        // GÜNCELLENMİŞ KESİN EŞLEŞMELER
+        if (p.includes("STEAM")) { col = renkMap["Steam"]; logoDosya = "steam.png"; }
+        else if (p.includes("EPIC") || p.includes("EPİC")) { col = renkMap["Epic Games"]; logoDosya = "epic.png"; }
+        else if (p.includes("EA GAMES") || p.includes("EA")) { col = renkMap["EA Games"]; logoDosya = "ea.png"; }
+        else if (p.includes("UBISOFT") || p.includes("UBİSOFT")) { col = renkMap["Ubisoft"]; logoDosya = "ubisoft.png"; }
+        else if (p.includes("NVIDIA") || p.includes("NVİDİA")) { col = renkMap["Nvidia"]; logoDosya = "nvidia.png"; }
+        else if (p.includes("AMD")) { col = renkMap["AMD"]; logoDosya = "amd.png"; }
+        else if (p.includes("INTEL") || p.includes("İNTEL")) { col = renkMap["Intel"]; logoDosya = "intel.png"; }
+        else if (p.includes("PS") || p.includes("PLAYSTATION") || p.includes("PLAYSTATİON")) { col = renkMap["PS"]; logoDosya = "ps.png"; }
+        else if (p.includes("XBOX")) { col = renkMap["Xbox"]; logoDosya = "xbox.png"; logoStili = "transform: scale(1.6);"; }
+        else if (p.includes("NINTENDO") || p.includes("NİNTENDO")) { col = renkMap["Nintendo"]; logoDosya = "nintendo.png"; }
+        else if (p.includes("RIOT") || p.includes("RİOT")) { col = renkMap["Riot Games"]; logoDosya = "riot.png"; }
+        else if (p.includes("VALORANT")) { col = renkMap["Valorant"]; logoDosya = "valorant.png"; logoStili = "transform: scale(1.3);"; }
+        else if (p.includes("LEAGUE") || p === "LOL") { col = renkMap["League of Legends"]; logoDosya = "lol.png"; logoStili = "transform: scale(1.4);"; }
+        else if (p.includes("CS2") || p.includes("COUNTER")) { col = renkMap["CS2"]; logoDosya = "cs2.png"; logoStili = "transform: scale(1.3);"; }
+        // ÖDEV: Bu spesifik haber favorilerde var mı? Varsa dolu kalp, yoksa boş kalp göster
+        const isFav = favoriler.includes(h.id.toString());
+        const checkedAttr = isFav ? 'checked="checked"' : '';
+
+        // ATLAS DOKUNUŞU: RENGİ TEKRAR MARKA RENGİNE (${col}) ÇEVİRDİK!
         return `
         <div class="news-row" style="--row-glow: ${col}" onclick="window.location.href='${basePathPage}haber-detay.php?id=${h.id}'">
+            
+            <label class="ui-like" onclick="event.stopPropagation();">
+                <input type="checkbox" ${checkedAttr} onchange="toggleFavori(event, ${h.id})">
+                <div class="checkmark">
+                    <svg viewBox="0 0 256 256">
+                    <rect fill="none" height="256" width="256"></rect>
+                    <path d="M224.6,51.9a59.5,59.5,0,0,0-43-19.9,60.5,60.5,0,0,0-44,17.6L128,59.1l-7.5-7.4C97.2,28.3,59.2,26.3,35.9,47.4a59.9,59.9,0,0,0-2.3,87l83.1,83.1a15.9,15.9,0,0,0,22.6,0l81-81C243.7,113.2,245.6,75.2,224.6,51.9Z"></path>
+                    </svg>
+                </div>
+            </label>
+
             <img src="${h.resim.startsWith('http') ? h.resim : (isSubPage ? '../' : '') + h.resim}" class="row-img" onerror="this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80'">
             <div class="row-info">
                 <h3>${h.baslik}</h3>
                 <p class="row-ozet">${h.ozet}</p>
                 <div class="row-logo-container">
-                  <img src="${basePathImg}logolar/${logoDosya}" alt="${h.platform}" class="platform-logo" style="${logoStili}">
+                  <img src="${basePathImg}logolar/${logoDosya}" alt="${h.platform}" class="platform-logo" style="${logoStili}" onerror="this.src='${basePathImg}logolar/default.png'">
                 </div>
             </div>
         </div>`;
@@ -268,19 +368,26 @@ function initHeroSlider(liste) {
     track.innerHTML = benzersizHaberler.map((h, i) => {
         let logoDosya = "default.png";
         let logoBoyutu = "30px";
+        let logoStili = ""; // Yeni eklendi: Ölçekleme için
         let platRenk = "#b76bff";
 
-        const p = h.platform.toLowerCase();
-        if (p.includes("steam")) { logoDosya = "steam.png"; platRenk = "#66c0f4"; }
-        else if (p.includes("epic")) { logoDosya = "epic.png"; platRenk = "#e0e0e0"; }
-        else if (p.includes("nvidia")) { logoDosya = "nvidia.png"; platRenk = "#76b900"; }
-        else if (p.includes("amd")) { logoDosya = "amd.png"; platRenk = "#ed1c24"; }
-        else if (p.includes("intel")) { logoDosya = "intel.png"; platRenk = "#0071c5"; }
-        else if (p.includes("ps")) { logoDosya = "ps.png"; platRenk = "#003791"; }
-        else if (p.includes("xbox")) { logoDosya = "xbox.png"; logoBoyutu = "45px"; platRenk = "#107c10"; }
-        else if (p.includes("nintendo")) { logoDosya = "nintendo.png"; platRenk = "#e60012"; }
-        else if (p.includes("ea")) { logoDosya = "ea.png"; platRenk = "#ff4747"; }
-        else if (p.includes("ubisoft")) { logoDosya = "ubisoft.png"; platRenk = "#0070ff"; }
+        // TÜRKÇE KARAKTER SORUNUNU KÖKTEN ÇÖZEN BÜYÜK HARF TAKTİĞİ
+        const p = h.platform.toUpperCase();
+        
+        if (p.includes("STEAM")) { logoDosya = "steam.png"; platRenk = "#66c0f4"; }
+        else if (p.includes("EPIC") || p.includes("EPİC")) { logoDosya = "epic.png"; platRenk = "#e0e0e0"; }
+        else if (p.includes("NVIDIA") || p.includes("NVİDİA")) { logoDosya = "nvidia.png"; platRenk = "#76b900"; }
+        else if (p.includes("AMD")) { logoDosya = "amd.png"; platRenk = "#ed1c24"; }
+        else if (p.includes("INTEL") || p.includes("İNTEL")) { logoDosya = "intel.png"; platRenk = "#0071c5"; }
+        else if (p.includes("PS") || p.includes("PLAYSTATION") || p.includes("PLAYSTATİON")) { logoDosya = "ps.png"; platRenk = "#003791"; }
+        else if (p.includes("XBOX")) { logoDosya = "xbox.png"; logoBoyutu = "45px"; platRenk = "#107c10"; }
+        else if (p.includes("NINTENDO") || p.includes("NİNTENDO")) { logoDosya = "nintendo.png"; platRenk = "#e60012"; }
+        else if (p.includes("EA")) { logoDosya = "ea.png"; platRenk = "#ff4747"; }
+        else if (p.includes("UBISOFT") || p.includes("UBİSOFT")) { logoDosya = "ubisoft.png"; platRenk = "#0070ff"; }
+        else if (p.includes("RIOT") || p.includes("RİOT")) { logoDosya = "riot.png"; platRenk = "#eb0029"; }
+        else if (p.includes("VALORANT")) { logoDosya = "valorant.png"; platRenk = "#ff4655"; logoStili = "transform: scale(1.3);"; }
+        else if (p.includes("LEAGUE") || p === "LOL") { logoDosya = "lol.png"; platRenk = "#c89b3c"; logoStili = "transform: scale(1.4);"; }
+        else if (p.includes("CS2") || p.includes("COUNTER")) { logoDosya = "cs2.png"; platRenk = "#f4a900"; logoStili = "transform: scale(1.3);"; }
 
         return `
         <div class="slider-item" data-index="${i}" style="--hover-color: ${platRenk}; cursor: pointer;" onclick="window.location.href='${basePathPage}haber-detay.php?id=${h.id}'">
@@ -288,7 +395,7 @@ function initHeroSlider(liste) {
             <img src="${h.resim.startsWith('http') ? h.resim : (isSubPage ? '../' : '') + h.resim}" class="slider-bg-img" onerror="this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80'">
             <div class="slider-content">
                 <span class="slider-tag" style="background: transparent; padding: 0; box-shadow: none;">
-                  <img src="${basePathImg}logolar/${logoDosya}" alt="${h.platform}" style="height: ${logoBoyutu}; object-fit: contain;">
+                <img src="${basePathImg}logolar/${logoDosya}" alt="${h.platform}" style="height: ${logoBoyutu}; object-fit: contain; ${logoStili}">
                 </span>
                 <h2>${h.baslik}</h2>
                 <p class="slider-ozet">${h.ozet}</p>
@@ -686,18 +793,18 @@ async function kontrolEtOturum() {
 
         if (data.logged_in) {
             localStorage.setItem('oturum', 'acik');
+            // ATLAS DOKUNUŞU 1: Giriş yapanın adını sarsılmaz hafızaya kaydet
+            localStorage.setItem('aktif_kullanici', data.kullanici_adi.toLowerCase().trim());
 
-            // Masaüstünde auth butonlarını gizle
             const authGroup = document.querySelector('.header-auth-group');
             if (authGroup) authGroup.style.display = 'none';
 
             if (document.getElementById('user-panel-active')) {
-                // Hamburger mobil linklerini güncelle (sayfa yenilenmeden oturum değişirse)
                 _guncelleMobilOturumLinkleri(data, prefix);
+                ekranaBas(allNewsData); 
                 return;
             }
 
-            // ── MASAÜSTÜ: header'a kullanıcı badge ekle ──
             const userBadge = document.createElement('div');
             userBadge.id = 'user-panel-active';
             userBadge.className = 'user-badge-desktop';
@@ -717,41 +824,42 @@ async function kontrolEtOturum() {
             const liveScoreBtn = document.querySelector('.live-score-btn');
             if (liveScoreBtn) liveScoreBtn.parentNode.insertBefore(userBadge, liveScoreBtn);
 
-            // ── MOBİL: hamburger menüye kullanıcı linklerini ekle ──
             _guncelleMobilOturumLinkleri(data, prefix);
+
+            // Her şey hazır, kalpleri boyayarak haberleri bas
+            ekranaBas(allNewsData); 
 
         } else {
             localStorage.removeItem('oturum');
+            // ATLAS DOKUNUŞU 2: Çıkış yapıldığında hafızadaki ismi de sil
+            localStorage.removeItem('aktif_kullanici');
+            
             document.documentElement.classList.remove('oturum-bekleniyor');
             const authGroup = document.querySelector('.header-auth-group');
             if (authGroup) authGroup.style.display = 'flex';
 
-            // Mobil hamburger'dan oturum linklerini temizle
             document.getElementById('hamburger-oturum-blok')?.remove();
-            // Hamburger giriş/kayıt bölümünü göster
             const mobileAuth = document.getElementById('hamburger-auth-blok');
             if (mobileAuth) mobileAuth.style.display = 'block';
+
+            // Ziyaretçi için haberleri bas (kalpler boş)
+            ekranaBas(allNewsData); 
         }
     } catch(e) {
         console.error('Oturum bilgisi çekilemedi:', e);
+        ekranaBas(allNewsData); 
     }
 }
 
 function _guncelleMobilOturumLinkleri(data, prefix) {
-    // Eski oturum bloğunu temizle
     document.getElementById('hamburger-oturum-blok')?.remove();
- 
-    // Giriş/kayıt bölümünü gizle
     const mobileAuth = document.getElementById('hamburger-auth-blok');
     if (mobileAuth) {
         mobileAuth.style.display = 'none';
-        // Auth bloğunun hemen içine oturum linklerini yaz (mor çizginin altına)
-        let adminLink = data.rol === 'admin'
-            ? `<a href="${prefix}admin.php" id="hm-admin">PANEL</a>`
-            : '';
+        let adminLink = data.rol === 'admin' ? `<a href="${prefix}admin.php" id="hm-admin">PANEL</a>` : '';
         mobileAuth.innerHTML = `
-            
             ${adminLink}
+            <a href="${prefix}pages/favoriler.php" id="hm-favoriler">FAVORİLER</a>
             <a href="#" onclick="openProfilModal('${data.kullanici_adi}','${data.eposta || 'Belirtilmemiş'}');return false;" id="hm-profil">PROFİL 👤</a>
             <a href="${prefix}cikis.php" id="hm-cikis" style="color:#ff4d4d;">ÇIKIŞ YAP</a>
         `;
@@ -759,7 +867,6 @@ function _guncelleMobilOturumLinkleri(data, prefix) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', kontrolEtOturum);
 
 /* === YORUM SİSTEMİ === */
 async function yorumlariGetir(haber_id) {
@@ -961,4 +1068,94 @@ document.addEventListener('DOMContentLoaded', () => {
             behavior: 'smooth' // Pürüzsüz kaydırma efekti
         });
     });
+});
+
+/* === FAVORİLERE EKLEME SİSTEMİ (ÜYE KONTROLLÜ & KULLANICIYA ÖZEL) === */
+window.toggleFavori = function(event, id) {
+    // 1. KULLANICIYI TANI: Kimin hafıza kutusuna yazacağımızı belirliyoruz
+    const userKey = getFavoriKey(); 
+
+    // 2. GÜVENLİK KONTROLÜ: Oturum kapalıysa veya kullanıcı adı yüklenmemişse engelle
+    if (!userKey || localStorage.getItem('oturum') !== 'acik') {
+        event.preventDefault(); // Kalbin dolmasını engelle
+        openAuthModal('login'); // Giriş panelini aç
+        showAuthMessage('error', 'Favorilere eklemek için giriş yapın!');
+        return;
+    }
+
+    // 3. HAFIZADAN OKU: Sadece bu kullanıcıya özel olan çekmeceyi açıyoruz
+    let favoriler = JSON.parse(localStorage.getItem(userKey)) || [];
+    const stringId = id.toString();
+    const isChecked = event.target.checked; // Kalbe basıldı mı (true) yoksa çekildi mi (false)
+
+    if (isChecked) {
+        // İşaretlendiyse ve listede yoksa kullanıcı kutusuna ekle
+        if (!favoriler.includes(stringId)) favoriler.push(stringId);
+    } else {
+        // İşareti kaldırıldıysa listeden sil
+        favoriler = favoriler.filter(fId => fId !== stringId);
+        
+        // Eğer favoriler sayfasındaysak kartın anında kaybolmasını sağlayan kod
+        const kart = event.target.closest('.news-row');
+        if (window.location.pathname.includes('favoriler.php') && kart) {
+            kart.style.transition = "0.3s";
+            kart.style.opacity = "0";
+            setTimeout(() => kart.style.display = "none", 300);
+        }
+    }
+    
+    // 4. HAFIZAYA KAYDET: Güncel listeyi kullanıcıya özel anahtarla tarayıcıya kilitle
+    localStorage.setItem(userKey, JSON.stringify(favoriler));
+};
+
+/* === TAKİP ET SİSTEMİ === */
+window.toggleTakip = function(event, platformAdi) {
+    event.preventDefault(); // Linke tıklamayı engelle
+    event.stopPropagation(); // Kartın içine girilmesini engelle
+
+    const aktifKullanici = localStorage.getItem('aktif_kullanici');
+    
+    // Giriş yapılmadıysa engelle
+    if (!aktifKullanici || localStorage.getItem('oturum') !== 'acik') {
+        openAuthModal('login');
+        showAuthMessage('error', 'Takip etmek için giriş yapın!');
+        return;
+    }
+
+    const storageKey = 'takip_' + aktifKullanici;
+    let takipListesi = JSON.parse(localStorage.getItem(storageKey)) || [];
+    const btn = event.currentTarget;
+    const textEl = btn.querySelector('.text');
+
+    if (takipListesi.includes(platformAdi)) {
+        // Takipten Çık
+        takipListesi = takipListesi.filter(p => p !== platformAdi);
+        btn.classList.remove('active');
+        textEl.innerText = "Takip Et";
+    } else {
+        // Takip Et
+        takipListesi.push(platformAdi);
+        btn.classList.add('active');
+        textEl.innerText = "Takipte";
+    }
+
+    // Güncel durumu kullanıcının hafızasına kaydet
+    localStorage.setItem(storageKey, JSON.stringify(takipListesi));
+};
+
+// Sayfa yüklendiğinde hafızaya bakıp takip edilen butonları yeşil (aktif) yapar
+document.addEventListener("DOMContentLoaded", () => {
+    const aktifKullanici = localStorage.getItem('aktif_kullanici');
+    if (aktifKullanici && localStorage.getItem('oturum') === 'acik') {
+        const storageKey = 'takip_' + aktifKullanici;
+        const takipListesi = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+        document.querySelectorAll('.bookmarkBtn').forEach(btn => {
+            const platformAdi = btn.getAttribute('data-platform');
+            if (takipListesi.includes(platformAdi)) {
+                btn.classList.add('active');
+                btn.querySelector('.text').innerText = "Takipte";
+            }
+        });
+    }
 });
