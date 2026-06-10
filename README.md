@@ -1,3 +1,5 @@
+https://gameportal.com.tr
+
 # 🎮 Oyun Dünyası Haber & İçerik Portalı
 
 Oyun dünyasındaki en güncel gelişmeleri, yeni çıkan yapımları ve sektör haberlerini tek bir platformda toplayan modern bir içerik portalıdır.
